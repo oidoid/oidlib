@@ -1,0 +1,41 @@
+{
+  "name": "matoid",
+  "author": "oidoid",
+  "version": "0.0.0",
+  "license": "GPL-3.0-only",
+  "description": "🧮 Math for oidoid.",
+  "keywords": [
+    "math",
+    "2d"
+  ],
+  "homepage": "https://git.io/matoid",
+  "repository": "github:oidoid/matoid",
+  "bugs": "https://github.com/oidoid/matoid/issues",
+  "main": "dist/matoid/matoid.js",
+  "type": "module",
+  "types": "dist/matoid/matoid.d.ts",
+  "scripts": {
+    "test": "npm run formatter -- -l && npm run rebuild && npm run test:unit",
+    "test:unit": "jest -c .jest/jest.config.json",
+    "build": "tsc -b",
+    "rebuild": "npm run clean && npm run build",
+    "clean": "tsc -b --clean",
+    "preversion": "[ -z \"$(git status -z)\" ]",
+    "version": "npm ci && npm t",
+    "prepublishOnly": "git push origin \"$(git tag --points-at @)\"",
+    "format": "npm run formatter -- -w",
+    "formatter": "prettier './**/*.ts'"
+  },
+  "engines": {
+    "node": "15.10.0",
+    "npm": "7.5.3"
+  },
+  "devDependencies": {
+    "@types/jest": "26.0.22",
+    "jest": "26.6.3",
+    "pre-commit": "1.2.2",
+    "prettier": "2.2.1",
+    "ts-jest": "26.5.4",
+    "typescript": "4.2.3"
+  }
+}
