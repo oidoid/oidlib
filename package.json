@@ -6,7 +6,8 @@
   "description": "🧮 Math for oidoid.",
   "keywords": [
     "math",
-    "2d"
+    "2d",
+    "game"
   ],
   "homepage": "https://git.io/matoid",
   "repository": "github:oidoid/matoid",
