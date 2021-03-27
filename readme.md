@@ -2,18 +2,6 @@
 
 Math for [oidoid](https://oidoid.com).
 
-## Table of Contents
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2} -->
-<!-- code_chunk_output -->
-
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [License](#license)
-  - [GPL-3.0-only](#gpl-30-only)
-
-<!-- /code_chunk_output -->
-
 ## Installation
 
 Execute `npm i -E matoid` to install. See the [changelog](docs/changelog.md) for
