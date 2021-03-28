@@ -7,10 +7,11 @@
   "transform": {".+\\.ts$": "ts-jest"},
   "moduleNameMapper": {
     "//": "Strip .js suffixes on imports.",
+    "(.+/node_modules/.+)/dist/(.+).js": "$1/src/$2",
     "^(\\.?\\./.+)\\.js$": "$1"
   },
   "//": "Colocate tests and snapshots.",
-  "snapshotResolver": "./.jest/snapshot-resolver.cjs",
+  "snapshotResolver": "<rootDir>/.jest/snapshot-resolver.cjs",
 
   "errorOnDeprecated": true,
 
