@@ -2,10 +2,9 @@
 
 The oidoid common library.
 
-## Installation and version history
+## Installation
 
-Add `https://deno.land/x/oidlib/mod.ts` to your import modules. See the
-[changelog](changelog.md) for release notes.
+Add `https://deno.land/x/oidlib/mod.ts` to your import modules.
 
 ## Shorthands
 
