@@ -12,11 +12,11 @@ dev: bundle\:watch
 
 .PHONY: bundle
 bundle: | $(dist_dir)/
-  $(deno) bundle '$(src_dir)/mod.ts' '$(dist_dir)/$(repo).js'
+  $(deno) bundle mod.ts '$(dist_dir)/$(repo).js'
 
 .PHONY: bundle\:watch
 bundle\:watch: | $(dist_dir)/
-  $(deno) bundle '$(src_dir)/mod.ts' '$(dist_dir)/$(repo).js' --watch
+  $(deno) bundle mod.ts '$(dist_dir)/$(repo).js' --watch
 
 .PHONY: test
 test: build test\:unit; $(deno) lint

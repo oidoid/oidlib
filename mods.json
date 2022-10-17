@@ -1,1 +1,4 @@
-{ "std/": "https://deno.land/std@0.159.0/" }
+{
+  "@/oidlib": "./mods.ts",
+  "std/": "https://deno.land/std@0.159.0/"
+}
