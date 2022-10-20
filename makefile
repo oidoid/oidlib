@@ -12,12 +12,12 @@ dev: bundle\:watch
 .PHONY: bundle
 bundle: | $(dist_dir)/
   name="$$(deno eval -p 'JSON.parse(await Deno.readTextFile("package.json")).name')"
-  $(deno) bundle mod.ts '$(dist_dir)/$$name.js'
+  $(deno) bundle mod.ts "$(dist_dir)/$$name.js"
 
 .PHONY: bundle\:watch
 bundle\:watch: | $(dist_dir)/
   name="$$(deno eval -p 'JSON.parse(await Deno.readTextFile("package.json")).name')"
-  $(deno) bundle mod.ts '$(dist_dir)/$$name.js' --watch
+  $(deno) bundle mod.ts "$(dist_dir)/$$name.js" --watch
 
 .PHONY: test
 test: build test\:unit; $(deno) lint
