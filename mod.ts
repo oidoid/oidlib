@@ -19,5 +19,6 @@ export * from './src/types/NonNull.ts';
 export * from './src/utils/ArrayUtil.ts';
 export * from './src/utils/assert.ts';
 export * from './src/utils/Color.ts';
+export * from './src/utils/Obj.ts';
 export * from './src/utils/NumUtil.ts';
 export * from './src/utils/Str.ts';

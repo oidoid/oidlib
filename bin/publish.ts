@@ -1,7 +1,6 @@
-#!/usr/bin/env -S deno --quiet run --allow-read --allow-run --check=typescript
-// Publish a new version.
+#!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
 import * as semver from 'https://deno.land/std/semver/mod.ts';
-import { Str } from '@/oidlib';
+import { Obj, Str } from '@/oidlib';
 
 const releaseTypes: Set<semver.ReleaseType> = new Set([
   'pre',
@@ -29,6 +28,20 @@ async function main(): Promise<number> {
   if (!isReleaseType(releaseType)) {
     console.error(
       `Unsupported release type, "${releaseType}". ${supportedReleaseTypesMsg}`,
+    );
+    return 1;
+  }
+
+  const pkg = JSON.parse(await Deno.readTextFile('package.json'));
+  if (!isPackage(pkg)) {
+    console.error('package.json missing name or version properties.');
+    return 1;
+  }
+
+  const nextVer = semver.inc(pkg.version, releaseType);
+  if (nextVer == null) {
+    console.error(
+      `Cannot compute next ${releaseType} semantic version from ${pkg.version}.`,
     );
     return 1;
   }
@@ -72,14 +85,24 @@ async function main(): Promise<number> {
     return 1;
   }
 
-  const prevVer = result.text.trim().split(/\s+/).at(-1);
-  const nextVer = semver.inc(prevVer ?? 'v0.0.0-prerelease', releaseType);
-  if (nextVer == null) {
-    console.error(
-      `Cannot compute next ${releaseType} semantic version from ${
-        prevVer ?? '(no prior version)'
-      }.`,
-    );
+  const gitVers = result.text.trim().split(/\s+/);
+  if (gitVers.some((ver) => `v${nextVer}` == ver)) {
+    console.error(`Git tag v${nextVer} is unavailable.`);
+    return 1;
+  }
+
+  pkg.version = nextVer;
+  await Deno.writeTextFile('package.json', JSON.stringify(pkg));
+
+  result = await git('add package.json');
+  if (!result.ok) {
+    console.error('Cannot stage package.json.');
+    return 1;
+  }
+
+  result = await git(`commit --message v${nextVer}`);
+  if (!result.ok) {
+    console.error('Cannot commit package.json.');
     return 1;
   }
 
@@ -118,4 +141,14 @@ async function git(args: string): Promise<{ ok: boolean; text: string }> {
 
 function isReleaseType(str: string): str is semver.ReleaseType {
   return releaseTypes.has(str as semver.ReleaseType);
+}
+
+function isPackage(val: unknown): val is Package {
+  if (!Obj.is(val)) return false;
+  return typeof val.version == 'string' && typeof val.name == 'string';
+}
+
+interface Package {
+  name: string;
+  version: string;
 }
