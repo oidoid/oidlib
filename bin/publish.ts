@@ -89,7 +89,9 @@ async function main(): Promise<number> {
     return 1;
   }
 
-  prompt('Ready to publish. <enter> to continue, <ctrl-c> to cancel:');
+  prompt(
+    `Ready to publish v${nextVer}. <enter> to continue, <ctrl-c> to cancel:`,
+  );
 
   // Push the active branch and tag.
   result = await git(`push origin ${branch} v${nextVer}`);
