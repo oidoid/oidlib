@@ -43,6 +43,9 @@ cp := cp --archive --force
 # https://github.com/denoland/deno/issues/15828
 deno := deno --quiet
 
+# https://github.com/denoland/deno/issues/16395.
+deno_config ?= deno.json
+
 # Overwrite destination.
 ln := ln --force
 
