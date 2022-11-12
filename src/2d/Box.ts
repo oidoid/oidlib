@@ -388,7 +388,7 @@ abstract class BoxNamespaceImpl<
   }
 
   readonly toString = (self: Readonly<Self>): string => {
-    return `[${self.start}, ${self.end}]`;
+    return `[${this.xy.toString(self.start)}, ${this.xy.toString(self.end)}]`;
   };
 
   unionCoerce(
