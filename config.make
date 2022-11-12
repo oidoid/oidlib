@@ -20,12 +20,16 @@ space := $(empty) $(empty)
 .SHELLFLAGS := -euc
 
 # Don't echo recipes.
+ifndef V
 .SILENT:
+endif
 
 # If a recipe fails, delete the target.
 .DELETE_ON_ERROR:
 
 # Preserve intermediate targets.
+# This breaks shell autocomplete. See
+# https://github.com/scop/bash-completion/issues/215.
 .SECONDARY:
 
 # to-do: move outside of oidlib.
@@ -35,10 +39,12 @@ aseprite := aseprite --batch
 cp := cp --archive --force
 
 # Only report warnings and errors.
+# https://github.com/denoland/deno/issues/10558
+# https://github.com/denoland/deno/issues/15828
 deno := deno --quiet
 
 # Overwrite destination.
-ln := ln -f
+ln := ln --force
 
 # Create directory hierarchies.
 mkdir := mkdir --parents
@@ -47,4 +53,11 @@ mkdir := mkdir --parents
 rm := rm --force --recursive
 
 # to-do: find Deno alternative.
-live-server := npx live-server --no-browser --quiet
+# https://github.com/denoland/deno/issues/16321
+live-server := npx live-server --no-browser
+
+# Silence sub-makes.
+make = $(MAKE)
+ifndef V
+make += --silent
+endif
