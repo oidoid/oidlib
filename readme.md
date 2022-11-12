@@ -4,7 +4,9 @@ The oidoid common library.
 
 ## Installation
 
-Add `https://deno.land/x/oidlib/mod.ts` to your import modules.
+oidlib is a Deno TypeScript project. Add `https://deno.land/x/oidlib/mod.ts` to
+your import modules and reference the `https://deno.land/x/oidlib/mods.json`
+import map.
 
 ## Shorthands
 
@@ -13,15 +15,27 @@ Add `https://deno.land/x/oidlib/mod.ts` to your import modules.
 | args      | arguments            |
 | box       | rectangle            |
 | config    | configuration        |
+| dist      | distributable(s)     |
 | int       | integer              |
 | num       | number               |
 | obj       | object               |
 | op        | operation            |
 | opt       | optional             |
+| src       | source(s)            |
 | str       | string               |
 | util      | utility              |
 | wh        | width and height     |
 | xy        | cartesian value pair |
+
+## Environment variables
+
+| Variable | Values       | Description   |
+| -------- | ------------ | ------------- |
+| V        | `1 \| unset` | Verbose mode. |
+
+## Conventions
+
+- Prefer TitleCase for classes, enums, and string literals.
 
 ## License
 
