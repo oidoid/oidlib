@@ -22,11 +22,11 @@ export function Random(seed: I32) {
 export namespace Random {
   /** Returns a fraction in [0, 1). */
   export function fraction(self: Random): number {
-    return (integer(self) - 1) / 0x7fff_fffe;
+    return (i32(self) - 1) / 0x7fff_fffe;
   }
 
   /** Returns an integer in [1, 0x7fff_fffe]. */
-  export function integer(self: Random): I32 {
+  export function i32(self: Random): I32 {
     self.seed = I32((self.seed * 16_807) % 0x7fff_ffff);
     return self.seed;
   }
