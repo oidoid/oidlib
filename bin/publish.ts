@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
-import * as semver from 'std/semver/mod.ts';
 import { Obj, Str } from '@/oidlib';
+import * as semver from 'std/semver/mod.ts';
 
 const releaseTypes: Set<semver.ReleaseType> = new Set([
   'pre',
@@ -106,15 +106,16 @@ async function main(): Promise<number> {
     return 1;
   }
 
+  prompt(
+    `Ready to publish v${nextVer}. Amend commit with any changes wanted ` +
+      'before tagging. <enter> to continue, <ctrl-c> to cancel:',
+  );
+
   result = await git(`tag v${nextVer}`);
   if (!result.ok) {
     console.error(`Cannot tag v${nextVer}.`);
     return 1;
   }
-
-  prompt(
-    `Ready to publish v${nextVer}. <enter> to continue, <ctrl-c> to cancel:`,
-  );
 
   // Push the active branch and tag.
   result = await git(`push origin ${branch} v${nextVer}`);
