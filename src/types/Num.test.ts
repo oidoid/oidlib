@@ -1,4 +1,3 @@
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 import {
   I16,
   I32,
@@ -13,6 +12,7 @@ import {
   Uint,
   Unumber,
 } from '@/oidlib';
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 Deno.test('Clamping.', async (test) => {
   for (
@@ -1092,22 +1092,70 @@ Deno.test('Maximum and minimum values.', () => {
 Deno.test('Bits.', async (test) => {
   for (
     const [value, intExpected, uintExpected, i4Expected, u4Expected] of [
-      [0b0000, 0, 0, 0, 0],
-      [0b0001, 1, 1, 1, 1],
-      [0b0010, 2, 2, 2, 2],
-      [0b0011, 3, 3, 3, 3],
-      [0b0100, 4, 4, 4, 4],
-      [0b0101, 5, 5, 5, 5],
-      [0b0110, 6, 6, 6, 6],
-      [0b0111, 7, 7, 7, 7],
-      [0b1000, 8, 8, -8, 8],
-      [0b1001, 9, 9, -7, 9],
-      [0b1010, 10, 10, -6, 10],
-      [0b1011, 11, 11, -5, 11],
-      [0b1100, 12, 12, -4, 12],
-      [0b1101, 13, 13, -3, 13],
-      [0b1110, 14, 14, -2, 14],
-      [0b1111, 15, 15, -1, 15],
+      [-31, -31, 0x1fffffffffffe1, 1, 1],
+      [-30, -30, 0x1fffffffffffe2, 2, 2],
+      [-29, -29, 0x1fffffffffffe3, 3, 3],
+      [-28, -28, 0x1fffffffffffe4, 4, 4],
+      [-27, -27, 0x1fffffffffffe5, 5, 5],
+      [-26, -26, 0x1fffffffffffe6, 6, 6],
+      [-25, -25, 0x1fffffffffffe7, 7, 7],
+      [-24, -24, 0x1fffffffffffe8, -8, 8],
+      [-23, -23, 0x1fffffffffffe9, -7, 9],
+      [-22, -22, 0x1fffffffffffea, -6, 10],
+      [-21, -21, 0x1fffffffffffeb, -5, 11],
+      [-20, -20, 0x1fffffffffffec, -4, 12],
+      [-19, -19, 0x1fffffffffffed, -3, 13],
+      [-18, -18, 0x1fffffffffffee, -2, 14],
+      [-17, -17, 0x1fffffffffffef, -1, 15],
+      [-16, -16, 0x1ffffffffffff0, 0, 0],
+      [-15, -15, 0x1ffffffffffff1, 1, 1],
+      [-14, -14, 0x1ffffffffffff2, 2, 2],
+      [-13, -13, 0x1ffffffffffff3, 3, 3],
+      [-12, -12, 0x1ffffffffffff4, 4, 4],
+      [-11, -11, 0x1ffffffffffff5, 5, 5],
+      [-10, -10, 0x1ffffffffffff6, 6, 6],
+      [-9, -9, 0x1ffffffffffff7, 7, 7],
+      [-8, -8, 0x1ffffffffffff8, -8, 8],
+      [-7, -7, 0x1ffffffffffff9, -7, 9],
+      [-6, -6, 0x1ffffffffffffa, -6, 10],
+      [-5, -5, 0x1ffffffffffffb, -5, 11],
+      [-4, -4, 0x1ffffffffffffc, -4, 12],
+      [-3, -3, 0x1ffffffffffffd, -3, 13],
+      [-2, -2, 0x1ffffffffffffe, -2, 14],
+      [-1, -1, 0x1fffffffffffff, -1, 15],
+
+      [0b0_0000, 0, 0, 0, 0],
+      [0b0_0001, 1, 1, 1, 1],
+      [0b0_0010, 2, 2, 2, 2],
+      [0b0_0011, 3, 3, 3, 3],
+      [0b0_0100, 4, 4, 4, 4],
+      [0b0_0101, 5, 5, 5, 5],
+      [0b0_0110, 6, 6, 6, 6],
+      [0b0_0111, 7, 7, 7, 7],
+      [0b0_1000, 8, 8, -8, 8],
+      [0b0_1001, 9, 9, -7, 9],
+      [0b0_1010, 10, 10, -6, 10],
+      [0b0_1011, 11, 11, -5, 11],
+      [0b0_1100, 12, 12, -4, 12],
+      [0b0_1101, 13, 13, -3, 13],
+      [0b0_1110, 14, 14, -2, 14],
+      [0b0_1111, 15, 15, -1, 15],
+      [0b1_0000, 16, 16, 0, 0],
+      [0b1_0001, 17, 17, 1, 1],
+      [0b1_0010, 18, 18, 2, 2],
+      [0b1_0011, 19, 19, 3, 3],
+      [0b1_0100, 20, 20, 4, 4],
+      [0b1_0101, 21, 21, 5, 5],
+      [0b1_0110, 22, 22, 6, 6],
+      [0b1_0111, 23, 23, 7, 7],
+      [0b1_1000, 24, 24, -8, 8],
+      [0b1_1001, 25, 25, -7, 9],
+      [0b1_1010, 26, 26, -6, 10],
+      [0b1_1011, 27, 27, -5, 11],
+      [0b1_1100, 28, 28, -4, 12],
+      [0b1_1101, 29, 29, -3, 13],
+      [0b1_1110, 30, 30, -2, 14],
+      [0b1_1111, 31, 31, -1, 15],
 
       [0xff, 255, 255, -1, 15],
       [0x80, 128, 128, 0, 0],
@@ -1125,12 +1173,35 @@ Deno.test('Bits.', async (test) => {
     ] as const
   ) {
     await test.step(`Mod: ${value} (0x${value.toString(16)} 0b${value.toString(2)}).`, () => {
-      assertEquals(Int.mod(value), Int(intExpected));
-      assertEquals(Uint.mod(value), Uint(uintExpected));
-      assertEquals(I4.mod(value), I4(i4Expected));
-      assertEquals(U4.mod(value), U4(u4Expected));
+      assertEquals(Int.mod(value), intExpected as Int);
+      assertEquals(Uint.mod(value), uintExpected as Uint);
+      assertEquals(I4.mod(value), i4Expected as I4);
+      assertEquals(U4.mod(value), u4Expected as U4);
     });
   }
+});
+
+Deno.test('Int bit limits.', async (test) => {
+  for (
+    const [name, val, intExpected, uintExpected] of [[
+      'min',
+      Number.MIN_SAFE_INTEGER,
+      Number.MIN_SAFE_INTEGER,
+      Number(BigInt.asUintN(53, BigInt(Number.MIN_SAFE_INTEGER))),
+    ], [
+      'max',
+      Number.MAX_SAFE_INTEGER,
+      Number.MAX_SAFE_INTEGER,
+      Number.MAX_SAFE_INTEGER,
+    ]] as const
+  ) {
+    await test.step(`Mod: ${name}.`, () => {
+      assertEquals(Int.mod(val), intExpected);
+      assertEquals(Uint.mod(val), uintExpected);
+    });
+  }
+
+  assertEquals(Int.mod(Number.MAX_SAFE_INTEGER), Number.MAX_SAFE_INTEGER);
 });
 
 let _: I32 = I32(0);

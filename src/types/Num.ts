@@ -193,16 +193,11 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
   };
 
   readonly mod = (int: number | bigint): T => {
-    // Always use bigint since all number bit arithmetic is signed 32b and
-    // NumUtil.wrap() can't handle Number.MAX_SAFE_INTEGER.
-    if (typeof int == 'number') int = BigInt(int);
     int = BigInt[this.signedness == 'signed' ? 'asIntN' : 'asUintN'](
       this.width,
-      int,
+      BigInt(int),
     );
     return this.construct(Number(int));
-    // to-do: try to use wrap instead of BigInt
-    // return this.construct(NumUtil.wrap(int as number, this.min, this.max + 1));
   };
 
   readonly round = (num: number): T => {

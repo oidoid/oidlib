@@ -21,8 +21,7 @@ export namespace NumUtil {
    * -1 mod 3 = 2
    */
   export function mod(num: number, mod: number): number {
-    // return ((num % mod) + mod) % mod;
-    return num - (mod * Math.floor(num / mod));
+    return num - mod * Math.floor(num / mod);
   }
 
   export function clamp(num: number, min: number, max: number): number {
