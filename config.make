@@ -43,7 +43,10 @@ cp := cp --archive --force
 # Only report warnings and errors.
 # https://github.com/denoland/deno/issues/10558
 # https://github.com/denoland/deno/issues/15828
-deno := deno --quiet
+deno := deno
+ifndef V
+deno += --quiet
+endif
 
 # https://github.com/denoland/deno/issues/16395.
 deno_config ?= deno.json
