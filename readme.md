@@ -12,18 +12,24 @@ import map.
 
 | Shorthand | Description          |
 | --------- | -------------------- |
-| args      | arguments            |
+| arg       | argument             |
+| attrib    | attribute            |
 | box       | rectangle            |
 | config    | configuration        |
+| dir       | directory            |
 | dist      | distributable(s)     |
+| fn        | function             |
 | int       | integer              |
+| len       | length               |
 | num       | number               |
 | obj       | object               |
 | op        | operation            |
 | opt       | optional             |
+| prop      | property             |
 | src       | source(s)            |
 | str       | string               |
 | util      | utility              |
+| val       | value                |
 | wh        | width and height     |
 | xy        | cartesian value pair |
 
