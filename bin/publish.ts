@@ -94,6 +94,12 @@ async function main(): Promise<number> {
   pkg.version = nextVer;
   await Deno.writeTextFile('package.json', JSON.stringify(pkg));
 
+  result = await deno('fmt package.json');
+  if (!result.ok) {
+    console.error('Cannot format package.json.');
+    return 1;
+  }
+
   result = await git('add package.json');
   if (!result.ok) {
     console.error('Cannot stage package.json.');
@@ -133,6 +139,17 @@ async function main(): Promise<number> {
 async function git(args: string): Promise<{ ok: boolean; text: string }> {
   const process = Deno.run({
     cmd: ['git', ...args.split(' ')],
+    stdout: 'piped',
+  });
+  const status = await process.status();
+  const out = await process.output();
+  return { ok: status.success, text: new TextDecoder().decode(out) };
+}
+
+// https://github.com/denoland/deno/issues/10731
+async function deno(args: string): Promise<{ ok: boolean; text: string }> {
+  const process = Deno.run({
+    cmd: ['deno', ...args.split(' ')],
     stdout: 'piped',
   });
   const status = await process.status();
