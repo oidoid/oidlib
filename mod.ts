@@ -23,4 +23,3 @@ export * from './src/types/Immutable.ts';
 export * from './src/types/Inverse.ts';
 export * from './src/types/JSON.ts';
 export * from './src/types/NonNull.ts';
-export * from './src/types/Opt.ts';

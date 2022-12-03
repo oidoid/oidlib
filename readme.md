@@ -15,6 +15,7 @@ import map.
 | arg       | argument             |
 | attrib    | attribute            |
 | box       | rectangle            |
+| cmd       | command              |
 | config    | configuration        |
 | dir       | directory            |
 | dist      | distributable(s)     |
@@ -24,7 +25,6 @@ import map.
 | num       | number               |
 | obj       | object               |
 | op        | operation            |
-| opt       | optional             |
 | prop      | property             |
 | src       | source(s)            |
 | str       | string               |
