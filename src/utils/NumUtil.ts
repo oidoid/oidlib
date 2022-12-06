@@ -21,7 +21,23 @@ export namespace NumUtil {
    * -1 mod 3 = 2
    */
   export function mod(num: number, mod: number): number {
+    // https://registry.khronos.org/OpenGL-Refpages/gl4/html/mod.xhtml
     return num - mod * Math.floor(num / mod);
+  }
+
+  //
+  export function modInt(num: number): number {
+    // Only [Number.MIN_SAFE_INTEGER - 1, Number.MAX_SAFE_INTEGER + 1] are
+    // supported inputs.
+    if (num == Number.MAX_SAFE_INTEGER + 1) return Number.MIN_SAFE_INTEGER - 1;
+
+    const b27 = 2 ** 27;
+    const hi = (Math.floor(num / b27) % b27) * b27;
+    return hi + mod(num, b27);
+  }
+
+  export function modUint(num: number): number {
+    return NumUtil.mod(num, Number.MAX_SAFE_INTEGER + 1);
   }
 
   export function clamp(num: number, min: number, max: number): number {
@@ -56,11 +72,27 @@ export namespace NumUtil {
     return num < 0 ? -Math.round(-num) : Math.round(num);
   }
 
-  type Interval =
-    | 'inclusive'
-    | 'exclusive'
-    | 'inclusive-exclusive'
-    | 'exclusive-inclusive';
+  export function lshift(val: number, shift: number): number {
+    return val * 2 ** shift;
+  }
+
+  /** Signed right shift. */
+  export function rshift(num: number, shift: number): number {
+    return Math.floor(num / (2 ** shift));
+  }
+
+  /** Zero-fill right shift. The result is always non-negative. */
+  export function ushift(num: number, shift: number): number {
+    // https://github.com/timotejroiko/bitwise53/blob/3f8132c/index.js
+    if (num >= 0) return rshift(num, shift);
+    return Math.floor((num + 2 ** 54) / (2 ** shift));
+  }
+
+  export type Interval =
+    | 'Inclusive'
+    | 'Exclusive'
+    | 'InclusiveExclusive'
+    | 'ExclusiveInclusive';
 
   export function assertDomain(
     num: number,
@@ -92,19 +124,27 @@ export namespace NumUtil {
     return `${start}${min}, ${max}${end}`;
   }
 
-  const intervalBrackets = Immutable({
-    inclusive: { start: '[', end: ']' },
-    exclusive: { start: '(', end: ')' },
-    'inclusive-exclusive': { start: '[', end: ')' },
-    'exclusive-inclusive': { start: '(', end: ']' },
+  const intervalBrackets: Readonly<
+    { [interval in Interval]: { start: string; end: string } }
+  > = Immutable({
+    Inclusive: { start: '[', end: ']' },
+    Exclusive: { start: '(', end: ')' },
+    InclusiveExclusive: { start: '[', end: ')' },
+    ExclusiveInclusive: { start: '(', end: ']' },
   });
 
   const domainTest: Readonly<
-    Record<Interval, (num: number, min: number, max: number) => boolean>
+    {
+      [interval in Interval]: (
+        num: number,
+        min: number,
+        max: number,
+      ) => boolean;
+    }
   > = Immutable({
-    inclusive: (num, min, max) => num >= min && num <= max,
-    exclusive: (num, min, max) => num > min && num < max,
-    'inclusive-exclusive': (num, min, max) => num >= min && num < max,
-    'exclusive-inclusive': (num, min, max) => num > min && num <= max,
+    Inclusive: (num, min, max) => num >= min && num <= max,
+    Exclusive: (num, min, max) => num > min && num < max,
+    InclusiveExclusive: (num, min, max) => num >= min && num < max,
+    ExclusiveInclusive: (num, min, max) => num > min && num <= max,
   });
 }

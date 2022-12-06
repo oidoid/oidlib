@@ -46,7 +46,7 @@ declare const uint: unique symbol;
 export type Unumber = number & (Uint | { [unumber]: never });
 declare const unumber: unique symbol;
 
-export type Signedness = 'signed' | 'unsigned';
+export type Signedness = 'Signed' | 'Unsigned';
 
 export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
 export type NumTypeName = 'Number' | 'Unumber';
@@ -85,14 +85,14 @@ export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
 
   /**
    * Interpret value as a two's complement encoded number, not a logical number.
-   * This is an unchecked cast in C and wraps (modulo `max + 1 - min`). Eg, `I8.mod(0xff)` has a logical value of `-1`
-   * not `255`. There are no guards on this function. Out-of-range values are
-   * silently truncated as bits without saturation. Eg, `U8.mod(256)` has a
-   * logical value of `0` not `255` since the most significant bit is discarded.
+   * This is an unchecked cast in C and wraps (modulo `max + 1 - min`). Eg,
+   * `I8.mod(0xff)` has a logical value of `-1` not `255`. There are no guards
+   * on this function. Out-of-range values are silently truncated as bits
+   * without saturation. Eg, `U8.mod(256)` has a logical value of `0` not `255`
+   * since the most significant bit is discarded.
    *
    * Unsigned bigints, unsigned 31-bit numbers, and binary notation (eg,
-   * 0b0000_0000) work as expected. Internally, the passed in value is always
-   * manipulated as a BigInt before being converted and returned.
+   * 0b0000_0000) work as expected.
    *
    * Negative bigints, negative numbers, and 32b or greater numbers are
    * error-prone. Eg:
@@ -103,10 +103,8 @@ export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
    * - `0b1_00000000_00000000_00000000_00000000 | 0b0` is `0` but
    *   `0b1_00000000_00000000_00000000_00000000n | 0b0n` is `4294967296n` and
    *   `Number(1n << 32n)` is `4294967296`.
-   *
-   * All number bit arithmetic is signed 32b.
    */
-  mod(int: number | BigInt): T;
+  mod(int: number): T;
   /** Clamp the ceiling of num. This is a saturating ceil(). */
   ceil(num: number): T;
   /** Clamp the floor of num. This is a saturating floor(). */
@@ -144,9 +142,9 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
   /**
    * The two's complement minimum. For signed numbers, this is -max - 1.
    * Constants like Number.MIN_SAFE_INTEGER allow for one's complement
-   * representations like C's limits.h. However, `Number.MIN_SAFE_INTEGER - 1`
-   * is representable and `(char) -128` is `-128` in C. WebGL v2 is two's
-   * complement.
+   * representations like C's limits.h. However, assume two's complement so
+   * `Number.MIN_SAFE_INTEGER - 1` is representable, just like in C
+   * `(char) -128` is `-128`. WebGL v2 is two's complement.
    */
   override readonly min: T;
   override readonly max: T;
@@ -169,8 +167,15 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
       width > 0 && Number.isInteger(width),
       'Width must be integer greater than zero.',
     );
+    assert(
+      width <= 32 ||
+        signedness == 'Unsigned' && width == 53 ||
+        signedness == 'Signed' && width == 54,
+      'Width must be < 53b or unsigned 53b or signed 54b.',
+    );
+
     this.width = <T> width;
-    if (this.signedness == 'signed') {
+    if (this.signedness == 'Signed') {
       this.min = <T> -(2 ** (width - 1));
       this.max = <T> (2 ** (width - 1) - 1);
     } else {
@@ -189,15 +194,19 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
 
   override is = (num: number): num is T => {
     return Number.isInteger(num) &&
-      NumUtil.inDomain(num, this.min, this.max, 'inclusive');
+      NumUtil.inDomain(num, this.min, this.max, 'Inclusive');
   };
 
-  readonly mod = (int: number | bigint): T => {
-    int = BigInt[this.signedness == 'signed' ? 'asIntN' : 'asUintN'](
-      this.width,
-      BigInt(int),
-    );
-    return this.construct(Number(int));
+  readonly mod = (int: number): T => {
+    if (this.width < 53) {
+      return this.construct(NumUtil.wrap(int, this.min, this.max + 1));
+    }
+
+    // Assume 53-bit unsigned.
+    if (this.width == 53) return this.construct(NumUtil.modUint(int));
+
+    // Assume 54-bit signed.
+    return this.construct(NumUtil.modInt(int));
   };
 
   readonly round = (num: number): T => {
@@ -241,63 +250,63 @@ class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
   };
 
   readonly is = (num: number): num is T => {
-    return NumUtil.inDomain(num, this.min, this.max, 'inclusive');
+    return NumUtil.inDomain(num, this.min, this.max, 'Inclusive');
   };
 }
 
-export const I4: IntNamespace<I4> = IntNumNamespaceImpl.new('I4', 4, 'signed');
+export const I4: IntNamespace<I4> = IntNumNamespaceImpl.new('I4', 4, 'Signed');
 export const U4: IntNamespace<U4> = IntNumNamespaceImpl.new(
   'U4',
   4,
-  'unsigned',
+  'Unsigned',
 );
-export const I8: IntNamespace<I8> = IntNumNamespaceImpl.new('I8', 8, 'signed');
+export const I8: IntNamespace<I8> = IntNumNamespaceImpl.new('I8', 8, 'Signed');
 export const U8: IntNamespace<U8> = IntNumNamespaceImpl.new(
   'U8',
   8,
-  'unsigned',
+  'Unsigned',
 );
 export const I16: IntNamespace<I16> = IntNumNamespaceImpl.new(
   'I16',
   16,
-  'signed',
+  'Signed',
 );
 export const U16: IntNamespace<U16> = IntNumNamespaceImpl.new(
   'U16',
   16,
-  'unsigned',
+  'Unsigned',
 );
 export const I32: IntNamespace<I32> = IntNumNamespaceImpl.new(
   'I32',
   32,
-  'signed',
+  'Signed',
 );
 export const U32: IntNamespace<U32> = IntNumNamespaceImpl.new(
   'U32',
   32,
-  'unsigned',
+  'Unsigned',
 );
 export const Int: IntNamespace<Int> = IntNumNamespaceImpl.new(
   'Int',
   54,
-  'signed',
+  'Signed',
 );
 // Numbers are signed so omitting negative numbers loses a bit instead of
 // doubling the values available.
 export const Uint: IntNamespace<Uint> = IntNumNamespaceImpl.new(
   'Uint',
   53,
-  'unsigned',
+  'Unsigned',
 );
 export const Num: NumNamespace<number> = NumberNumNamespaceImpl.new(
   'Number',
-  'signed',
+  'Signed',
   Number.NEGATIVE_INFINITY,
   Number.POSITIVE_INFINITY,
 );
 export const Unumber: NumNamespace<Unumber> = NumberNumNamespaceImpl.new(
   'Unumber',
-  'unsigned',
+  'Unsigned',
   0,
   Number.POSITIVE_INFINITY,
 );

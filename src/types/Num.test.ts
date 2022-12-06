@@ -1091,7 +1091,7 @@ Deno.test('Maximum and minimum values.', () => {
 
 Deno.test('Bits.', async (test) => {
   for (
-    const [value, intExpected, uintExpected, i4Expected, u4Expected] of [
+    const [val, intExpected, uintExpected, i4Expected, u4Expected] of [
       [-31, -31, 0x1fffffffffffe1, 1, 1],
       [-30, -30, 0x1fffffffffffe2, 2, 2],
       [-29, -29, 0x1fffffffffffe3, 3, 3],
@@ -1164,7 +1164,7 @@ Deno.test('Bits.', async (test) => {
       [0b1_00000000_00000000_00000000_00000000, 4294967296, 4294967296, 0, 0],
       [0b1_00000000_00000000_00000000_00000000 | 0b0, 0, 0, 0, 0],
       [
-        0b1_00000000_00000000_00000000_00000000n | 0b0n,
+        Number(0b1_00000000_00000000_00000000_00000000n | 0b0n),
         4294967296,
         4294967296,
         0,
@@ -1172,32 +1172,71 @@ Deno.test('Bits.', async (test) => {
       ],
     ] as const
   ) {
-    await test.step(`Mod: ${value} (0x${value.toString(16)} 0b${value.toString(2)}).`, () => {
-      assertEquals(Int.mod(value), intExpected as Int);
-      assertEquals(Uint.mod(value), uintExpected as Uint);
-      assertEquals(I4.mod(value), i4Expected as I4);
-      assertEquals(U4.mod(value), u4Expected as U4);
+    await test.step(`Mod: ${val} (0x${val.toString(16)} 0b${val.toString(2)}).`, () => {
+      assertEquals(
+        Int.mod(val),
+        intExpected as Int,
+        `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
+      );
+      assertEquals(
+        Uint.mod(val),
+        uintExpected as Uint,
+        `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
+      );
+      assertEquals(
+        I4.mod(val),
+        i4Expected as I4,
+        `I4.mod(${val}); ${I4.mod(val)} != ${i4Expected}`,
+      );
+      assertEquals(
+        U4.mod(val),
+        u4Expected as U4,
+        `U4.mod(${val}); ${U4.mod(val)} != ${u4Expected}`,
+      );
     });
   }
 });
 
 Deno.test('Int bit limits.', async (test) => {
   for (
-    const [name, val, intExpected, uintExpected] of [[
-      'min',
-      Number.MIN_SAFE_INTEGER,
-      Number.MIN_SAFE_INTEGER,
-      Number(BigInt.asUintN(53, BigInt(Number.MIN_SAFE_INTEGER))),
-    ], [
-      'max',
-      Number.MAX_SAFE_INTEGER,
-      Number.MAX_SAFE_INTEGER,
-      Number.MAX_SAFE_INTEGER,
-    ]] as const
+    const [name, val, intExpected, uintExpected] of [
+      [
+        'min - 1',
+        Number.MIN_SAFE_INTEGER - 1,
+        Number.MIN_SAFE_INTEGER - 1,
+        Number(BigInt.asUintN(53, BigInt(Number.MIN_SAFE_INTEGER - 1))),
+      ],
+      [
+        'min',
+        Number.MIN_SAFE_INTEGER,
+        Number.MIN_SAFE_INTEGER,
+        Number(BigInt.asUintN(53, BigInt(Number.MIN_SAFE_INTEGER))),
+      ],
+      [
+        'max',
+        Number.MAX_SAFE_INTEGER,
+        Number.MAX_SAFE_INTEGER,
+        Number.MAX_SAFE_INTEGER,
+      ],
+      [
+        'max + 1',
+        Number.MAX_SAFE_INTEGER + 1,
+        Number.MIN_SAFE_INTEGER - 1,
+        0,
+      ],
+    ] as const
   ) {
     await test.step(`Mod: ${name}.`, () => {
-      assertEquals(Int.mod(val), intExpected);
-      assertEquals(Uint.mod(val), uintExpected);
+      assertEquals(
+        Int.mod(val),
+        intExpected,
+        `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
+      );
+      assertEquals(
+        Uint.mod(val),
+        uintExpected,
+        `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
+      );
     });
   }
 

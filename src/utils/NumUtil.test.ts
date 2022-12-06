@@ -1,5 +1,5 @@
-import { assertEquals } from 'std/testing/asserts.ts';
 import { Int, NumUtil } from '@/oidlib';
+import { assertEquals } from 'std/testing/asserts.ts';
 
 Deno.test('wrap()', async (test) => {
   for (
@@ -451,5 +451,233 @@ Deno.test('round()', async (test) => {
   ) {
     await test.step(`round(${num}) => ${expected}`, () =>
       assertEquals(NumUtil.round(num), Int(expected)));
+  }
+});
+
+Deno.test('lshift()', async (test) => {
+  for (
+    const [shift, expected] of [
+      0x00_00_00_00_00_00_01n,
+      0x00_00_00_00_00_00_02n,
+      0x00_00_00_00_00_00_04n,
+      0x00_00_00_00_00_00_08n,
+      0x00_00_00_00_00_00_10n,
+      0x00_00_00_00_00_00_20n,
+      0x00_00_00_00_00_00_40n,
+      0x00_00_00_00_00_00_80n,
+      0x00_00_00_00_00_01_00n,
+      0x00_00_00_00_00_02_00n,
+      0x00_00_00_00_00_04_00n,
+      0x00_00_00_00_00_08_00n,
+      0x00_00_00_00_00_10_00n,
+      0x00_00_00_00_00_20_00n,
+      0x00_00_00_00_00_40_00n,
+      0x00_00_00_00_00_80_00n,
+      0x00_00_00_00_01_00_00n,
+      0x00_00_00_00_02_00_00n,
+      0x00_00_00_00_04_00_00n,
+      0x00_00_00_00_08_00_00n,
+      0x00_00_00_00_10_00_00n,
+      0x00_00_00_00_20_00_00n,
+      0x00_00_00_00_40_00_00n,
+      0x00_00_00_00_80_00_00n,
+      0x00_00_00_01_00_00_00n,
+      0x00_00_00_02_00_00_00n,
+      0x00_00_00_04_00_00_00n,
+      0x00_00_00_08_00_00_00n,
+      0x00_00_00_10_00_00_00n,
+      0x00_00_00_20_00_00_00n,
+      0x00_00_00_40_00_00_00n,
+      0x00_00_00_80_00_00_00n,
+      0x00_00_01_00_00_00_00n,
+      0x00_00_02_00_00_00_00n,
+      0x00_00_04_00_00_00_00n,
+      0x00_00_08_00_00_00_00n,
+      0x00_00_10_00_00_00_00n,
+      0x00_00_20_00_00_00_00n,
+      0x00_00_40_00_00_00_00n,
+      0x00_00_80_00_00_00_00n,
+      0x00_01_00_00_00_00_00n,
+      0x00_02_00_00_00_00_00n,
+      0x00_04_00_00_00_00_00n,
+      0x00_08_00_00_00_00_00n,
+      0x00_10_00_00_00_00_00n,
+      0x00_20_00_00_00_00_00n,
+      0x00_40_00_00_00_00_00n,
+      0x00_80_00_00_00_00_00n,
+      0x01_00_00_00_00_00_00n,
+      0x02_00_00_00_00_00_00n,
+      0x04_00_00_00_00_00_00n,
+      0x08_00_00_00_00_00_00n,
+      0x10_00_00_00_00_00_00n,
+      0x20_00_00_00_00_00_00n,
+    ].entries()
+  ) {
+    const input = 1;
+    // There are no enforced limits so allow doubling at the 54th bit.
+    const expectedNum = Number(BigInt.asUintN(54, expected));
+    await test.step(`1 << ${shift} → x${expectedNum.toString(16)}`, () =>
+      assertEquals(NumUtil.lshift(input, shift), expectedNum));
+  }
+});
+
+Deno.test('unsigned right-shift', async (test) => {
+  for (
+    const [shift, expected] of [
+      0x10_00_00_00_00_00_00n,
+      0x08_00_00_00_00_00_00n,
+      0x04_00_00_00_00_00_00n,
+      0x02_00_00_00_00_00_00n,
+      0x01_00_00_00_00_00_00n,
+      0x00_80_00_00_00_00_00n,
+      0x00_40_00_00_00_00_00n,
+      0x00_20_00_00_00_00_00n,
+      0x00_10_00_00_00_00_00n,
+      0x00_08_00_00_00_00_00n,
+      0x00_04_00_00_00_00_00n,
+      0x00_02_00_00_00_00_00n,
+      0x00_01_00_00_00_00_00n,
+      0x00_00_80_00_00_00_00n,
+      0x00_00_40_00_00_00_00n,
+      0x00_00_20_00_00_00_00n,
+      0x00_00_10_00_00_00_00n,
+      0x00_00_08_00_00_00_00n,
+      0x00_00_04_00_00_00_00n,
+      0x00_00_02_00_00_00_00n,
+      0x00_00_01_00_00_00_00n,
+      0x00_00_00_80_00_00_00n,
+      0x00_00_00_40_00_00_00n,
+      0x00_00_00_20_00_00_00n,
+      0x00_00_00_10_00_00_00n,
+      0x00_00_00_08_00_00_00n,
+      0x00_00_00_04_00_00_00n,
+      0x00_00_00_02_00_00_00n,
+      0x00_00_00_01_00_00_00n,
+      0x00_00_00_00_80_00_00n,
+      0x00_00_00_00_40_00_00n,
+      0x00_00_00_00_20_00_00n,
+      0x00_00_00_00_10_00_00n,
+      0x00_00_00_00_08_00_00n,
+      0x00_00_00_00_04_00_00n,
+      0x00_00_00_00_02_00_00n,
+      0x00_00_00_00_01_00_00n,
+      0x00_00_00_00_00_80_00n,
+      0x00_00_00_00_00_40_00n,
+      0x00_00_00_00_00_20_00n,
+      0x00_00_00_00_00_10_00n,
+      0x00_00_00_00_00_08_00n,
+      0x00_00_00_00_00_04_00n,
+      0x00_00_00_00_00_02_00n,
+      0x00_00_00_00_00_01_00n,
+      0x00_00_00_00_00_00_80n,
+      0x00_00_00_00_00_00_40n,
+      0x00_00_00_00_00_00_20n,
+      0x00_00_00_00_00_00_10n,
+      0x00_00_00_00_00_00_08n,
+      0x00_00_00_00_00_00_04n,
+      0x00_00_00_00_00_00_02n,
+      0x00_00_00_00_00_00_01n,
+      0x00_00_00_00_00_00_00n,
+      0x00_00_00_00_00_00_00n,
+    ].entries()
+  ) {
+    const input = Number(BigInt.asUintN(53, 0x10_00_00_00_00_00_00n));
+    const expectedNum = Number(BigInt.asUintN(53, expected));
+    await test.step(`rshift x${input.toString(16)} >> ${shift} → x${expectedNum.toString(16)}`, () =>
+      assertEquals(NumUtil.rshift(input, shift), expectedNum));
+    await test.step(`ushift x${input.toString(16)} >> ${shift} → x${expectedNum.toString(16)}`, () =>
+      assertEquals(NumUtil.ushift(input, shift), expectedNum));
+  }
+});
+
+Deno.test('signed right-shift', async (test) => {
+  for (
+    const [shift, [expectedSigned, expectedUnsigned]] of ([
+      [0x20_00_00_00_00_00_00n, 0x20_00_00_00_00_00_00n],
+      [0x30_00_00_00_00_00_00n, 0x10_00_00_00_00_00_00n],
+      [0x38_00_00_00_00_00_00n, 0x08_00_00_00_00_00_00n],
+      [0x3c_00_00_00_00_00_00n, 0x04_00_00_00_00_00_00n],
+      [0x3e_00_00_00_00_00_00n, 0x02_00_00_00_00_00_00n],
+      [0x3f_00_00_00_00_00_00n, 0x01_00_00_00_00_00_00n],
+      [0x3f_80_00_00_00_00_00n, 0x00_80_00_00_00_00_00n],
+      [0x3f_c0_00_00_00_00_00n, 0x00_40_00_00_00_00_00n],
+      [0x3f_e0_00_00_00_00_00n, 0x00_20_00_00_00_00_00n],
+      [0x3f_f0_00_00_00_00_00n, 0x00_10_00_00_00_00_00n],
+      [0x3f_f8_00_00_00_00_00n, 0x00_08_00_00_00_00_00n],
+      [0x3f_fc_00_00_00_00_00n, 0x00_04_00_00_00_00_00n],
+      [0x3f_fe_00_00_00_00_00n, 0x00_02_00_00_00_00_00n],
+      [0x3f_ff_00_00_00_00_00n, 0x00_01_00_00_00_00_00n],
+      [0x3f_ff_80_00_00_00_00n, 0x00_00_80_00_00_00_00n],
+      [0x3f_ff_c0_00_00_00_00n, 0x00_00_40_00_00_00_00n],
+      [0x3f_ff_e0_00_00_00_00n, 0x00_00_20_00_00_00_00n],
+      [0x3f_ff_f0_00_00_00_00n, 0x00_00_10_00_00_00_00n],
+      [0x3f_ff_f8_00_00_00_00n, 0x00_00_08_00_00_00_00n],
+      [0x3f_ff_fc_00_00_00_00n, 0x00_00_04_00_00_00_00n],
+      [0x3f_ff_fe_00_00_00_00n, 0x00_00_02_00_00_00_00n],
+      [0x3f_ff_ff_00_00_00_00n, 0x00_00_01_00_00_00_00n],
+      [0x3f_ff_ff_80_00_00_00n, 0x00_00_00_80_00_00_00n],
+      [0x3f_ff_ff_c0_00_00_00n, 0x00_00_00_40_00_00_00n],
+      [0x3f_ff_ff_e0_00_00_00n, 0x00_00_00_20_00_00_00n],
+      [0x3f_ff_ff_f0_00_00_00n, 0x00_00_00_10_00_00_00n],
+      [0x3f_ff_ff_f8_00_00_00n, 0x00_00_00_08_00_00_00n],
+      [0x3f_ff_ff_fc_00_00_00n, 0x00_00_00_04_00_00_00n],
+      [0x3f_ff_ff_fe_00_00_00n, 0x00_00_00_02_00_00_00n],
+      [0x3f_ff_ff_ff_00_00_00n, 0x00_00_00_01_00_00_00n],
+      [0x3f_ff_ff_ff_80_00_00n, 0x00_00_00_00_80_00_00n],
+      [0x3f_ff_ff_ff_c0_00_00n, 0x00_00_00_00_40_00_00n],
+      [0x3f_ff_ff_ff_e0_00_00n, 0x00_00_00_00_20_00_00n],
+      [0x3f_ff_ff_ff_f0_00_00n, 0x00_00_00_00_10_00_00n],
+      [0x3f_ff_ff_ff_f8_00_00n, 0x00_00_00_00_08_00_00n],
+      [0x3f_ff_ff_ff_fc_00_00n, 0x00_00_00_00_04_00_00n],
+      [0x3f_ff_ff_ff_fe_00_00n, 0x00_00_00_00_02_00_00n],
+      [0x3f_ff_ff_ff_ff_00_00n, 0x00_00_00_00_01_00_00n],
+      [0x3f_ff_ff_ff_ff_80_00n, 0x00_00_00_00_00_80_00n],
+      [0x3f_ff_ff_ff_ff_c0_00n, 0x00_00_00_00_00_40_00n],
+      [0x3f_ff_ff_ff_ff_e0_00n, 0x00_00_00_00_00_20_00n],
+      [0x3f_ff_ff_ff_ff_f0_00n, 0x00_00_00_00_00_10_00n],
+      [0x3f_ff_ff_ff_ff_f8_00n, 0x00_00_00_00_00_08_00n],
+      [0x3f_ff_ff_ff_ff_fc_00n, 0x00_00_00_00_00_04_00n],
+      [0x3f_ff_ff_ff_ff_fe_00n, 0x00_00_00_00_00_02_00n],
+      [0x3f_ff_ff_ff_ff_ff_00n, 0x00_00_00_00_00_01_00n],
+      [0x3f_ff_ff_ff_ff_ff_80n, 0x00_00_00_00_00_00_80n],
+      [0x3f_ff_ff_ff_ff_ff_c0n, 0x00_00_00_00_00_00_40n],
+      [0x3f_ff_ff_ff_ff_ff_e0n, 0x00_00_00_00_00_00_20n],
+      [0x3f_ff_ff_ff_ff_ff_f0n, 0x00_00_00_00_00_00_10n],
+      [0x3f_ff_ff_ff_ff_ff_f8n, 0x00_00_00_00_00_00_08n],
+      [0x3f_ff_ff_ff_ff_ff_fcn, 0x00_00_00_00_00_00_04n],
+      [0x3f_ff_ff_ff_ff_ff_fen, 0x00_00_00_00_00_00_02n],
+      [0x3f_ff_ff_ff_ff_ff_ffn, 0x00_00_00_00_00_00_01n],
+      [0x3f_ff_ff_ff_ff_ff_ffn, 0x00_00_00_00_00_00_00n],
+      [0x3f_ff_ff_ff_ff_ff_ffn, 0x00_00_00_00_00_00_00n],
+    ] as const).entries()
+  ) {
+    const input = Number(BigInt.asIntN(54, 0x20_00_00_00_00_00_00n));
+    const expectedSignedNum = Number(BigInt.asIntN(54, expectedSigned));
+    const expectedUnsignedNum = Number(BigInt.asUintN(54, expectedUnsigned));
+    await test.step(`rshift x${input.toString(16)} >> ${shift} → x${expectedSignedNum.toString(16)} (x${Number(BigInt.asUintN(54, expectedSigned)).toString(16)})`, () =>
+      assertEquals(NumUtil.rshift(input, shift), expectedSignedNum));
+    await test.step(`ushift x${input.toString(16)} >> ${shift} → x${expectedUnsignedNum.toString(16)}`, () =>
+      assertEquals(NumUtil.ushift(input, shift), expectedUnsignedNum));
+  }
+});
+
+Deno.test('mod int', async (test) => {
+  for (
+    const [index, [input, expectedInt, expectedUint]] of // deno-fmt-ignore
+    ([
+      [Number.MIN_SAFE_INTEGER - 1, BigInt(Number.MIN_SAFE_INTEGER - 1), 0x00_00_00_00_00_00_00n],
+      [Number.MIN_SAFE_INTEGER, BigInt(Number.MIN_SAFE_INTEGER), 0x00_00_00_00_00_00_01n],
+      [Number.MIN_SAFE_INTEGER + 1, BigInt(Number.MIN_SAFE_INTEGER + 1), 0x00_00_00_00_00_00_02n],
+      [Number.MAX_SAFE_INTEGER - 1, BigInt(Number.MAX_SAFE_INTEGER - 1), BigInt(Number.MAX_SAFE_INTEGER - 1)],
+      [Number.MAX_SAFE_INTEGER, BigInt(Number.MAX_SAFE_INTEGER), BigInt(Number.MAX_SAFE_INTEGER)],
+      [Number.MAX_SAFE_INTEGER + 1, BigInt(Number.MIN_SAFE_INTEGER - 1), 0n],
+    ] as const).entries()
+  ) {
+    const expectedIntNum = Number(BigInt.asIntN(54, expectedInt));
+    const expectedUintNum = Number(BigInt.asUintN(54, expectedUint));
+    await test.step(`${index} modInt(x${input.toString(16)}) → x${expectedIntNum.toString(16)} (x${Number(BigInt.asUintN(53, expectedInt)).toString(16)})`, () =>
+      assertEquals(NumUtil.modInt(input), expectedIntNum));
+    await test.step(`${index} modUint(x${input.toString(16)}) → x${expectedUintNum.toString(16)} (x${Number(BigInt.asUintN(53, expectedUint)).toString(16)})`, () =>
+      assertEquals(NumUtil.modUint(input), expectedUintNum));
   }
 });
