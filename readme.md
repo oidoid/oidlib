@@ -10,28 +10,37 @@ import map.
 
 ## Shorthands
 
-| Shorthand | Description          |
-| --------- | -------------------- |
-| arg       | argument             |
-| attrib    | attribute            |
-| box       | rectangle            |
-| cmd       | command              |
-| config    | configuration        |
-| dir       | directory            |
-| dist      | distributable(s)     |
-| fn        | function             |
-| int       | integer              |
-| len       | length               |
-| num       | number               |
-| obj       | object               |
-| op        | operation            |
-| prop      | property             |
-| src       | source(s)            |
-| str       | string               |
-| util      | utility              |
-| val       | value                |
-| wh        | width and height     |
-| xy        | cartesian value pair |
+| Shorthand | Description                        |
+| --------- | ---------------------------------- |
+| arg       | argument                           |
+| attrib    | attribute                          |
+| box       | rectangle                          |
+| cb        | callback / listener                |
+| cmd       | command                            |
+| config    | configuration                      |
+| dir       | directory                          |
+| dist      | distributable(s)                   |
+| err       | error                              |
+| ev        | event                              |
+| ex        | example                            |
+| exec      | executable                         |
+| exec      | execute                            |
+| fn        | function                           |
+| int       | integer                            |
+| lhs       | left-hand side                     |
+| num       | number                             |
+| obj       | object                             |
+| op        | operation                          |
+| prop      | property                           |
+| rhs       | right-hand side                    |
+| size      | Map.size / Array.length            |
+| src       | source(s)                          |
+| str       | string                             |
+| this      | this when possible, self otherwise |
+| util      | utility                            |
+| val       | value                              |
+| wh        | width and height                   |
+| xy        | cartesian value pair               |
 
 ## Environment variables
 
