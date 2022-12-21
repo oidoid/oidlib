@@ -6,10 +6,7 @@ import {
 export async function assertSnapshot<T>(
   test: Deno.TestContext,
   actual: T,
-  options?: SnapshotOptions<T>,
+  opts?: SnapshotOptions<T>,
 ): Promise<void> {
-  return await assertSnapshotWithOptions(test, actual, {
-    dir: '.',
-    ...options,
-  });
+  return await assertSnapshotWithOptions(test, actual, { dir: '.', ...opts });
 }

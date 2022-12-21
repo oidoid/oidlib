@@ -17,8 +17,6 @@ export * from './src/utils/Str.ts';
 
 export * from './src/math/Random.ts';
 
-export * from './src/time/Millis.ts';
-
 export * from './src/types/Immutable.ts';
 export * from './src/types/Inverse.ts';
 export * from './src/types/JSON.ts';

@@ -3,6 +3,6 @@ export namespace Obj {
   export function is(
     val: unknown,
   ): val is { [key: string | number | symbol]: unknown } {
-    return val != null && typeof val === 'object';
+    return val != null && typeof val == 'object';
   }
 }
