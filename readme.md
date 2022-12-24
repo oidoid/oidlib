@@ -28,6 +28,7 @@ import map.
 | fn        | function                           |
 | int       | integer                            |
 | lhs       | left-hand side                     |
+| lut       | lookup table                       |
 | num       | number                             |
 | obj       | object                             |
 | op        | operation                          |
