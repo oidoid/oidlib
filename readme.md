@@ -18,6 +18,7 @@ import map.
 | cb        | callback / listener                |
 | cmd       | command                            |
 | config    | configuration                      |
+| ctrl      | control                            |
 | dir       | directory                          |
 | dist      | distributable(s)                   |
 | err       | error                              |
@@ -32,6 +33,7 @@ import map.
 | num       | number                             |
 | obj       | object                             |
 | op        | operation                          |
+| prev      | previous                           |
 | prop      | property                           |
 | rhs       | right-hand side                    |
 | size      | Map.size / Array.length            |
