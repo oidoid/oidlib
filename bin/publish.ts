@@ -38,7 +38,7 @@ async function main(): Promise<number> {
     return 1;
   }
 
-  const nextVer = semver.inc(pkg.version, releaseType);
+  const nextVer = semver.increment(pkg.version, releaseType);
   if (nextVer == null) {
     console.error(
       `Cannot compute next ${releaseType} semantic version from ${pkg.version}.`,
