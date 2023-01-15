@@ -98,34 +98,6 @@ for (
     assertEquals<number>(IntXY.area(xy), expected));
 }
 
-// to-do: delete or add method. This was for clamping between two values, not
-// constructing a new IntXY.
-// for (
-//   const [index, [xy, min, max, expected]] of ([
-//     [
-//       IntXY(10, 200),
-//       IntXY(11, 201),
-//       IntXY(1000, 1000),
-//       IntXY(11, 201),
-//     ],
-//     [
-//       IntXY(10, 200),
-//       IntXY(0, 0),
-//       IntXY(1000, 1000),
-//       IntXY(10, 200),
-//     ],
-//     [
-//       IntXY(10, 200),
-//       IntXY(0, 0),
-//       IntXY(9, 199),
-//       IntXY(9, 199),
-//     ],
-//   ] as const).entries()
-// ) {
-//   Deno.test(`Clamp: ${index}.`, () =>
-//     assertEquals(IntXY.clamp(xy, min, max), expected));
-// }
-
 for (
   const [name, xy, to, ratio, expected] of [
     ['integer', IntXY(1, 2), IntXY(3, 4), .5, IntXY(2, 3)],
