@@ -1,5 +1,5 @@
-import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts';
 import { ArrayUtil, I32, Random } from '@/oidlib';
+import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts';
 
 Deno.test('Shuffle: permutations.', () => {
   const iterations = 1_000_000;
@@ -9,9 +9,9 @@ Deno.test('Shuffle: permutations.', () => {
   );
 
   const distribution: Record<string, number> = {};
-  const random = Random(I32(0));
+  const random = new Random(I32(0));
   for (let i = 0; i < iterations; i++) {
-    ArrayUtil.shuffle(array, () => Random.fraction(random));
+    ArrayUtil.shuffle(array, () => random.fraction);
     const permutation = array.join('');
     distribution[permutation] ??= 0;
     distribution[permutation]++;

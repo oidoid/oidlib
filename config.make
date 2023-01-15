@@ -62,6 +62,11 @@ rm := rm --force --recursive
 
 # to-do: find Deno alternative.
 # https://github.com/denoland/deno/issues/16321
+# esbuild doesn't support a Deno config (Deno-ism) or import maps (requires
+# package management) and didn't seem to live reload.
+# https://esbuild.github.io/api/#live-reload
+# esbuild_watch := deno run --allow-all https://deno.land/x/esbuild@v0.17.0/mod.js --watch
+# tail -f /dev/null | $(esbuild_watch) --servedir='$(dist_dir)'
 live-server := npx live-server --no-browser
 
 # Silence sub-makes.

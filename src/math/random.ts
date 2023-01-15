@@ -1,33 +1,34 @@
 import { I32 } from '@/oidlib';
 
 // http://www.firstpr.com.au/dsp/rand31/
-export interface Random {
+export class Random {
   /** Only [1, 0x7fff_fffe] is valid. */
-  seed: I32;
-}
+  #seed: I32;
 
-export function Random(seed: I32) {
-  seed = I32((seed * 16_807) % 0x7fff_ffff); // [-0x7fff_fffe, 0x7fff_fffe]
-
-  // Account for out of range numbers.
-  if (seed <= 0) { // [-0x7fff_fffe, 0]
-    seed = I32(
-      (seed + 0x7fff_fffe) % 0x7fff_fffe + // [0, 0x7fff_fffd]
-        1, // [1, 0x7fff_fffe]
-    );
+  get seed(): I32 {
+    return this.#seed;
   }
-  return { seed };
-}
 
-export namespace Random {
+  constructor(seed: I32) {
+    this.#seed = I32((seed * 16_807) % 0x7fff_ffff); // [-0x7fff_fffe, 0x7fff_fffe]
+
+    // Account for out of range numbers.
+    if (this.#seed <= 0) { // [-0x7fff_fffe, 0]
+      this.#seed = I32(
+        (seed + 0x7fff_fffe) % 0x7fff_fffe + // [0, 0x7fff_fffd]
+          1, // [1, 0x7fff_fffe]
+      );
+    }
+  }
+
   /** Returns a fraction in [0, 1). */
-  export function fraction(self: Random): number {
-    return (i32(self) - 1) / 0x7fff_fffe;
+  get fraction(): number {
+    return (this.i32 - 1) / 0x7fff_fffe;
   }
 
   /** Returns an integer in [1, 0x7fff_fffe]. */
-  export function i32(self: Random): I32 {
-    self.seed = I32((self.seed * 16_807) % 0x7fff_ffff);
-    return self.seed;
+  get i32(): I32 {
+    this.#seed = I32((this.#seed * 16_807) % 0x7fff_ffff);
+    return this.#seed;
   }
 }

@@ -1,8 +1,7 @@
 // ─── oidlib >°──
 
 // Import order is due to https://github.com/denoland/deno/issues/11286.
-// export * from './src/test/TestUtil.ts';
-
+// export * from './src/test/test-util.ts';
 export * from './src/utils/str.ts';
 export * from './src/types/num.ts';
 export * from './src/2d/xy.ts';
