@@ -14,9 +14,9 @@ import {
   IntXY,
   IntXYNamespace,
   Num,
-  NumberXY,
   NumCoercion,
   NumNamespace,
+  NumXY,
   NumXYNamespace,
   Str,
   U16,
@@ -29,8 +29,8 @@ import {
   U8XY,
   Uint,
   UintXY,
-  Unumber,
-  UnumberXY,
+  Unum,
+  UnumXY,
   XY,
   XYNamespace,
 } from '@/oidlib';
@@ -257,9 +257,9 @@ abstract class BoxNamespaceImpl<
     self: Readonly<Self>,
     coerce: CoerceXY<XYSelf, T>,
   ): XYSelf {
-    const wh = this.whCoerce(self, NumberXY);
-    const offset = NumberXY.div(wh, 2, 2);
-    return coerce(NumberXY.add(offset, self.start));
+    const wh = this.whCoerce(self, NumXY);
+    const offset = NumXY.div(wh, 2, 2);
+    return coerce(NumXY.add(offset, self.start));
   }
 
   construct(
@@ -312,12 +312,12 @@ abstract class BoxNamespaceImpl<
     coerce: CoerceXY<XYSelf, T>,
     ...args: BoxArgs
   ): Self {
-    const box = NumberBox(argsToBox(args));
-    const min = NumberXY(this.min(self));
-    const max = NumberXY(this.max(self));
+    const box = NumBox(argsToBox(args));
+    const min = NumXY(this.min(self));
+    const max = NumXY(this.max(self));
     return {
-      start: coerce(NumberXY.max(min, NumberBox.min(box))),
-      end: coerce(NumberXY.min(max, NumberBox.max(box))),
+      start: coerce(NumXY.max(min, NumBox.min(box))),
+      end: coerce(NumXY.min(max, NumBox.max(box))),
     } as Self;
   }
 
@@ -352,14 +352,14 @@ abstract class BoxNamespaceImpl<
     coerce: CoerceXY<XYSelf, T>,
     ...args: XYArgs
   ): Self {
-    const to = NumberXY(argsToXY(args));
-    const by = NumberXY.sub(to, this.centerCoerce(self, coerce));
+    const to = NumXY(argsToXY(args));
+    const by = NumXY.sub(to, this.centerCoerce(self, coerce));
     return this.moveByCoerce(self, coerce, by);
   }
 
   moveToCoerce(self: Self, coerce: CoerceXY<XYSelf, T>, ...args: XYArgs): Self {
-    const to = NumberXY(argsToXY(args));
-    const by = NumberXY.sub(to, self.start);
+    const to = NumXY(argsToXY(args));
+    const by = NumXY.sub(to, self.start);
     return this.moveByCoerce(self, coerce, by);
   }
 
@@ -382,8 +382,8 @@ abstract class BoxNamespaceImpl<
   }
 
   sizeToCoerce(self: Self, coerce: CoerceXY<XYSelf, T>, ...args: XYArgs): Self {
-    const to = NumberXY(argsToXY(args));
-    const by = NumberXY.sub(NumberXY.add(to, self.start), self.end);
+    const to = NumXY(argsToXY(args));
+    const by = NumXY.sub(NumXY.add(to, self.start), self.end);
     return this.sizeByCoerce(self, coerce, by);
   }
 
@@ -396,12 +396,12 @@ abstract class BoxNamespaceImpl<
     coerce: CoerceXY<XYSelf, T>,
     ...args: BoxArgs
   ): Self {
-    const box = NumberBox(argsToBox(args));
-    const min = NumberXY(this.min(self));
-    const max = NumberXY(this.max(self));
+    const box = NumBox(argsToBox(args));
+    const min = NumXY(this.min(self));
+    const max = NumXY(this.max(self));
     return {
-      start: coerce(NumberXY.min(min, NumberBox.min(box))),
-      end: coerce(NumberXY.max(max, NumberBox.max(box))),
+      start: coerce(NumXY.min(min, NumBox.min(box))),
+      end: coerce(NumXY.max(max, NumBox.max(box))),
     } as Self;
   }
 
@@ -464,8 +464,8 @@ class IntBoxNamespaceImpl<
     adapters.areaNum = (self) => base.areaCoerce(self, Number);
     adapters.heightNum = (self) => base.heightCoerce(self, Number);
     adapters.widthNum = (self) => base.widthCoerce(self, Number);
-    adapters.centerNum = (self) => base.centerCoerce(self, NumberXY);
-    adapters.whNum = (self) => base.whCoerce(self, NumberXY);
+    adapters.centerNum = (self) => base.centerCoerce(self, NumXY);
+    adapters.whNum = (self) => base.whCoerce(self, NumXY);
 
     for (
       const coercion of ['', 'ceil', 'floor', 'mod', 'round', 'trunc'] as const
@@ -605,10 +605,10 @@ export type IntBox = Box<IntXY, Int> & { [intBox]: never };
 declare const intBox: unique symbol;
 export type UintBox = Box<UintXY, Uint> & { [uintBox]: never };
 declare const uintBox: unique symbol;
-export type NumberBox = Box<NumberXY, number> & { [numberBox]: never };
-declare const numberBox: unique symbol;
-export type UnumberBox = Box<UnumberXY, Unumber> & { [unumberBox]: never };
-declare const unumberBox: unique symbol;
+export type NumBox = Box<NumXY, number> & { [numBox]: never };
+declare const numBox: unique symbol;
+export type UnumBox = Box<UnumXY, Unum> & { [unumBox]: never };
+declare const unumBox: unique symbol;
 
 export const I4Box: IntBoxNamespace<I4Box, I4XY, I4> = IntBoxNamespaceImpl.new(
   'I4Box',
@@ -642,14 +642,12 @@ export const IntBox: IntBoxNamespace<IntBox, IntXY, Int> = IntBoxNamespaceImpl
   .new('IntBox', Int, IntXY);
 export const UintBox: IntBoxNamespace<UintBox, UintXY, Uint> =
   IntBoxNamespaceImpl.new('UintBox', Uint, UintXY);
-export const NumberBox: NumBoxNamespace<NumberBox, NumberXY, number> =
-  NumberBoxNamespaceImpl.new('NumberBox', Num, NumberXY);
-export const UnumberBox: NumBoxNamespace<UnumberBox, UnumberXY, Unumber> =
-  NumberBoxNamespaceImpl.new('UnumberBox', Unumber, UnumberXY);
+export const NumBox: NumBoxNamespace<NumBox, NumXY, number> =
+  NumberBoxNamespaceImpl.new('NumBox', Num, NumXY);
+export const UnumBox: NumBoxNamespace<UnumBox, UnumXY, Unum> =
+  NumberBoxNamespaceImpl.new('UnumBox', Unum, UnumXY);
 
-function argsToBox(
-  args: BoxArgs | XYArgs,
-): Readonly<Box<XY<number>, number>> {
+function argsToBox(args: BoxArgs | XYArgs): Readonly<Box<XY<number>, number>> {
   if (args.length == 2) {
     if (typeof args[0] == 'number') {
       const start = { x: args[0], y: args[1] as number };

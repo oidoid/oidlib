@@ -17,55 +17,19 @@ import {
   U4,
   U8,
   Uint,
-  Unumber,
+  Unum,
 } from '@/oidlib';
 
-// to-do: see what the class version looks like again for XY, Box, Random, etc.
-// The number primitive wrappers (I8, U32, etc) make sense, work well, and
-// should stay as branded types because numbers are immutable, I don't want to
-// wrap or extend number, and I wouldn't want to modify the prototype chain. I
-// like the namespace style for these and other primitives and builtins like Str
-// and Obj.
-//
-// However, XY and Box, and other higher layer classes like Random, I'm unsure
-// of.
-//
-// These are mutable types which exposes them to erroneous mixes of static
-// utilities and instances such as `NumberXY.addClamp(I4XY(1, 2), 100, 200)` as
-// opposed to `I4XY.addRound(I4XY(1, 2), 100, 200)`. The utilities are strictly
-// typed to prevent this but it complicates the implementation a bit. Instead of
-// the IntXY utility being a superset of all other integer types like Int is,
-// the utility is only allowed to operate on exactly IntXYs.
-//
-// These are user types and could be classes. `I4XY(1, 2).addRound(100, 200)` is
-// a much nicer syntax. If the pipeline operator becomes available, functions
-// won't have to be nested like `I4XY(1, 2) |> I4XY.addRound(%, 100, 200)`.
-//
-// Classes require their own marshalling implementations. However, while most
-// plain JavaScript primitives can be de/serialized directly from/to JSON, that
-// is no longer the case for types such as bigints. Even infinite number values
-// cannot be de/serialized directly without a custom reviver or replacer. Sets
-// and Maps are quite prevalent builtins but also JSON incompatible. Native
-// de/serialization incompatibility is not unique to classes.
-//
-// Additionally, plain objects have no encapsulation. It's very easy to touch
-// state. If an object has nothing to hide (all states are valid), then perhaps
-// this is ok but JavaScript primitives are broad and usually invalid states are
-// possible. For example, see Animator which exposes period when only index
-// is wanted.
-//
-// Modern JavaScript is very class-centric.
-
-/** A cartesian position. */
+/** A cartesian position or dimensions. */
 export interface XY<T> {
   x: T;
   y: T;
 }
 
-// Unless you're using NumberXY or UnumberXY, you almost never want these base
-// methods for integral types. They do not coerce and they're not type-checked,
-// but even if they were typed strongly, `I8XY.div(I8XY(1, 1), I8XY(2, 2))`
-// would still only fail at runtime.
+// Unless you're using NumXY or UnumXY, you almost never want these base methods
+// for integral types. They do not coerce and they're not type-checked, but even
+// if they were typed strongly, `I8XY.div(I8XY(1, 1), I8XY(2, 2))` would still
+// only fail at runtime.
 export interface XYNamespace<Self extends XY<T>, T extends number>
   extends
     AbsXYNamespace<Self, T, '' | 'clamp'>,
@@ -433,10 +397,10 @@ export type IntXY = XY<Int> & { [intXY]: never };
 declare const intXY: unique symbol;
 export type UintXY = XY<Uint> & { [uintXY]: never };
 declare const uintXY: unique symbol;
-export type NumberXY = XY<number> & { [numberXY]: never };
-declare const numberXY: unique symbol;
-export type UnumberXY = XY<Unumber> & { [unumberXY]: never };
-declare const unumberXY: unique symbol;
+export type NumXY = XY<number> & { [numXY]: never };
+declare const numXY: unique symbol;
+export type UnumXY = XY<Unum> & { [unumXY]: never };
+declare const unumXY: unique symbol;
 
 export const I4XY: IntXYNamespace<I4XY, I4> = IntXYNamespaceImpl.new(
   'I4XY',
@@ -478,10 +442,10 @@ export const UintXY: IntXYNamespace<UintXY, Uint> = IntXYNamespaceImpl.new(
   'UintXY',
   Uint,
 );
-export const NumberXY: NumXYNamespace<NumberXY, number> = NumberXYNamespaceImpl
-  .new('NumberXY', Num);
-export const UnumberXY: NumXYNamespace<UnumberXY, Unumber> =
-  NumberXYNamespaceImpl.new('UnumberXY', Unumber);
+export const NumXY: NumXYNamespace<NumXY, number> = NumberXYNamespaceImpl
+  .new('NumXY', Num);
+export const UnumXY: NumXYNamespace<UnumXY, Unum> = NumberXYNamespaceImpl
+  .new('UnumXY', Unum);
 
 function argsToXY(args: XYArgs): Readonly<XY<number>> {
   if (args.length == 1) return args[0];

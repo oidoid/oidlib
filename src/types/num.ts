@@ -32,6 +32,9 @@ declare const u32: unique symbol;
  * limiting the range is wanted, performance guidelines are unclear[1][2], and
  * there's no native JSON support[3][4].
  *
+ * Arithmetic and other operations are not provided since number is immutable.
+ * Wrap operations like additions in the coercion wanted. Eg, `I32(1 + 1)`.
+ *
  * [safe integer]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
  * [bitwise operations]: https://wikipedia.org/wiki/Asm.js#Code_generation
  * [1]: https://github.com/tc39/proposal-bigint/blob/master/ADVANCED.md#int64uint64
@@ -43,13 +46,13 @@ export type Int = number & (I32 | Uint | { [int]: never });
 declare const int: unique symbol;
 export type Uint = number & (U32 | { [uint]: never });
 declare const uint: unique symbol;
-export type Unumber = number & (Uint | { [unumber]: never });
-declare const unumber: unique symbol;
+export type Unum = number & (Uint | { [unum]: never });
+declare const unum: unique symbol;
 
 export type Signedness = 'Signed' | 'Unsigned';
 
 export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
-export type NumTypeName = 'Number' | 'Unumber';
+export type NumTypeName = 'Num' | 'Unum';
 export type AnyNumTypeName = IntTypeName | NumTypeName;
 
 export type IntCoercion = 'ceil' | 'floor' | 'mod' | 'round' | 'trunc';
@@ -61,12 +64,16 @@ export interface AnyNumNamespace<T extends number> {
   readonly max: T;
   readonly signedness: Signedness;
 
+  /** Identical to cast(). Prefer this function. */
+  (num: number): T;
+
   /**
    * Cast or assert val (no change). val is interpreted as a logical number,
    * not bits. For example, `I8(0xff)` will fail as 255 is out-of-range for a
-   * signed eight-bit number.
+   * signed eight-bit number. Prefer nameless function.
    */
-  (num: number): T;
+  cast(num: number): T;
+
   is(num: number): num is T;
 }
 
@@ -130,7 +137,7 @@ abstract class NumNamespaceImpl<T extends number> {
     this.signedness = signedness;
   }
 
-  construct(num: number): T {
+  cast(num: number): T {
     assert(this.is(num), `${num} is not a ${this.#name}.`);
     return num;
   }
@@ -156,7 +163,7 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
     signedness: Signedness,
   ): IntNamespace<T> {
     const base = new IntNumNamespaceImpl<T>(name, width, signedness);
-    const constructor = base.construct.bind(base);
+    const constructor = base.cast.bind(base);
     Object.defineProperty(constructor, 'name', { value: name });
     return Object.assign(constructor, base) as IntNamespace<T>;
   }
@@ -199,14 +206,14 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
 
   readonly mod = (int: number): T => {
     if (this.width < 53) {
-      return this.construct(NumUtil.wrap(int, this.min, this.max + 1));
+      return this.cast(NumUtil.wrap(int, this.min, this.max + 1));
     }
 
     // Assume 53-bit unsigned.
-    if (this.width == 53) return this.construct(NumUtil.modUint(int));
+    if (this.width == 53) return this.cast(NumUtil.modUint(int));
 
     // Assume 54-bit signed.
-    return this.construct(NumUtil.modInt(int));
+    return this.cast(NumUtil.modInt(int));
   };
 
   readonly round = (num: number): T => {
@@ -229,7 +236,7 @@ class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
     max: number,
   ): NumNamespace<T> {
     const base = new NumberNumNamespaceImpl<T>(name, signedness, min, max);
-    const constructor = base.construct.bind(base);
+    const constructor = base.cast.bind(base);
     Object.defineProperty(constructor, 'name', { value: name });
     return Object.assign(constructor, base) as NumNamespace<T>;
   }
@@ -299,13 +306,13 @@ export const Uint: IntNamespace<Uint> = IntNumNamespaceImpl.new(
   'Unsigned',
 );
 export const Num: NumNamespace<number> = NumberNumNamespaceImpl.new(
-  'Number',
+  'Num',
   'Signed',
   Number.NEGATIVE_INFINITY,
   Number.POSITIVE_INFINITY,
 );
-export const Unumber: NumNamespace<Unumber> = NumberNumNamespaceImpl.new(
-  'Unumber',
+export const Unum: NumNamespace<Unum> = NumberNumNamespaceImpl.new(
+  'Unum',
   'Unsigned',
   0,
   Number.POSITIVE_INFINITY,

@@ -1,4 +1,3 @@
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 import {
   I16XY,
   I32XY,
@@ -6,15 +5,16 @@ import {
   I8XY,
   Int,
   IntXY,
-  NumberXY,
+  NumXY,
   U16XY,
   U32XY,
   U4XY,
   U8XY,
   UintXY,
-  UnumberXY,
+  UnumXY,
   XY,
 } from '@/oidlib';
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 for (
   const [name, x, y, expected] of [
@@ -64,7 +64,7 @@ for (
     [
       'integers and fractions',
       IntXY(1, 2),
-      NumberXY(3.9, 4.9),
+      NumXY(3.9, 4.9),
       IntXY(4, 6),
     ],
   ] as const
@@ -79,7 +79,7 @@ for (
     [
       'integers and fractions',
       IntXY(1, 2),
-      NumberXY(3.9, 4.9),
+      NumXY(3.9, 4.9),
       IntXY(-2, -2),
     ],
   ] as const
@@ -192,6 +192,6 @@ IntXY.add(I4XY(0, 0), 1, 1);
 // @ts-expect-error 2345
 UintXY.add(I4XY(0, 0), 1, 1);
 // @ts-expect-error 2345
-NumberXY.add(I4XY(0, 0), 1, 1);
+NumXY.add(I4XY(0, 0), 1, 1);
 // @ts-expect-error 2345
-UnumberXY.add(I4XY(0, 0), 1, 1);
+UnumXY.add(I4XY(0, 0), 1, 1);

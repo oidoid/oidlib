@@ -10,7 +10,7 @@ import {
   U4,
   U8,
   Uint,
-  Unumber,
+  Unum,
 } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
@@ -19,8 +19,8 @@ Deno.test('Clamping.', async (test) => {
     const [
       name,
       value,
-      numberClampExpected,
-      unumberClampExpected,
+      numClampExpected,
+      unumClampExpected,
       intCeilExpected,
       intFloorExpected,
       intRoundExpected,
@@ -43,7 +43,7 @@ Deno.test('Clamping.', async (test) => {
         Number.MIN_SAFE_INTEGER - 1, // value
 
         Number.MIN_SAFE_INTEGER - 1, // number
-        0, // unumber
+        0, // unum
 
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
@@ -68,7 +68,7 @@ Deno.test('Clamping.', async (test) => {
         -1, // value
 
         -1, // number
-        0, // unumber
+        0, // unum
 
         -1, // Int.ceil
         -1, // Int.floor
@@ -93,7 +93,7 @@ Deno.test('Clamping.', async (test) => {
         0, // value
 
         0, // number
-        0, // unumber
+        0, // unum
 
         0, // Int.ceil
         0, // Int.floor
@@ -118,7 +118,7 @@ Deno.test('Clamping.', async (test) => {
         1, // value
 
         1, // number
-        1, // unumber
+        1, // unum
 
         1, // Int.ceil
         1, // Int.floor
@@ -143,7 +143,7 @@ Deno.test('Clamping.', async (test) => {
         Number.MAX_SAFE_INTEGER, // value
 
         Number.MAX_SAFE_INTEGER, // number
-        Number.MAX_SAFE_INTEGER, // unumber
+        Number.MAX_SAFE_INTEGER, // unum
 
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
@@ -168,7 +168,7 @@ Deno.test('Clamping.', async (test) => {
         Number.NEGATIVE_INFINITY, // value
 
         Number.NEGATIVE_INFINITY, // number
-        0, // unumber
+        0, // unum
 
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
@@ -193,7 +193,7 @@ Deno.test('Clamping.', async (test) => {
         -Number.MAX_VALUE, // value
 
         -Number.MAX_VALUE, // number
-        0, // unumber
+        0, // unum
 
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
@@ -218,7 +218,7 @@ Deno.test('Clamping.', async (test) => {
         -1.5, // value
 
         -1.5, // number
-        0, // unumber
+        0, // unum
 
         -1, // Int.ceil
         -2, // Int.floor
@@ -243,7 +243,7 @@ Deno.test('Clamping.', async (test) => {
         1.5, // value
 
         1.5, // number
-        1.5, // unumber
+        1.5, // unum
 
         2, // Int.ceil
         1, // Int.floor
@@ -268,7 +268,7 @@ Deno.test('Clamping.', async (test) => {
         Number.MAX_VALUE, // value
 
         Number.MAX_VALUE, // number
-        Number.MAX_VALUE, // unumber
+        Number.MAX_VALUE, // unum
 
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
@@ -293,7 +293,7 @@ Deno.test('Clamping.', async (test) => {
         Number.POSITIVE_INFINITY, // value
 
         Number.POSITIVE_INFINITY, // number
-        Number.POSITIVE_INFINITY, // unumber
+        Number.POSITIVE_INFINITY, // unum
 
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
@@ -318,7 +318,7 @@ Deno.test('Clamping.', async (test) => {
         -9.75, // value
 
         -9.75, // number
-        0, // unumber
+        0, // unum
 
         -9, // Int.ceil
         -10, // Int.floor
@@ -343,7 +343,7 @@ Deno.test('Clamping.', async (test) => {
         -9.5, // value
 
         -9.5, // number
-        0, // unumber
+        0, // unum
 
         -9, // Int.ceil
         -10, // Int.floor
@@ -368,7 +368,7 @@ Deno.test('Clamping.', async (test) => {
         -9.25, // value
 
         -9.25, // number
-        0, // unumber
+        0, // unum
 
         -9, // Int.ceil
         -10, // Int.floor
@@ -393,7 +393,7 @@ Deno.test('Clamping.', async (test) => {
         -9, // value
 
         -9, // number
-        0, // unumber
+        0, // unum
 
         -9, // Int.ceil
         -9, // Int.floor
@@ -418,7 +418,7 @@ Deno.test('Clamping.', async (test) => {
         -8.75, // value
 
         -8.75, // number
-        0, // unumber
+        0, // unum
 
         -8, // Int.ceil
         -9, // Int.floor
@@ -443,7 +443,7 @@ Deno.test('Clamping.', async (test) => {
         -8.5, // value
 
         -8.5, // number
-        0, // unumber
+        0, // unum
 
         -8, // Int.ceil
         -9, // Int.floor
@@ -468,7 +468,7 @@ Deno.test('Clamping.', async (test) => {
         -8.25, // value
 
         -8.25, // number
-        0, // unumber
+        0, // unum
 
         -8, // Int.ceil
         -9, // Int.floor
@@ -493,7 +493,7 @@ Deno.test('Clamping.', async (test) => {
         -8, // value
 
         -8, // number
-        0, // unumber
+        0, // unum
 
         -8, // Int.ceil
         -8, // Int.floor
@@ -518,7 +518,7 @@ Deno.test('Clamping.', async (test) => {
         -7.75, // value
 
         -7.75, // number
-        0, // unumber
+        0, // unum
 
         -7, // Int.ceil
         -8, // Int.floor
@@ -543,7 +543,7 @@ Deno.test('Clamping.', async (test) => {
         -7.5, // value
 
         -7.5, // number
-        0, // unumber
+        0, // unum
 
         -7, // Int.ceil
         -8, // Int.floor
@@ -568,7 +568,7 @@ Deno.test('Clamping.', async (test) => {
         -7.25, // value
 
         -7.25, // number
-        0, // unumber
+        0, // unum
 
         -7, // Int.ceil
         -8, // Int.floor
@@ -593,7 +593,7 @@ Deno.test('Clamping.', async (test) => {
         -7, // value
 
         -7, // number
-        0, // unumber
+        0, // unum
 
         -7, // Int.ceil
         -7, // Int.floor
@@ -619,7 +619,7 @@ Deno.test('Clamping.', async (test) => {
         -6.75, // value
 
         -6.75, // number
-        0, // unumber
+        0, // unum
 
         -6, // Int.ceil
         -7, // Int.floor
@@ -644,7 +644,7 @@ Deno.test('Clamping.', async (test) => {
         -6.5, // value
 
         -6.5, // number
-        0, // unumber
+        0, // unum
 
         -6, // Int.ceil
         -7, // Int.floor
@@ -669,7 +669,7 @@ Deno.test('Clamping.', async (test) => {
         -6.25, // value
 
         -6.25, // number
-        0, // unumber
+        0, // unum
 
         -6, // Int.ceil
         -7, // Int.floor
@@ -694,7 +694,7 @@ Deno.test('Clamping.', async (test) => {
         -6, // value
 
         -6, // number
-        0, // unumber
+        0, // unum
 
         -6, // Int.ceil
         -6, // Int.floor
@@ -719,7 +719,7 @@ Deno.test('Clamping.', async (test) => {
         6, // value
 
         6, // number
-        6, // unumber
+        6, // unum
 
         6, // Int.ceil
         6, // Int.floor
@@ -744,7 +744,7 @@ Deno.test('Clamping.', async (test) => {
         6.25, // value
 
         6.25, // number
-        6.25, // unumber
+        6.25, // unum
 
         7, // Int.ceil
         6, // Int.floor
@@ -769,7 +769,7 @@ Deno.test('Clamping.', async (test) => {
         6.5, // value
 
         6.5, // number
-        6.5, // unumber
+        6.5, // unum
 
         7, // Int.ceil
         6, // Int.floor
@@ -794,7 +794,7 @@ Deno.test('Clamping.', async (test) => {
         6.75, // value
 
         6.75, // number
-        6.75, // unumber
+        6.75, // unum
 
         7, // Int.ceil
         6, // Int.floor
@@ -819,7 +819,7 @@ Deno.test('Clamping.', async (test) => {
         7, // value
 
         7, // number
-        7, // unumber
+        7, // unum
 
         7, // Int.ceil
         7, // Int.floor
@@ -844,7 +844,7 @@ Deno.test('Clamping.', async (test) => {
         7.25, // value
 
         7.25, // number
-        7.25, // unumber
+        7.25, // unum
 
         8, // Int.ceil
         7, // Int.floor
@@ -869,7 +869,7 @@ Deno.test('Clamping.', async (test) => {
         7.5, // value
 
         7.5, // number
-        7.5, // unumber
+        7.5, // unum
 
         8, // Int.ceil
         7, // Int.floor
@@ -894,7 +894,7 @@ Deno.test('Clamping.', async (test) => {
         7.75, // value
 
         7.75, // number
-        7.75, // unumber
+        7.75, // unum
 
         8, // Int.ceil
         7, // Int.floor
@@ -919,7 +919,7 @@ Deno.test('Clamping.', async (test) => {
         8, // value
 
         8, // number
-        8, // unumber
+        8, // unum
 
         8, // Int.ceil
         8, // Int.floor
@@ -945,7 +945,7 @@ Deno.test('Clamping.', async (test) => {
         NaN, // value
 
         undefined, // number
-        undefined, // unumber
+        undefined, // unum
         undefined, // Int.ceil
         undefined, // Int.floor
         undefined, // Int.round
@@ -966,9 +966,9 @@ Deno.test('Clamping.', async (test) => {
     ] as const
   ) {
     await test.step(name, () => {
-      if (numberClampExpected == null) {
+      if (numClampExpected == null) {
         assertThrows(() => Num.clamp(value));
-        assertThrows(() => Unumber.clamp(value));
+        assertThrows(() => Unum.clamp(value));
         assertThrows(() => Int.ceil(value));
         assertThrows(() => Int.floor(value));
         assertThrows(() => Int.round(value));
@@ -986,8 +986,8 @@ Deno.test('Clamping.', async (test) => {
         assertThrows(() => U4.round(value));
         assertThrows(() => U4.trunc(value));
       } else {
-        assertEquals(Num.clamp(value), Num(numberClampExpected));
-        assertEquals(Unumber.clamp(value), Unumber(unumberClampExpected));
+        assertEquals(Num.clamp(value), Num(numClampExpected));
+        assertEquals(Unum.clamp(value), Unum(unumClampExpected));
         assertEquals(Int.ceil(value), Int(intCeilExpected));
         assertEquals(Int.floor(value), Int(intFloorExpected));
         assertEquals(Int.round(value), Int(intRoundExpected));
@@ -1065,8 +1065,8 @@ Deno.test('is()', async (test) => {
 Deno.test('Maximum and minimum values.', () => {
   assertEquals(Num.min, Number.NEGATIVE_INFINITY);
   assertEquals(Num.max, Number.POSITIVE_INFINITY);
-  assertEquals(Unumber.min, 0);
-  assertEquals(Unumber.max, Number.POSITIVE_INFINITY);
+  assertEquals(Unum.min, 0);
+  assertEquals(Unum.max, Number.POSITIVE_INFINITY);
   assertEquals(Int.min, Number.MIN_SAFE_INTEGER - 1);
   assertEquals(Int.max, Number.MAX_SAFE_INTEGER);
   assertEquals(Uint.min, 0);

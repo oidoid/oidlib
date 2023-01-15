@@ -15,7 +15,7 @@ export class Random {
     // Account for out of range numbers.
     if (this.#seed <= 0) { // [-0x7fff_fffe, 0]
       this.#seed = I32(
-        (seed + 0x7fff_fffe) % 0x7fff_fffe + // [0, 0x7fff_fffd]
+        (this.#seed + 0x7fff_fffe) % 0x7fff_fffe + // [0, 0x7fff_fffd]
           1, // [1, 0x7fff_fffe]
       );
     }
