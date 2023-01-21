@@ -15,6 +15,7 @@ export namespace NumUtil {
     const z = y % range; // Wrap to z ∈ [0, range).
     return z + min; // Add min to return ∈ [min, max).
   }
+  // to-do: review animator and usage elsewhere.
 
   /**
    * -1 % 3 = -1

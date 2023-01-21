@@ -55,8 +55,9 @@ export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
 export type NumTypeName = 'Num' | 'Unum';
 export type AnyNumTypeName = IntTypeName | NumTypeName;
 
-export type IntCoercion = 'ceil' | 'floor' | 'mod' | 'round' | 'trunc';
-export type NumCoercion = 'clamp';
+// to-do: capitalize.
+export type IntCoercion = 'cast' | 'ceil' | 'floor' | 'mod' | 'round' | 'trunc';
+export type NumCoercion = 'cast' | 'clamp';
 
 export interface AnyNumNamespace<T extends number> {
   readonly name: AnyNumTypeName;
@@ -137,10 +138,10 @@ abstract class NumNamespaceImpl<T extends number> {
     this.signedness = signedness;
   }
 
-  cast(num: number): T {
+  cast = (num: number): T => {
     assert(this.is(num), `${num} is not a ${this.#name}.`);
     return num;
-  }
+  };
 
   abstract readonly is: (num: number) => num is T;
 }

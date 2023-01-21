@@ -1,19 +1,4 @@
-import {
-  I16XY,
-  I32XY,
-  I4XY,
-  I8XY,
-  Int,
-  IntXY,
-  NumXY,
-  U16XY,
-  U32XY,
-  U4XY,
-  U8XY,
-  UintXY,
-  UnumXY,
-  XY,
-} from '@/oidlib';
+import { Int, IntXY, NumXY } from '@/oidlib';
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
 
 for (
@@ -23,8 +8,8 @@ for (
   ] as const
 ) {
   Deno.test(`Cast: ${name}.`, () => {
-    if (expected == null) assertThrows(() => IntXY(x, y));
-    else assertEquals<XY<Int>>(IntXY(x, y), expected);
+    if (expected == null) assertThrows(() => new IntXY(x, y));
+    else assertEquals(new IntXY(x, y).toJSON(), expected);
   });
 }
 
@@ -34,8 +19,9 @@ for (
     ['fractions', 1.9, 9.9, { x: Int(1), y: Int(9) }],
   ] as const
 ) {
-  Deno.test(`Trunc: ${name}.`, () =>
-    assertEquals<XY<Int>>(IntXY.trunc(x, y), expected));
+  Deno.test(`Trunc: ${name}.`, () => {
+    assertEquals(IntXY.trunc(x, y).toJSON(), expected);
+  });
 }
 
 for (
@@ -43,127 +29,98 @@ for (
     ['integers', Int(1), Int(2), { x: Int(1), y: Int(2) }],
   ] as const
 ) {
-  Deno.test(`Construct: ${name}.`, () => assertEquals(IntXY(x, y), expected));
+  Deno.test(`Construct: ${name}.`, () => {
+    assertEquals(new IntXY(x, y).toJSON(), expected);
+  });
 }
 
 for (
   const [name, xy, expected] of [
-    ['positive', IntXY(1, 2), IntXY(1, 2)],
-    ['positive and negative', IntXY(1, -2), IntXY(1, 2)],
-    ['negative', IntXY(-1, -2), IntXY(1, 2)],
+    ['positive', new IntXY(1, 2), new IntXY(1, 2)],
+    ['positive and negative', new IntXY(1, -2), new IntXY(1, 2)],
+    ['negative', new IntXY(-1, -2), new IntXY(1, 2)],
   ] as const
 ) {
-  Deno.test(`Absolute: ${name}.`, () => assertEquals(IntXY.abs(xy), expected));
+  Deno.test(`Absolute: ${name}.`, () => assertEquals(xy.abs(), expected));
   Deno.test(`Absolute (clamp): ${name}.`, () =>
-    assertEquals(IntXY.absClamp(xy), expected));
+    assertEquals(xy.absClamp(), expected));
 }
 
 for (
   const [name, lhs, rhs, expected] of [
-    ['integers', IntXY(1, 2), IntXY(3, 4), IntXY(4, 6)],
+    ['integers', new IntXY(1, 2), new IntXY(3, 4), new IntXY(4, 6)],
     [
       'integers and fractions',
-      IntXY(1, 2),
-      NumXY(3.9, 4.9),
-      IntXY(4, 6),
+      new IntXY(1, 2),
+      new NumXY(3.9, 4.9),
+      new IntXY(4, 6),
     ],
   ] as const
 ) {
   Deno.test(`addTrunc: ${name}.`, () =>
-    assertEquals(IntXY.addTrunc(lhs, rhs), expected));
+    assertEquals(lhs.addTrunc(rhs), expected));
 }
 
 for (
   const [name, lhs, rhs, expected] of [
-    ['integers', IntXY(1, 2), IntXY(3, 4), IntXY(-2, -2)],
+    ['integers', new IntXY(1, 2), new IntXY(3, 4), new IntXY(-2, -2)],
     [
       'integers and fractions',
-      IntXY(1, 2),
-      NumXY(3.9, 4.9),
-      IntXY(-2, -2),
+      new IntXY(1, 2),
+      new NumXY(3.9, 4.9),
+      new IntXY(-2, -2),
     ],
   ] as const
 ) {
   Deno.test(`subTrunc: ${name}.`, () =>
-    assertEquals(IntXY.subTrunc(lhs, rhs), expected));
+    assertEquals(lhs.subTrunc(rhs), expected));
 }
 
 for (
   const [name, xy, expected] of [
-    ['positive', IntXY(2, 3), 6],
-    ['negative', IntXY(-2, 3), -6],
+    ['positive', new IntXY(2, 3), 6],
+    ['negative', new IntXY(-2, 3), -6],
   ] as const
 ) {
-  Deno.test(`Area: ${name}.`, () =>
-    assertEquals<number>(IntXY.area(xy), expected));
+  Deno.test(`Area: ${name}.`, () => assertEquals<number>(xy.area, expected));
 }
 
 for (
   const [name, xy, to, ratio, expected] of [
-    ['integer', IntXY(1, 2), IntXY(3, 4), .5, IntXY(2, 3)],
+    ['integer', new IntXY(1, 2), new IntXY(3, 4), .5, new IntXY(2, 3)],
   ] as const
 ) {
   Deno.test(`Lerp (Int): ${name}.`, () =>
-    assertEquals(IntXY.lerp(xy, to, ratio), expected));
+    assertEquals(xy.lerp(to, ratio), expected));
 }
 
 for (
   const [name, xy, expected] of [
-    ['integer', IntXY(3, 4), 5],
+    ['integer', new IntXY(3, 4), 5],
   ] as const
 ) {
   Deno.test(`Magnitude: ${name}.`, () =>
-    assertEquals<number>(IntXY.magnitude(xy), expected));
+    assertEquals<number>(xy.magnitude, expected));
 }
 
 for (
   const [index, [lhs, rhs, expected]] of ([
-    [IntXY(1, 20), IntXY(300, 4000), IntXY(1, 20)],
-    [IntXY(100, 20), IntXY(3, 4000), IntXY(3, 20)],
-    [IntXY(1, 2000), IntXY(300, 40), IntXY(1, 40)],
-    [IntXY(100, 2000), IntXY(3, 40), IntXY(3, 40)],
+    [new IntXY(1, 20), new IntXY(300, 4000), new IntXY(1, 20)],
+    [new IntXY(100, 20), new IntXY(3, 4000), new IntXY(3, 20)],
+    [new IntXY(1, 2000), new IntXY(300, 40), new IntXY(1, 40)],
+    [new IntXY(100, 2000), new IntXY(3, 40), new IntXY(3, 40)],
   ] as const).entries()
 ) {
-  Deno.test(`Minimum: ${index}.`, () =>
-    assertEquals(IntXY.min(lhs, rhs), expected));
+  Deno.test(`Minimum: ${index}.`, () => assertEquals(lhs.min(rhs), expected));
 }
 
 for (
   const [index, [lhs, rhs, expected]] of ([
-    [IntXY(1, 20), IntXY(300, 4000), IntXY(300, 4000)],
-    [IntXY(100, 20), IntXY(3, 4000), IntXY(100, 4000)],
-    [IntXY(1, 2000), IntXY(300, 40), IntXY(300, 2000)],
-    [IntXY(100, 2000), IntXY(3, 40), IntXY(100, 2000)],
+    [new IntXY(1, 20), new IntXY(300, 4000), new IntXY(300, 4000)],
+    [new IntXY(100, 20), new IntXY(3, 4000), new IntXY(100, 4000)],
+    [new IntXY(1, 2000), new IntXY(300, 40), new IntXY(300, 2000)],
+    [new IntXY(100, 2000), new IntXY(3, 40), new IntXY(100, 2000)],
   ] as const).entries()
 ) {
-  Deno.test(`Maximum: ${index}.`, () =>
-    assertEquals(IntXY.max(lhs, rhs), expected));
+  Deno.test(`Maximum: ${index}.`, () => assertEquals(lhs.max(rhs), expected));
 }
-
-// Test namespace type branding is correct and would forbid using a more
-// permissive namespace with a narrower type like
-// `I16XY.add(I8XY(1, 1), 1000, 1000)`.
-// @ts-expect-error 2345
-I4XY.add(U4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-U4XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-I8XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-U8XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-I16XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-U16XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-I32XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-U32XY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-IntXY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-UintXY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-NumXY.add(I4XY(0, 0), 1, 1);
-// @ts-expect-error 2345
-UnumXY.add(I4XY(0, 0), 1, 1);
