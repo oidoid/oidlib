@@ -55,9 +55,8 @@ export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
 export type NumTypeName = 'Num' | 'Unum';
 export type AnyNumTypeName = IntTypeName | NumTypeName;
 
-// to-do: capitalize.
-export type IntCoercion = 'cast' | 'ceil' | 'floor' | 'mod' | 'round' | 'trunc';
-export type NumCoercion = 'cast' | 'clamp';
+export type IntCoercion = 'Cast' | 'Ceil' | 'Floor' | 'Round' | 'Trunc';
+export type NumCoercion = 'Cast' | 'Clamp';
 
 export interface AnyNumNamespace<T extends number> {
   readonly name: AnyNumTypeName;
@@ -206,6 +205,8 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
   };
 
   readonly mod = (int: number): T => {
+    assert(Number.isInteger(int), `${int} is not an integral value.`);
+
     if (this.width < 53) {
       return this.cast(NumUtil.wrap(int, this.min, this.max + 1));
     }

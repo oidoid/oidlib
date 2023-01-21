@@ -14,94 +14,147 @@ import {
   Uint,
   Unum,
 } from '@/oidlib';
+import { Str } from '../utils/str.ts';
 
-/**
- * A cartesian position or dimensions.
- *
- * Unless you're using NumXY or UnumXY, you almost never want to use the base
- * methods like area for integral types. They do not coerce and they're not
- * type-checked, but even if they were typed strongly,
- * `new I8XY(1, 1).div(new I8XY(2, 2))` would still only fail at runtime.
- */
+/** A cartesian position or dimensions. x and y are independent values. */
 export interface XY<T> {
   x: T;
   y: T;
 }
 
+/**
+ * XY numerical state with methods.
+ *
+ * Specifying a coercion function is almost always desirable. The coercions are:
+ *
+ * - Cast: throw if the result of the operation is out-of-range. Eg:
+ *
+ *     const xy = new U4XY(0, 0)
+ *     xy.add(0, 16) // Throws
+ *
+ * - Clamp: saturate to the nearest limit if the result of the operation is
+ *   out-of-range. Eg:
+ *
+ *     const xy = new UnumXY(1, 1)
+ *     xy.subClamp(.5, 2) // (.5, 0)
+ *
+ *   Clamping is available on all fractional methods and integral methods where
+ *   a fractional value is not possible.
+ *
+ * All argument type-checking is loose, ensuring only that `number`s or an
+ * `XY<number>` is passed since out-of-range errors are extraordinarily easy to
+ * induce for all types.
+ */
 export interface NumericalXY<T> extends XY<T> {
+  /** Set x and y to their absolute values. */
   abs(): this;
   absClamp(): this;
+  /** Add arguments to x and y. */
   add(...args: XYArgs): this;
+  /** The product of x and y. */
   area: T;
   areaNum: number;
   areaClamp: T;
+  /** Copy state as a new clone. */
   copy(): this;
+  /** Divide x and y by arguments. */
   div(...args: XYArgs): this;
+  /** Compare x and y to arguments. */
   eq(...args: XYArgs): boolean;
+  /** Linear interpolate from x and y to arguments. */
   lerp(...args: LerpArgs): this;
+  /** Given a triangle with sides x and y, the length of the hypotenuse. */
   magnitude: T;
   magnitudeNum: number;
   magnitudeClamp: T;
+  /** Set x and y to the greater of themselves and arguments. */
   max(...args: XYArgs): this;
+  /** Set x and y to the lesser of themselves and arguments. */
   min(...args: XYArgs): this;
+  /** Multiply x and y by arguments. */
   mul(...args: XYArgs): this;
+  /** Set x and y to arguments. */
   set(...args: XYArgs): this;
+  /** Subtract x and y by arguments. */
   sub(...args: XYArgs): this;
+  /** Copy state as plain JSON. */
   toJSON(): XY<T>;
+  /** Copy state as a permissive double XY. */
   toNumXY(): NumXY;
+  /** Copy state as a string. */
   toString(): string;
 }
 
+/**
+ * XY integral state with methods.
+ *
+ * Even more so than `number` and `Unum` types, specifying a coercion function
+ * is almost always desirable. The fractional coercions are:
+ *
+ * - Ceil: clamp and ceiling if the result of the operation is out-of-range. Eg:
+ *
+ *     const xy = new U4XY(0, 0)
+ *     xy.addCeil(1.5, 16.5) // (2, 15)
+ *
+ * - Floor: clamp and floor if the result of the operation is out-of-range. Eg:
+ *
+ *     const xy = new U4XY(0, 0)
+ *     xy.addFloor(1.5, 16.5) // (1, 15)
+ *
+ * - Round: clamp and round if the result of the operation is out-of-range. Eg:
+ *
+ *     const xy = new U4XY(0, 0)
+ *     xy.addRound(1.5, 16.5) // (2, 15)
+ *
+ * - Trunc: clamp and truncate if the result of the operation is out-of-range.
+ *   Eg:
+ *
+ *     const xy = new U4XY(0, 0)
+ *     xy.addTrunc(1.5, 16.5) // (1, 15)
+ */
 export interface IntegralXY<T> extends NumericalXY<T> {
   addCeil(...args: XYArgs): this;
   addFloor(...args: XYArgs): this;
-  addMod(...args: XYArgs): this;
   addRound(...args: XYArgs): this;
   addTrunc(...args: XYArgs): this;
 
   divCeil(...args: XYArgs): this;
   divFloor(...args: XYArgs): this;
-  divMod(...args: XYArgs): this;
   divRound(...args: XYArgs): this;
   divTrunc(...args: XYArgs): this;
 
   lerpCeil(...args: LerpArgs): this;
   lerpFloor(...args: LerpArgs): this;
-  lerpMod(...args: LerpArgs): this;
   lerpRound(...args: LerpArgs): this;
   lerpTrunc(...args: LerpArgs): this;
 
   maxCeil(...args: XYArgs): this;
   maxFloor(...args: XYArgs): this;
-  maxMod(...args: XYArgs): this;
   maxRound(...args: XYArgs): this;
   maxTrunc(...args: XYArgs): this;
 
   minCeil(...args: XYArgs): this;
   minFloor(...args: XYArgs): this;
-  minMod(...args: XYArgs): this;
   minRound(...args: XYArgs): this;
   minTrunc(...args: XYArgs): this;
 
   mulCeil(...args: XYArgs): this;
   mulFloor(...args: XYArgs): this;
-  mulMod(...args: XYArgs): this;
   mulRound(...args: XYArgs): this;
   mulTrunc(...args: XYArgs): this;
 
   setCeil(...args: XYArgs): this;
   setFloor(...args: XYArgs): this;
-  setMod(...args: XYArgs): this;
   setRound(...args: XYArgs): this;
   setTrunc(...args: XYArgs): this;
 
   subCeil(...args: XYArgs): this;
   subFloor(...args: XYArgs): this;
-  subMod(...args: XYArgs): this;
   subRound(...args: XYArgs): this;
   subTrunc(...args: XYArgs): this;
 }
 
+/** XY fractional state with methods. */
 export interface FractionalXY<T> extends NumericalXY<T> {
   addClamp(...args: XYArgs): this;
   divClamp(...args: XYArgs): this;
@@ -116,7 +169,7 @@ export interface FractionalXY<T> extends NumericalXY<T> {
 export type XYArgs =
   | readonly [x: number, y: number]
   | [xy: Readonly<XY<number>>];
-type LerpArgs =
+export type LerpArgs =
   | [toX: number, toY: number, ratio: number]
   | [to: Readonly<XY<number>>, ratio: number];
 
@@ -143,33 +196,33 @@ abstract class BaseNumericalXY<T extends number, Coerce>
 
   constructor(...args: XYArgs) {
     const xy = argsToXY(args);
-    this.#x = this.coerce('cast', xy.x);
-    this.#y = this.coerce('cast', xy.y);
+    this.#x = this.coerce('Cast', xy.x);
+    this.#y = this.coerce('Cast', xy.y);
   }
 
   abs(): this {
-    return this.absCoerce('cast');
+    return this.absCoerce('Cast');
   }
 
   absClamp(): this {
-    return this.absCoerce('clamp');
+    return this.absCoerce('Clamp');
   }
 
-  protected absCoerce(coerce: Coerce | 'cast' | 'clamp'): this {
+  protected absCoerce(coerce: Coerce | 'Cast' | 'Clamp'): this {
     return this.setCoerce(coerce, Math.abs(this.x), Math.abs(this.y));
   }
 
   add(...args: XYArgs): this {
-    return this.addCoerce('cast', args);
+    return this.addCoerce('Cast', args);
   }
 
-  protected addCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected addCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(coerce, this.x + xy.x, this.y + xy.y);
   }
 
   get area(): T {
-    return this.coerce('cast', this.areaNum);
+    return this.coerce('Cast', this.areaNum);
   }
 
   get areaNum(): number {
@@ -177,10 +230,10 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   get areaClamp(): T {
-    return this.coerce('clamp', this.areaNum);
+    return this.coerce('Clamp', this.areaNum);
   }
 
-  protected abstract coerce(coerce: Coerce | 'cast' | 'clamp', num: number): T;
+  protected abstract coerce(coerce: Coerce | 'Cast' | 'Clamp', num: number): T;
 
   copy(): this {
     return new (this.constructor as new (...args: XYArgs) => this)(
@@ -190,10 +243,10 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   div(...args: XYArgs): this {
-    return this.divCoerce('cast', args);
+    return this.divCoerce('Cast', args);
   }
 
-  protected divCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected divCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(coerce, this.x / xy.x, this.y / xy.y);
   }
@@ -204,16 +257,16 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   lerp(...args: LerpArgs): this {
-    return this.lerpCoerce('cast', args);
+    return this.lerpCoerce('Cast', args);
   }
 
   protected abstract lerpCoerce(
-    coerce: Coerce | 'cast' | 'clamp',
+    coerce: Coerce | 'Cast' | 'Clamp',
     args: LerpArgs,
   ): this;
 
   get magnitude(): T {
-    return this.coerce('cast', this.magnitudeNum);
+    return this.coerce('Cast', this.magnitudeNum);
   }
 
   get magnitudeNum(): number {
@@ -221,14 +274,14 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   get magnitudeClamp(): T {
-    return this.coerce('clamp', this.magnitudeNum);
+    return this.coerce('Clamp', this.magnitudeNum);
   }
 
   max(...args: XYArgs): this {
-    return this.maxCoerce('cast', args);
+    return this.maxCoerce('Cast', args);
   }
 
-  protected maxCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected maxCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(
       coerce,
@@ -238,10 +291,10 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   min(...args: XYArgs): this {
-    return this.minCoerce('cast', args);
+    return this.minCoerce('Cast', args);
   }
 
-  protected minCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected minCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(
       coerce,
@@ -251,20 +304,20 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   mul(...args: XYArgs): this {
-    return this.mulCoerce('cast', args);
+    return this.mulCoerce('Cast', args);
   }
 
-  protected mulCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected mulCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(coerce, this.x * xy.x, this.y * xy.y);
   }
 
   set(...args: XYArgs): this {
-    return this.setCoerce('cast', ...args);
+    return this.setCoerce('Cast', ...args);
   }
 
   protected setCoerce(
-    coerce: Coerce | 'cast' | 'clamp',
+    coerce: Coerce | 'Cast' | 'Clamp',
     ...args: XYArgs
   ): this {
     const xy = argsToXY(args);
@@ -274,10 +327,10 @@ abstract class BaseNumericalXY<T extends number, Coerce>
   }
 
   sub(...args: XYArgs): this {
-    return this.subCoerce('cast', args);
+    return this.subCoerce('Cast', args);
   }
 
-  protected subCoerce(coerce: Coerce | 'cast' | 'clamp', args: XYArgs): this {
+  protected subCoerce(coerce: Coerce | 'Cast' | 'Clamp', args: XYArgs): this {
     const xy = argsToXY(args);
     return this.setCoerce(coerce, this.x - xy.x, this.y - xy.y);
   }
@@ -296,7 +349,7 @@ abstract class BaseNumericalXY<T extends number, Coerce>
 }
 
 class BaseIntegralXY<T extends Int>
-  extends BaseNumericalXY<T, IntCoercion | 'clamp'>
+  extends BaseNumericalXY<T, IntCoercion | 'Clamp'>
   implements IntegralXY<T> {
   protected static cast(...args: XYArgs) {
     return new this(...args);
@@ -304,27 +357,22 @@ class BaseIntegralXY<T extends Int>
 
   protected static ceil(...args: XYArgs) {
     const xy = argsToXY(args);
-    return new this(this.coerce('ceil', xy.x), this.coerce('ceil', xy.y));
+    return new this(this.coerce('Ceil', xy.x), this.coerce('Ceil', xy.y));
   }
 
   protected static floor(...args: XYArgs) {
     const xy = argsToXY(args);
-    return new this(this.coerce('floor', xy.x), this.coerce('floor', xy.y));
-  }
-
-  protected static mod(...args: XYArgs) {
-    const xy = argsToXY(args);
-    return new this(this.coerce('mod', xy.x), this.coerce('mod', xy.y));
+    return new this(this.coerce('Floor', xy.x), this.coerce('Floor', xy.y));
   }
 
   protected static round(...args: XYArgs) {
     const xy = argsToXY(args);
-    return new this(this.coerce('round', xy.x), this.coerce('round', xy.y));
+    return new this(this.coerce('Round', xy.x), this.coerce('Round', xy.y));
   }
 
   protected static trunc(...args: XYArgs) {
     const xy = argsToXY(args);
-    return new this(this.coerce('trunc', xy.x), this.coerce('trunc', xy.y));
+    return new this(this.coerce('Trunc', xy.x), this.coerce('Trunc', xy.y));
   }
 
   protected static coerce(_coerce: IntCoercion, _num: number): Int {
@@ -334,53 +382,45 @@ class BaseIntegralXY<T extends Int>
   }
 
   addCeil(...args: XYArgs): this {
-    return this.addCoerce('ceil', args);
+    return this.addCoerce('Ceil', args);
   }
 
   addFloor(...args: XYArgs): this {
-    return this.addCoerce('floor', args);
-  }
-
-  addMod(...args: XYArgs): this {
-    return this.addCoerce('mod', args);
+    return this.addCoerce('Floor', args);
   }
 
   addRound(...args: XYArgs): this {
-    return this.addCoerce('round', args);
+    return this.addCoerce('Round', args);
   }
 
   addTrunc(...args: XYArgs): this {
-    return this.addCoerce('trunc', args);
+    return this.addCoerce('Trunc', args);
   }
 
-  protected coerce(_coerce: IntCoercion | 'clamp', _num: number): T {
+  protected coerce(_coerce: IntCoercion | 'Clamp', _num: number): T {
     throw Error(
       `Missing ${this.constructor.name}.${this.coerce.name}() subclass implementation.`,
     );
   }
 
   divCeil(...args: XYArgs): this {
-    return this.divCoerce('ceil', args);
+    return this.divCoerce('Ceil', args);
   }
 
   divFloor(...args: XYArgs): this {
-    return this.divCoerce('floor', args);
-  }
-
-  divMod(...args: XYArgs): this {
-    return this.divCoerce('mod', args);
+    return this.divCoerce('Floor', args);
   }
 
   divRound(...args: XYArgs): this {
-    return this.divCoerce('round', args);
+    return this.divCoerce('Round', args);
   }
 
   divTrunc(...args: XYArgs): this {
-    return this.divCoerce('trunc', args);
+    return this.divCoerce('Trunc', args);
   }
 
   lerpCeil(...args: LerpArgs): this {
-    return this.lerpCoerce('ceil', args);
+    return this.lerpCoerce('Ceil', args);
   }
 
   protected lerpCoerce(coerce: IntCoercion, args: LerpArgs): this {
@@ -399,124 +439,100 @@ class BaseIntegralXY<T extends Int>
   }
 
   lerpFloor(...args: LerpArgs): this {
-    return this.lerpCoerce('floor', args);
-  }
-
-  lerpMod(...args: LerpArgs): this {
-    return this.lerpCoerce('mod', args);
+    return this.lerpCoerce('Floor', args);
   }
 
   lerpRound(...args: LerpArgs): this {
-    return this.lerpCoerce('round', args);
+    return this.lerpCoerce('Round', args);
   }
 
   lerpTrunc(...args: LerpArgs): this {
-    return this.lerpCoerce('trunc', args);
+    return this.lerpCoerce('Trunc', args);
   }
 
   maxCeil(...args: XYArgs): this {
-    return this.maxCoerce('ceil', args);
+    return this.maxCoerce('Ceil', args);
   }
 
   maxFloor(...args: XYArgs): this {
-    return this.maxCoerce('floor', args);
-  }
-
-  maxMod(...args: XYArgs): this {
-    return this.maxCoerce('mod', args);
+    return this.maxCoerce('Floor', args);
   }
 
   maxRound(...args: XYArgs): this {
-    return this.maxCoerce('round', args);
+    return this.maxCoerce('Round', args);
   }
 
   maxTrunc(...args: XYArgs): this {
-    return this.maxCoerce('trunc', args);
+    return this.maxCoerce('Trunc', args);
   }
 
   minCeil(...args: XYArgs): this {
-    return this.minCoerce('ceil', args);
+    return this.minCoerce('Ceil', args);
   }
 
   minFloor(...args: XYArgs): this {
-    return this.minCoerce('floor', args);
-  }
-
-  minMod(...args: XYArgs): this {
-    return this.minCoerce('mod', args);
+    return this.minCoerce('Floor', args);
   }
 
   minRound(...args: XYArgs): this {
-    return this.minCoerce('round', args);
+    return this.minCoerce('Round', args);
   }
 
   minTrunc(...args: XYArgs): this {
-    return this.minCoerce('trunc', args);
+    return this.minCoerce('Trunc', args);
   }
 
   mulCeil(...args: XYArgs): this {
-    return this.mulCoerce('ceil', args);
+    return this.mulCoerce('Ceil', args);
   }
 
   mulFloor(...args: XYArgs): this {
-    return this.mulCoerce('floor', args);
-  }
-
-  mulMod(...args: XYArgs): this {
-    return this.mulCoerce('mod', args);
+    return this.mulCoerce('Floor', args);
   }
 
   mulRound(...args: XYArgs): this {
-    return this.mulCoerce('round', args);
+    return this.mulCoerce('Round', args);
   }
 
   mulTrunc(...args: XYArgs): this {
-    return this.mulCoerce('trunc', args);
+    return this.mulCoerce('Trunc', args);
   }
 
   setCeil(...args: XYArgs): this {
-    return this.setCoerce('ceil', ...args);
+    return this.setCoerce('Ceil', ...args);
   }
 
   setFloor(...args: XYArgs): this {
-    return this.setCoerce('floor', ...args);
-  }
-
-  setMod(...args: XYArgs): this {
-    return this.setCoerce('mod', ...args);
+    return this.setCoerce('Floor', ...args);
   }
 
   setRound(...args: XYArgs): this {
-    return this.setCoerce('round', ...args);
+    return this.setCoerce('Round', ...args);
   }
 
   setTrunc(...args: XYArgs): this {
-    return this.setCoerce('trunc', ...args);
+    return this.setCoerce('Trunc', ...args);
   }
 
   subCeil(...args: XYArgs): this {
-    return this.subCoerce('ceil', args);
+    return this.subCoerce('Ceil', args);
   }
 
   subFloor(...args: XYArgs): this {
-    return this.subCoerce('floor', args);
-  }
-
-  subMod(...args: XYArgs): this {
-    return this.subCoerce('mod', args);
+    return this.subCoerce('Floor', args);
   }
 
   subRound(...args: XYArgs): this {
-    return this.subCoerce('round', args);
+    return this.subCoerce('Round', args);
   }
 
   subTrunc(...args: XYArgs): this {
-    return this.subCoerce('trunc', args);
+    return this.subCoerce('Trunc', args);
   }
 }
 
 class BaseFractionalXY<T extends number>
-  extends BaseNumericalXY<T, 'cast' | 'clamp'>
+  extends BaseNumericalXY<T, 'Cast' | 'Clamp'>
   implements FractionalXY<T> {
   protected static cast(...args: XYArgs) {
     return new this(...args);
@@ -524,34 +540,34 @@ class BaseFractionalXY<T extends number>
 
   protected static clamp(...args: XYArgs) {
     const xy = argsToXY(args);
-    return new this(this.coerce('clamp', xy.x), this.coerce('clamp', xy.y));
+    return new this(this.coerce('Clamp', xy.x), this.coerce('Clamp', xy.y));
   }
 
-  protected static coerce(_coerce: 'clamp', _num: number): number {
+  protected static coerce(_coerce: 'Clamp', _num: number): number {
     throw Error(
       `Missing ${this.name}.${this.coerce.name}() subclass implementation.`,
     );
   }
 
   addClamp(...args: XYArgs): this {
-    return this.addCoerce('clamp', args);
+    return this.addCoerce('Clamp', args);
   }
 
-  protected coerce(_coerce: 'cast' | 'clamp', _num: number): T {
+  protected coerce(_coerce: 'Cast' | 'Clamp', _num: number): T {
     throw Error(
       `Missing ${this.constructor.name}.${this.coerce.name}() subclass implementation.`,
     );
   }
 
   divClamp(...args: XYArgs): this {
-    return this.divCoerce('clamp', args);
+    return this.divCoerce('Clamp', args);
   }
 
   lerpClamp(...args: LerpArgs): this {
-    return this.lerpCoerce('clamp', args);
+    return this.lerpCoerce('Clamp', args);
   }
 
-  protected lerpCoerce(coerce: 'cast' | 'clamp', args: LerpArgs): this {
+  protected lerpCoerce(coerce: 'Cast' | 'Clamp', args: LerpArgs): this {
     if (args.length == 3) {
       return this.setCoerce(
         coerce,
@@ -567,23 +583,23 @@ class BaseFractionalXY<T extends number>
   }
 
   maxClamp(...args: XYArgs): this {
-    return this.maxCoerce('clamp', args);
+    return this.maxCoerce('Clamp', args);
   }
 
   minClamp(...args: XYArgs): this {
-    return this.minCoerce('clamp', args);
+    return this.minCoerce('Clamp', args);
   }
 
   mulClamp(...args: XYArgs): this {
-    return this.mulCoerce('clamp', args);
+    return this.mulCoerce('Clamp', args);
   }
 
   setClamp(...args: XYArgs): this {
-    return this.setCoerce('clamp', ...args);
+    return this.setCoerce('Clamp', ...args);
   }
 
   subClamp(...args: XYArgs): this {
-    return this.subCoerce('clamp', args);
+    return this.subCoerce('Clamp', args);
   }
 }
 
@@ -600,10 +616,6 @@ export class I4XY extends BaseIntegralXY<I4> {
     return super.floor(...args) as I4XY;
   }
 
-  static override mod(...args: XYArgs): I4XY {
-    return super.mod(...args) as I4XY;
-  }
-
   static override round(...args: XYArgs): I4XY {
     return super.round(...args) as I4XY;
   }
@@ -613,13 +625,13 @@ export class I4XY extends BaseIntegralXY<I4> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): I4 {
-    return I4[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return I4[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): I4 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): I4 {
     return I4XY.coerce(coerce, num);
   }
 }
@@ -637,10 +649,6 @@ export class U4XY extends BaseIntegralXY<U4> {
     return super.floor(...args) as U4XY;
   }
 
-  static override mod(...args: XYArgs): U4XY {
-    return super.mod(...args) as U4XY;
-  }
-
   static override round(...args: XYArgs): U4XY {
     return super.round(...args) as U4XY;
   }
@@ -650,13 +658,13 @@ export class U4XY extends BaseIntegralXY<U4> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): U4 {
-    return U4[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return U4[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): U4 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): U4 {
     return U4XY.coerce(coerce, num);
   }
 }
@@ -674,10 +682,6 @@ export class I8XY extends BaseIntegralXY<I8> {
     return super.floor(...args) as I8XY;
   }
 
-  static override mod(...args: XYArgs): I8XY {
-    return super.mod(...args) as I8XY;
-  }
-
   static override round(...args: XYArgs): I8XY {
     return super.round(...args) as I8XY;
   }
@@ -687,13 +691,13 @@ export class I8XY extends BaseIntegralXY<I8> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): I8 {
-    return I8[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return I8[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): I8 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): I8 {
     return I8XY.coerce(coerce, num);
   }
 }
@@ -711,10 +715,6 @@ export class U8XY extends BaseIntegralXY<U8> {
     return super.floor(...args) as U8XY;
   }
 
-  static override mod(...args: XYArgs): U8XY {
-    return super.mod(...args) as U8XY;
-  }
-
   static override round(...args: XYArgs): U8XY {
     return super.round(...args) as U8XY;
   }
@@ -724,13 +724,13 @@ export class U8XY extends BaseIntegralXY<U8> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): U8 {
-    return U8[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return U8[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): U8 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): U8 {
     return U8XY.coerce(coerce, num);
   }
 }
@@ -748,10 +748,6 @@ export class I16XY extends BaseIntegralXY<I16> {
     return super.floor(...args) as I16XY;
   }
 
-  static override mod(...args: XYArgs): I16XY {
-    return super.mod(...args) as I16XY;
-  }
-
   static override round(...args: XYArgs): I16XY {
     return super.round(...args) as I16XY;
   }
@@ -761,13 +757,13 @@ export class I16XY extends BaseIntegralXY<I16> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): I16 {
-    return I16[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return I16[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): I16 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): I16 {
     return I16XY.coerce(coerce, num);
   }
 }
@@ -785,10 +781,6 @@ export class U16XY extends BaseIntegralXY<U16> {
     return super.floor(...args) as U16XY;
   }
 
-  static override mod(...args: XYArgs): U16XY {
-    return super.mod(...args) as U16XY;
-  }
-
   static override round(...args: XYArgs): U16XY {
     return super.round(...args) as U16XY;
   }
@@ -798,13 +790,13 @@ export class U16XY extends BaseIntegralXY<U16> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): U16 {
-    return U16[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return U16[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): U16 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): U16 {
     return U16XY.coerce(coerce, num);
   }
 }
@@ -822,10 +814,6 @@ export class I32XY extends BaseIntegralXY<I32> {
     return super.floor(...args) as I32XY;
   }
 
-  static override mod(...args: XYArgs): I32XY {
-    return super.mod(...args) as I32XY;
-  }
-
   static override round(...args: XYArgs): I32XY {
     return super.round(...args) as I32XY;
   }
@@ -835,13 +823,13 @@ export class I32XY extends BaseIntegralXY<I32> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): I32 {
-    return I32[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return I32[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): I32 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): I32 {
     return I32XY.coerce(coerce, num);
   }
 }
@@ -859,10 +847,6 @@ export class U32XY extends BaseIntegralXY<U32> {
     return super.floor(...args) as U32XY;
   }
 
-  static override mod(...args: XYArgs): U32XY {
-    return super.mod(...args) as U32XY;
-  }
-
   static override round(...args: XYArgs): U32XY {
     return super.round(...args) as U32XY;
   }
@@ -872,13 +856,13 @@ export class U32XY extends BaseIntegralXY<U32> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): U32 {
-    return U32[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return U32[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): U32 {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): U32 {
     return U32XY.coerce(coerce, num);
   }
 }
@@ -896,10 +880,6 @@ export class IntXY extends BaseIntegralXY<Int> {
     return super.floor(...args) as IntXY;
   }
 
-  static override mod(...args: XYArgs): IntXY {
-    return super.mod(...args) as IntXY;
-  }
-
   static override round(...args: XYArgs): IntXY {
     return super.round(...args) as IntXY;
   }
@@ -909,13 +889,13 @@ export class IntXY extends BaseIntegralXY<Int> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): Int {
-    return Int[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return Int[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): Int {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): Int {
     return IntXY.coerce(coerce, num);
   }
 }
@@ -933,10 +913,6 @@ export class UintXY extends BaseIntegralXY<Uint> {
     return super.floor(...args) as UintXY;
   }
 
-  static override mod(...args: XYArgs): UintXY {
-    return super.mod(...args) as UintXY;
-  }
-
   static override round(...args: XYArgs): UintXY {
     return super.round(...args) as UintXY;
   }
@@ -946,13 +922,13 @@ export class UintXY extends BaseIntegralXY<Uint> {
   }
 
   protected static override coerce(
-    coerce: IntCoercion | 'clamp',
+    coerce: IntCoercion | 'Clamp',
     num: number,
   ): Uint {
-    return Uint[coerce == 'clamp' ? 'trunc' : coerce](num);
+    return Uint[Str.uncapitalize(coerce == 'Clamp' ? 'Trunc' : coerce)](num);
   }
 
-  protected override coerce(coerce: IntCoercion | 'clamp', num: number): Uint {
+  protected override coerce(coerce: IntCoercion | 'Clamp', num: number): Uint {
     return UintXY.coerce(coerce, num);
   }
 }
@@ -967,13 +943,13 @@ export class NumXY extends BaseFractionalXY<number> {
   }
 
   protected static override coerce(
-    coerce: 'cast' | 'clamp',
+    coerce: 'Cast' | 'Clamp',
     num: number,
   ): number {
-    return Num[coerce](num);
+    return Num[Str.uncapitalize(coerce)](num);
   }
 
-  protected override coerce(coerce: 'cast' | 'clamp', num: number): number {
+  protected override coerce(coerce: 'Cast' | 'Clamp', num: number): number {
     return NumXY.coerce(coerce, num);
   }
 }
@@ -988,13 +964,13 @@ export class UnumXY extends BaseFractionalXY<Unum> {
   }
 
   protected static override coerce(
-    coerce: 'cast' | 'clamp',
+    coerce: 'Cast' | 'Clamp',
     num: number,
   ): Unum {
-    return Unum[coerce](num);
+    return Unum[Str.uncapitalize(coerce)](num);
   }
 
-  protected override coerce(coerce: 'cast' | 'clamp', num: number): Unum {
+  protected override coerce(coerce: 'Cast' | 'Clamp', num: number): Unum {
     return UnumXY.coerce(coerce, num);
   }
 }
