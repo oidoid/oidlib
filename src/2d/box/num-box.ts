@@ -281,7 +281,7 @@ export class NumBox implements FractionalBox<number> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.set(box.x, box.y);
     this.#wh.set(box.w, box.h);
     return this;
@@ -296,7 +296,7 @@ export class NumBox implements FractionalBox<number> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.setClamp(box.x, box.y);
     this.#wh.setClamp(box.w, box.h);
     return this;

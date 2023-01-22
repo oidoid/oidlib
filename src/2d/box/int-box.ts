@@ -476,7 +476,7 @@ export class IntBox implements IntegralBox<Int> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.set(box.x, box.y);
     this.#wh.set(box.w, box.h);
     return this;
@@ -491,7 +491,7 @@ export class IntBox implements IntegralBox<Int> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.setCeil(box.x, box.y);
     this.#wh.setCeil(box.w, box.h);
     return this;
@@ -506,7 +506,7 @@ export class IntBox implements IntegralBox<Int> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.setFloor(box.x, box.y);
     this.#wh.setFloor(box.w, box.h);
     return this;
@@ -521,7 +521,7 @@ export class IntBox implements IntegralBox<Int> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.setRound(box.x, box.y);
     this.#wh.setRound(box.w, box.h);
     return this;
@@ -536,7 +536,7 @@ export class IntBox implements IntegralBox<Int> {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.setTrunc(box.x, box.y);
     this.#wh.setTrunc(box.w, box.h);
     return this;

@@ -237,7 +237,7 @@ export class <%- type %>Box implements <% if (type == 'Num' || type == 'Unum') {
     w?: number,
     h?: number,
   ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h));
+    const box = argsToBox(xXYBox, yWH, w, h);
     this.#xy.set<%- coerce %>(box.x, box.y);
     this.#wh.set<%- coerce %>(box.w, box.h);
     return this;
