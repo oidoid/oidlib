@@ -6,7 +6,6 @@ import {
   Int,
   IntCoercion,
   Num,
-  NumUtil,
   U16,
   U32,
   U4,
@@ -61,8 +60,6 @@ export interface NumericalXY<T> extends XY<T> {
   div(...args: XYArgs): this;
   /** Compare x and y to arguments. */
   eq(...args: XYArgs): boolean;
-  /** Linear interpolate from x and y to arguments. */
-  lerp(...args: LerpArgs): this;
   /** Given a triangle with sides x and y, the length of the hypotenuse. */
   magnitude: T;
   magnitudeNum: number;
@@ -123,11 +120,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   divRound(...args: XYArgs): this;
   divTrunc(...args: XYArgs): this;
 
-  lerpCeil(...args: LerpArgs): this;
-  lerpFloor(...args: LerpArgs): this;
-  lerpRound(...args: LerpArgs): this;
-  lerpTrunc(...args: LerpArgs): this;
-
   maxCeil(...args: XYArgs): this;
   maxFloor(...args: XYArgs): this;
   maxRound(...args: XYArgs): this;
@@ -158,7 +150,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
 export interface FractionalXY<T> extends NumericalXY<T> {
   addClamp(...args: XYArgs): this;
   divClamp(...args: XYArgs): this;
-  lerpClamp(...args: LerpArgs): this;
   maxClamp(...args: XYArgs): this;
   minClamp(...args: XYArgs): this;
   mulClamp(...args: XYArgs): this;
@@ -169,9 +160,6 @@ export interface FractionalXY<T> extends NumericalXY<T> {
 export type XYArgs =
   | readonly [x: number, y: number]
   | [xy: Readonly<XY<number>>];
-export type LerpArgs =
-  | [toX: number, toY: number, ratio: number]
-  | [to: Readonly<XY<number>>, ratio: number];
 
 abstract class BaseNumericalXY<T extends number, Coerce>
   implements NumericalXY<T> {
@@ -255,15 +243,6 @@ abstract class BaseNumericalXY<T extends number, Coerce>
     const xy = argsToXY(args);
     return this.x == xy.x && this.y == xy.y;
   }
-
-  lerp(...args: LerpArgs): this {
-    return this.lerpCoerce('Cast', args);
-  }
-
-  protected abstract lerpCoerce(
-    coerce: Coerce | 'Cast' | 'Clamp',
-    args: LerpArgs,
-  ): this;
 
   get magnitude(): T {
     return this.coerce('Cast', this.magnitudeNum);
@@ -419,37 +398,6 @@ class BaseIntegralXY<T extends Int>
     return this.divCoerce('Trunc', args);
   }
 
-  lerpCeil(...args: LerpArgs): this {
-    return this.lerpCoerce('Ceil', args);
-  }
-
-  protected lerpCoerce(coerce: IntCoercion, args: LerpArgs): this {
-    if (args.length == 3) {
-      return this.setCoerce(
-        coerce,
-        NumUtil.lerpInt(this.x, args[0], args[2]),
-        NumUtil.lerpInt(this.y, args[1], args[2]),
-      );
-    }
-    return this.setCoerce(
-      coerce,
-      NumUtil.lerpInt(this.x, args[0].x, args[1]),
-      NumUtil.lerpInt(this.y, args[0].y, args[1]),
-    );
-  }
-
-  lerpFloor(...args: LerpArgs): this {
-    return this.lerpCoerce('Floor', args);
-  }
-
-  lerpRound(...args: LerpArgs): this {
-    return this.lerpCoerce('Round', args);
-  }
-
-  lerpTrunc(...args: LerpArgs): this {
-    return this.lerpCoerce('Trunc', args);
-  }
-
   maxCeil(...args: XYArgs): this {
     return this.maxCoerce('Ceil', args);
   }
@@ -561,25 +509,6 @@ class BaseFractionalXY<T extends number>
 
   divClamp(...args: XYArgs): this {
     return this.divCoerce('Clamp', args);
-  }
-
-  lerpClamp(...args: LerpArgs): this {
-    return this.lerpCoerce('Clamp', args);
-  }
-
-  protected lerpCoerce(coerce: 'Cast' | 'Clamp', args: LerpArgs): this {
-    if (args.length == 3) {
-      return this.setCoerce(
-        coerce,
-        NumUtil.lerp(this.x, args[0], args[2]),
-        NumUtil.lerp(this.y, args[1], args[2]),
-      );
-    }
-    return this.setCoerce(
-      coerce,
-      NumUtil.lerp(this.x, args[0].x, args[1]),
-      NumUtil.lerp(this.y, args[0].y, args[1]),
-    );
   }
 
   maxClamp(...args: XYArgs): this {

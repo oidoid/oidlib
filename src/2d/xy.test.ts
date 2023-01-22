@@ -86,15 +86,6 @@ for (
 }
 
 for (
-  const [name, xy, to, ratio, expected] of [
-    ['integer', new IntXY(1, 2), new IntXY(3, 4), .5, new IntXY(2, 3)],
-  ] as const
-) {
-  Deno.test(`Lerp (Int): ${name}.`, () =>
-    assertEquals(xy.lerp(to, ratio), expected));
-}
-
-for (
   const [name, xy, expected] of [
     ['integer', new IntXY(3, 4), 5],
   ] as const
