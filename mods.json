@@ -1,6 +1,7 @@
 {
   "imports": {
     "@/oidlib": "./mod.ts",
+    "dejs/": "https://deno.land/x/dejs@0.10.3/",
     "std/": "https://deno.land/std@0.171.0/"
   }
 }

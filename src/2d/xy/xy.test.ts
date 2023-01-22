@@ -86,9 +86,7 @@ for (
 }
 
 for (
-  const [name, xy, expected] of [
-    ['integer', new IntXY(3, 4), 5],
-  ] as const
+  const [name, xy, expected] of [['integer', new IntXY(3, 4), 5]] as const
 ) {
   Deno.test(`Magnitude: ${name}.`, () =>
     assertEquals<number>(xy.magnitude, expected));

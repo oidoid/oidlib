@@ -19,6 +19,7 @@ import map.
 | cmd       | command                            |
 | config    | configuration                      |
 | ctrl      | control                            |
+| ctx       | context                            |
 | dir       | directory                          |
 | dist      | distributable(s)                   |
 | err       | error                              |
@@ -39,6 +40,7 @@ import map.
 | size      | Map.size / Array.length            |
 | src       | source(s)                          |
 | str       | string                             |
+| sym       | symbol                             |
 | this      | this when possible, self otherwise |
 | util      | utility                            |
 | val       | value                              |

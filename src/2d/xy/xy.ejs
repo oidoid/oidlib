@@ -1,0 +1,117 @@
+import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY } from '@/oidlib';
+
+export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY<<%- component %>> {
+  <% coercions.forEach(coerce =>{ %>
+  static <%- coerce.toLowerCase() %>(x: number, y: number): <%- type %>XY;
+  static <%- coerce.toLowerCase() %>(xy: Readonly<XY<number>>): <%- type %>XY;
+  static <%- coerce.toLowerCase() %>(xXY: number | Readonly<XY<number>>, y?: number): <%- type %>XY {
+    return new this(
+      <%- type %>.<%- coerce.toLowerCase() %>(typeof xXY == 'number' ? xXY : xXY.x),
+      <%- type %>.<%- coerce.toLowerCase() %>(typeof xXY == 'number' ? y! : xXY.y),
+    );
+  }
+  <% }) %>
+
+  #x: <%- component %>;
+  #y: <%- component %>;
+
+  constructor(x: number, y: number);
+  constructor(xy: Readonly<XY<number>>);
+  constructor(xXY: number | Readonly<XY<number>>, y?: number) {
+    this.#x = <%- type %>(typeof xXY == 'number' ? xXY : xXY.x);
+    this.#y = <%- type %>(typeof xXY == 'number' ? y! : xXY.y);
+  }
+
+  <% ['', 'Clamp'].forEach(coerce =>{ %>
+  abs<%- coerce %>(): this {
+    this.#x = <%- type %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.abs(this.#x));
+    this.#y = <%- type %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.abs(this.#y));
+    return this;
+  }
+  <% }) %>
+
+  <% [['add', '+'], ['div', '/'], ['mul', '*'], ['sub', '-']].forEach(([op, sym]) =>{ %>
+  <% ['', ...coercions].forEach(coerce =>{ %>
+  <%- op %><%- coerce %>(x: number, y: number): this;
+  <%- op %><%- coerce %>(xy: Readonly<XY<number>>): this;
+  <%- op %><%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(this.#x <%- sym %> (typeof xXY == 'number' ? xXY : xXY.x));
+    this.#y = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(this.#y <%- sym %> (typeof xXY == 'number' ? y! : xXY.y));
+    return this;
+  }
+  <% }) %>
+  <% }) %>
+
+  <% ['', 'Clamp', 'Num'].forEach(coerce =>{ %>
+  get area<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
+    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(this.#x * this.#y);
+  }
+  <% }) %>
+
+  copy(): this {
+    return new <%- type %>XY(this.#x, this.#y) as this;
+  }
+
+  eq(x: number, y: number): boolean;
+  eq(xy: Readonly<XY<number>>): boolean;
+  eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
+    return this.#x == (typeof xXY == 'number' ? xXY : xXY.x) &&
+      this.#y == (typeof xXY == 'number' ? y! : xXY.y);
+  }
+
+  <% ['', 'Clamp', 'Num'].forEach(coerce =>{ %>
+  get magnitude<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
+    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.sqrt(this.#x * this.#x + this.#y * this.#y));
+  }
+  <% }) %>
+
+  <% ['max', 'min'].forEach(op =>{ %>
+  <% ['', ...coercions].forEach(coerce =>{ %>
+  <%- op %><%- coerce %>(x: number, y: number): this;
+  <%- op %><%- coerce %>(xy: Readonly<XY<number>>): this;
+  <%- op %><%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(Math.<%- op %>(this.#x, typeof xXY == 'number' ? xXY : xXY.x));
+    this.#y = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(Math.<%- op %>(this.#y, typeof xXY == 'number' ? y! : xXY.y));
+    return this;
+  }
+  <% }) %>
+  <% }) %>
+
+  <% ['', ...coercions].forEach(coerce =>{ %>
+  set<%- coerce %>(x: number, y: number): this;
+  set<%- coerce %>(xy: Readonly<XY<number>>): this;
+  set<%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(typeof xXY == 'number' ? xXY : xXY.x);
+    this.#y = <%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %>(typeof xXY == 'number' ? y! : xXY.y);
+    return this;
+  }
+  <% }) %>
+
+  toJSON(): XY<<%- component %>> {
+    return { x: this.#x, y: this.#y };
+  }
+
+  toNumXY(): NumXY {
+    return new NumXY(this.#x, this.#y);
+  }
+
+  toString(): string {
+    return `(${this.#x}, ${this.#y})`;
+  }
+
+  get x(): <%- component %> {
+    return this.#x;
+  }
+
+  set x(x: <%- component %>) {
+    this.#x = x;
+  }
+
+  get y(): <%- component %> {
+    return this.#y;
+  }
+
+  set y(y: <%- component %>) {
+    this.#y = y;
+  }
+}

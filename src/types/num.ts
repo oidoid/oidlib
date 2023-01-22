@@ -55,8 +55,8 @@ export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
 export type NumTypeName = 'Num' | 'Unum';
 export type AnyNumTypeName = IntTypeName | NumTypeName;
 
-export type IntCoercion = 'Cast' | 'Ceil' | 'Floor' | 'Round' | 'Trunc';
-export type NumCoercion = 'Cast' | 'Clamp';
+export type IntCoercion = 'Ceil' | 'Floor' | 'Round' | 'Trunc';
+export type NumCoercion = 'Clamp';
 
 export interface AnyNumNamespace<T extends number> {
   readonly name: AnyNumTypeName;
@@ -64,15 +64,12 @@ export interface AnyNumNamespace<T extends number> {
   readonly max: T;
   readonly signedness: Signedness;
 
-  /** Identical to cast(). Prefer this function. */
-  (num: number): T;
-
   /**
    * Cast or assert val (no change). val is interpreted as a logical number,
    * not bits. For example, `I8(0xff)` will fail as 255 is out-of-range for a
-   * signed eight-bit number. Prefer nameless function.
+   * signed eight-bit number.
    */
-  cast(num: number): T;
+  (num: number): T;
 
   is(num: number): num is T;
 }
@@ -137,10 +134,10 @@ abstract class NumNamespaceImpl<T extends number> {
     this.signedness = signedness;
   }
 
-  cast = (num: number): T => {
+  cast(num: number): T {
     assert(this.is(num), `${num} is not a ${this.#name}.`);
     return num;
-  };
+  }
 
   abstract readonly is: (num: number) => num is T;
 }
