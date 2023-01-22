@@ -211,3 +211,25 @@ export interface FractionalBox<T> extends NumericalBox<T> {
   unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this;
   unionClamp(box: Readonly<Box<number>>): this;
 }
+
+export function argsToBox(
+  xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+  yWH?: number | Readonly<XY<number>>,
+  w?: number,
+  h?: number,
+): Readonly<Box<number>> {
+  if (typeof xXYBox == 'number') {
+    return { x: xXYBox, y: yWH as number, w: w ?? 0, h: h ?? 0 };
+  }
+  if (yWH == null) {
+    return 'w' in xXYBox
+      ? xXYBox as Box<number>
+      : { x: xXYBox.x, y: xXYBox.y, w: 0, h: 0 };
+  }
+  return {
+    x: xXYBox.x,
+    y: xXYBox.y,
+    w: (yWH as XY<number>).x,
+    h: (yWH as XY<number>).y,
+  };
+}
