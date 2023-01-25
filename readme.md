@@ -23,6 +23,7 @@ import map.
 | dir       | directory                          |
 | dist      | distributable(s)                   |
 | err       | error                              |
+| eq        | equal                              |
 | ev        | event                              |
 | ex        | example                            |
 | exec      | executable                         |
