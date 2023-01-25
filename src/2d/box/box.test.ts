@@ -302,6 +302,10 @@ Deno.test(`toJSON()`, () => {
   assertEquals(new IntBox(1, 2, 3, 4).toJSON(), { x: 1, y: 2, w: 3, h: 4 });
 });
 
+Deno.test(`toNumBox()`, () => {
+  assertEquals(new IntBox(1, 2, 3, 4).toNumBox(), new NumBox(1, 2, 3, 4));
+});
+
 Deno.test(`toString()`, () => {
   assertEquals(new IntBox(1, 2, 3, 4).toString(), '[(1, 2), 3×4]');
 });
