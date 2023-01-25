@@ -11,7 +11,7 @@ Deno.test('Shuffle: permutations.', () => {
   const distribution: Record<string, number> = {};
   const random = new Random(I32(0));
   for (let i = 0; i < iterations; i++) {
-    ArrayUtil.shuffle(array, () => random.fraction);
+    ArrayUtil.shuffle(array, () => random.fraction());
     const permutation = array.join('');
     distribution[permutation] ??= 0;
     distribution[permutation]++;

@@ -22,12 +22,12 @@ export class Random {
   }
 
   /** Returns a fraction in [0, 1). */
-  get fraction(): number {
-    return (this.i32 - 1) / 0x7fff_fffe;
+  fraction(): number {
+    return (this.i32() - 1) / 0x7fff_fffe;
   }
 
   /** Returns an integer in [1, 0x7fff_fffe]. */
-  get i32(): I32 {
+  i32(): I32 {
     this.#seed = I32((this.#seed * 16_807) % 0x7fff_ffff);
     return this.#seed;
   }
