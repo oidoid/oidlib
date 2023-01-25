@@ -23,6 +23,7 @@ export interface NumericalBox<T> extends Box<T> {
   area: T;
   areaClamp: T;
   areaNum: number;
+  /** The center coordinate. */
   center: XY<T>;
   centerNum: NumXY;
   /**
@@ -37,17 +38,23 @@ export interface NumericalBox<T> extends Box<T> {
   contains(x: number, y: number, w: number, h: number): boolean;
   contains(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): boolean;
   contains(box: Readonly<Box<number>>): boolean;
+  /** Copy state as a new clone. */
   copy(): this;
   /** True if either side is zero. */
   empty: boolean;
+  /** The starting coordinate plus dimensions. */
   end: XY<T>;
   endClamp: XY<T>;
   endNum: NumXY;
+  /** Compare xy and wh to arguments. */
   eq(x: number, y: number, w: number, h: number): boolean;
   eq(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): boolean;
   eq(box: Readonly<Box<number>>): boolean;
   /** Returns true if boxed is flipped along either or both axes. */
   flipped: boolean;
+  /**
+   * The mutual region occupied by this box and arguments. Flipped if disjoint.
+   */
   intersection(x: number, y: number, w: number, h: number): this;
   intersection(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this;
   intersection(box: Readonly<Box<number>>): this;
@@ -60,16 +67,21 @@ export interface NumericalBox<T> extends Box<T> {
   intersects(x: number, y: number, w: number, h: number): boolean;
   intersects(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): boolean;
   intersects(box: Readonly<Box<number>>): boolean;
+  /** The greatest coordinate of this box. */
   max: XY<T>;
   maxClamp: XY<T>;
   maxNum: NumXY;
+  /** The least coordinate of this box. */
   min: XY<T>;
   minClamp: XY<T>;
   minNum: NumXY;
+  /** Reposition the box by arguments. */
   moveBy(x: number, y: number): this;
   moveBy(xy: Readonly<XY<number>>): this;
+  /** Center the box on arguments. */
   moveCenterTo(x: number, y: number): this;
   moveCenterTo(xy: Readonly<XY<number>>): this;
+  /** Reposition the box to arguments. */
   moveTo(x: number, y: number): this;
   moveTo(xy: Readonly<XY<number>>): this;
   /**
@@ -79,22 +91,29 @@ export interface NumericalBox<T> extends Box<T> {
    */
   order(): this;
   orderClamp(): this;
+  /** Set xy and wh to arguments. */
   set(x: number, y: number, w: number, h: number): this;
   set(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this;
   set(box: Readonly<Box<number>>): this;
+  /** Resize the box by arguments. */
   sizeBy(x: number, y: number): this;
   sizeBy(xy: Readonly<XY<number>>): this;
+  /** Resize the box to arguments. */
   sizeTo(x: number, y: number): this;
   sizeTo(xy: Readonly<XY<number>>): this;
-  // to-do: sizeCenterBy? like, it sizes from the center as the origin would
-  // appear to resize without moving from that center origin.
+  /** Sets the minimum rectangle occupied by both box and arguments. */
   union(x: number, y: number, w: number, h: number): this;
   union(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this;
   union(box: Readonly<Box<number>>): this;
+  /** The box coordinates. */
   xy: XY<T>;
+  /** The box dimensions. */
   wh: XY<T>;
+  /** Copy state as plain JSON. */
   toJSON(): Box<T>;
+  /** Copy state as a permissive double Box. */
   toNumBox(): NumBox;
+  /** Copy state as a string. */
   toString(): string;
 }
 
