@@ -1,5 +1,5 @@
-import { Int, NumUtil } from '@/oidlib';
-import { assertEquals } from 'std/testing/asserts.ts';
+import { Int, NumUtil } from '@/oidlib'
+import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('wrap()', async (test) => {
   for (
@@ -303,9 +303,9 @@ Deno.test('wrap()', async (test) => {
     ] as const
   ) {
     await test.step(`Wrap ${x} to [${min}, ${max}].`, () =>
-      assertEquals(NumUtil.wrap(x, min, max), expected));
+      assertEquals(NumUtil.wrap(x, min, max), expected))
   }
-});
+})
 
 Deno.test('lerpInt()', async (test) => {
   for (
@@ -379,9 +379,9 @@ Deno.test('lerpInt()', async (test) => {
       assertEquals(
         NumUtil.lerpInt(Int(from), Int(to), ratio),
         Int(expected),
-      ));
+      ))
   }
-});
+})
 
 Deno.test('round()', async (test) => {
   for (
@@ -450,9 +450,9 @@ Deno.test('round()', async (test) => {
     ] as const
   ) {
     await test.step(`round(${num}) => ${expected}`, () =>
-      assertEquals(NumUtil.round(num), Int(expected)));
+      assertEquals(NumUtil.round(num), Int(expected)))
   }
-});
+})
 
 Deno.test('lshift()', async (test) => {
   for (
@@ -513,13 +513,13 @@ Deno.test('lshift()', async (test) => {
       0x20_00_00_00_00_00_00n,
     ].entries()
   ) {
-    const input = 1;
+    const input = 1
     // There are no enforced limits so allow doubling at the 54th bit.
-    const expectedNum = Number(BigInt.asUintN(54, expected));
+    const expectedNum = Number(BigInt.asUintN(54, expected))
     await test.step(`1 << ${shift} → x${expectedNum.toString(16)}`, () =>
-      assertEquals(NumUtil.lshift(input, shift), expectedNum));
+      assertEquals(NumUtil.lshift(input, shift), expectedNum))
   }
-});
+})
 
 Deno.test('unsigned right-shift', async (test) => {
   for (
@@ -581,14 +581,14 @@ Deno.test('unsigned right-shift', async (test) => {
       0x00_00_00_00_00_00_00n,
     ].entries()
   ) {
-    const input = Number(BigInt.asUintN(53, 0x10_00_00_00_00_00_00n));
-    const expectedNum = Number(BigInt.asUintN(53, expected));
+    const input = Number(BigInt.asUintN(53, 0x10_00_00_00_00_00_00n))
+    const expectedNum = Number(BigInt.asUintN(53, expected))
     await test.step(`rshift x${input.toString(16)} >> ${shift} → x${expectedNum.toString(16)}`, () =>
-      assertEquals(NumUtil.rshift(input, shift), expectedNum));
+      assertEquals(NumUtil.rshift(input, shift), expectedNum))
     await test.step(`ushift x${input.toString(16)} >> ${shift} → x${expectedNum.toString(16)}`, () =>
-      assertEquals(NumUtil.ushift(input, shift), expectedNum));
+      assertEquals(NumUtil.ushift(input, shift), expectedNum))
   }
-});
+})
 
 Deno.test('signed right-shift', async (test) => {
   for (
@@ -651,15 +651,15 @@ Deno.test('signed right-shift', async (test) => {
       [0x3f_ff_ff_ff_ff_ff_ffn, 0x00_00_00_00_00_00_00n],
     ] as const).entries()
   ) {
-    const input = Number(BigInt.asIntN(54, 0x20_00_00_00_00_00_00n));
-    const expectedSignedNum = Number(BigInt.asIntN(54, expectedSigned));
-    const expectedUnsignedNum = Number(BigInt.asUintN(54, expectedUnsigned));
+    const input = Number(BigInt.asIntN(54, 0x20_00_00_00_00_00_00n))
+    const expectedSignedNum = Number(BigInt.asIntN(54, expectedSigned))
+    const expectedUnsignedNum = Number(BigInt.asUintN(54, expectedUnsigned))
     await test.step(`rshift x${input.toString(16)} >> ${shift} → x${expectedSignedNum.toString(16)} (x${Number(BigInt.asUintN(54, expectedSigned)).toString(16)})`, () =>
-      assertEquals(NumUtil.rshift(input, shift), expectedSignedNum));
+      assertEquals(NumUtil.rshift(input, shift), expectedSignedNum))
     await test.step(`ushift x${input.toString(16)} >> ${shift} → x${expectedUnsignedNum.toString(16)}`, () =>
-      assertEquals(NumUtil.ushift(input, shift), expectedUnsignedNum));
+      assertEquals(NumUtil.ushift(input, shift), expectedUnsignedNum))
   }
-});
+})
 
 Deno.test('mod int', async (test) => {
   for (
@@ -673,11 +673,11 @@ Deno.test('mod int', async (test) => {
       [Number.MAX_SAFE_INTEGER + 1, BigInt(Number.MIN_SAFE_INTEGER - 1), 0n],
     ] as const).entries()
   ) {
-    const expectedIntNum = Number(BigInt.asIntN(54, expectedInt));
-    const expectedUintNum = Number(BigInt.asUintN(54, expectedUint));
+    const expectedIntNum = Number(BigInt.asIntN(54, expectedInt))
+    const expectedUintNum = Number(BigInt.asUintN(54, expectedUint))
     await test.step(`${index} modInt(x${input.toString(16)}) → x${expectedIntNum.toString(16)} (x${Number(BigInt.asUintN(53, expectedInt)).toString(16)})`, () =>
-      assertEquals(NumUtil.modInt(input), expectedIntNum));
+      assertEquals(NumUtil.modInt(input), expectedIntNum))
     await test.step(`${index} modUint(x${input.toString(16)}) → x${expectedUintNum.toString(16)} (x${Number(BigInt.asUintN(53, expectedUint)).toString(16)})`, () =>
-      assertEquals(NumUtil.modUint(input), expectedUintNum));
+      assertEquals(NumUtil.modUint(input), expectedUintNum))
   }
-});
+})

@@ -1,21 +1,21 @@
-import { assert, NumUtil } from '@/oidlib';
+import { assert, NumUtil } from '@/oidlib'
 
-export type I4 = number & { [i4]: never };
-declare const i4: unique symbol;
-export type U4 = number & { [u4]: never };
-declare const u4: unique symbol;
-export type I8 = number & (I4 | { [i8]: never });
-declare const i8: unique symbol;
-export type U8 = number & (U4 | { [u8]: never });
-declare const u8: unique symbol;
-export type I16 = number & (I8 | { [i16]: never });
-declare const i16: unique symbol;
-export type U16 = number & (U8 | { [u16]: never });
-declare const u16: unique symbol;
-export type I32 = number & (I16 | U16 | { [i32]: never });
-declare const i32: unique symbol;
-export type U32 = number & (U16 | { [u32]: never });
-declare const u32: unique symbol;
+export type I4 = number & { [i4]: never }
+declare const i4: unique symbol
+export type U4 = number & { [u4]: never }
+declare const u4: unique symbol
+export type I8 = number & (I4 | { [i8]: never })
+declare const i8: unique symbol
+export type U8 = number & (U4 | { [u8]: never })
+declare const u8: unique symbol
+export type I16 = number & (I8 | { [i16]: never })
+declare const i16: unique symbol
+export type U16 = number & (U8 | { [u16]: never })
+declare const u16: unique symbol
+export type I32 = number & (I16 | U16 | { [i32]: never })
+declare const i32: unique symbol
+export type U32 = number & (U16 | { [u32]: never })
+declare const u32: unique symbol
 /**
  * A "[safe integer]" `number` in
  * [`Number.MIN_SAFE_INTEGER`, `Number.MAX_SAFE_INTEGER`]
@@ -42,50 +42,50 @@ declare const u32: unique symbol;
  * [3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
  * [4]: https://github.com/denoland/deno/pull/15692
  */
-export type Int = number & (I32 | Uint | { [int]: never });
-declare const int: unique symbol;
-export type Uint = number & (U32 | { [uint]: never });
-declare const uint: unique symbol;
-export type Unum = number & (Uint | { [unum]: never });
-declare const unum: unique symbol;
+export type Int = number & (I32 | Uint | { [int]: never })
+declare const int: unique symbol
+export type Uint = number & (U32 | { [uint]: never })
+declare const uint: unique symbol
+export type Unum = number & (Uint | { [unum]: never })
+declare const unum: unique symbol
 
-export type Signedness = 'Signed' | 'Unsigned';
+export type Signedness = 'Signed' | 'Unsigned'
 
-export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint';
-export type NumTypeName = 'Num' | 'Unum';
-export type AnyNumTypeName = IntTypeName | NumTypeName;
+export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint'
+export type NumTypeName = 'Num' | 'Unum'
+export type AnyNumTypeName = IntTypeName | NumTypeName
 
-export type IntCoercion = 'Ceil' | 'Floor' | 'Round' | 'Trunc';
-export type NumCoercion = 'Clamp';
+export type IntCoercion = 'Ceil' | 'Floor' | 'Round' | 'Trunc'
+export type NumCoercion = 'Clamp'
 
 export interface AnyNumNamespace<T extends number> {
-  readonly name: AnyNumTypeName;
-  readonly min: T;
-  readonly max: T;
-  readonly signedness: Signedness;
+  readonly name: AnyNumTypeName
+  readonly min: T
+  readonly max: T
+  readonly signedness: Signedness
 
   /**
    * Cast or assert val (no change). val is interpreted as a logical number,
    * not bits. For example, `I8(0xff)` will fail as 255 is out-of-range for a
    * signed eight-bit number.
    */
-  (num: number): T;
+  (num: number): T
 
-  is(num: number): num is T;
+  is(num: number): num is T
 }
 
 export interface NumNamespace<T extends number> extends AnyNumNamespace<T> {
-  readonly name: NumTypeName;
+  readonly name: NumTypeName
   /**
    * Values exceeding the range are limited to the corresponding logical minimum
    * or maximum inclusive endpoint.
    */
-  clamp(num: number): T;
+  clamp(num: number): T
 }
 
 export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
-  readonly name: IntTypeName;
-  readonly width: T;
+  readonly name: IntTypeName
+  readonly width: T
 
   /**
    * Interpret value as a two's complement encoded number, not a logical number.
@@ -108,15 +108,15 @@ export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
    *   `0b1_00000000_00000000_00000000_00000000n | 0b0n` is `4294967296n` and
    *   `Number(1n << 32n)` is `4294967296`.
    */
-  mod(int: number): T;
+  mod(int: number): T
   /** Clamp the ceiling of num. This is a saturating ceil(). */
-  ceil(num: number): T;
+  ceil(num: number): T
   /** Clamp the floor of num. This is a saturating floor(). */
-  floor(num: number): T;
+  floor(num: number): T
   /** Clamp the rounding of num. This is a saturating round(). */
-  round(num: number): T;
+  round(num: number): T
   /** Clamp the truncation of num. This is a saturating trunc(). */
-  trunc(num: number): T;
+  trunc(num: number): T
 }
 
 abstract class NumNamespaceImpl<T extends number> {
@@ -124,22 +124,22 @@ abstract class NumNamespaceImpl<T extends number> {
    * Private to avoid enumerable. The static constructors will define the name
    * on the function object.
    */
-  readonly #name: AnyNumTypeName;
-  abstract readonly min: T;
-  abstract readonly max: T;
-  readonly signedness: Signedness;
+  readonly #name: AnyNumTypeName
+  abstract readonly min: T
+  abstract readonly max: T
+  readonly signedness: Signedness
 
   protected constructor(name: AnyNumTypeName, signedness: Signedness) {
-    this.#name = name;
-    this.signedness = signedness;
+    this.#name = name
+    this.signedness = signedness
   }
 
   cast(num: number): T {
-    assert(this.is(num), `${num} is not a ${this.#name}.`);
-    return num;
+    assert(this.is(num), `${num} is not a ${this.#name}.`)
+    return num
   }
 
-  abstract readonly is: (num: number) => num is T;
+  abstract readonly is: (num: number) => num is T
 }
 
 class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
@@ -150,83 +150,83 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
    * `Number.MIN_SAFE_INTEGER - 1` is representable, just like in C
    * `(char) -128` is `-128`. WebGL v2 is two's complement.
    */
-  override readonly min: T;
-  override readonly max: T;
-  readonly width: T;
+  override readonly min: T
+  override readonly max: T
+  readonly width: T
 
   static new<T extends Int>(
     name: AnyNumTypeName,
     width: number,
     signedness: Signedness,
   ): IntNamespace<T> {
-    const base = new IntNumNamespaceImpl<T>(name, width, signedness);
-    const constructor = base.cast.bind(base);
-    Object.defineProperty(constructor, 'name', { value: name });
-    return Object.assign(constructor, base) as IntNamespace<T>;
+    const base = new IntNumNamespaceImpl<T>(name, width, signedness)
+    const constructor = base.cast.bind(base)
+    Object.defineProperty(constructor, 'name', { value: name })
+    return Object.assign(constructor, base) as IntNamespace<T>
   }
 
   constructor(name: AnyNumTypeName, width: number, signedness: Signedness) {
-    super(name, signedness);
+    super(name, signedness)
     assert(
       width > 0 && Number.isInteger(width),
       'Width must be integer greater than zero.',
-    );
+    )
     assert(
       width <= 32 ||
         signedness == 'Unsigned' && width == 53 ||
         signedness == 'Signed' && width == 54,
       'Width must be < 53b or unsigned 53b or signed 54b.',
-    );
+    )
 
-    this.width = <T> width;
+    this.width = <T> width
     if (this.signedness == 'Signed') {
-      this.min = <T> -(2 ** (width - 1));
-      this.max = <T> (2 ** (width - 1) - 1);
+      this.min = <T> -(2 ** (width - 1))
+      this.max = <T> (2 ** (width - 1) - 1)
     } else {
-      this.min = <T> 0;
-      this.max = <T> (2 ** width - 1);
+      this.min = <T> 0
+      this.max = <T> (2 ** width - 1)
     }
   }
 
   readonly ceil = (num: number): T => {
-    return <T> NumUtil.clamp(Math.ceil(num), this.min, this.max);
-  };
+    return <T> NumUtil.clamp(Math.ceil(num), this.min, this.max)
+  }
 
   readonly floor = (num: number): T => {
-    return <T> NumUtil.clamp(Math.floor(num), this.min, this.max);
-  };
+    return <T> NumUtil.clamp(Math.floor(num), this.min, this.max)
+  }
 
   override is = (num: number): num is T => {
     return Number.isInteger(num) &&
-      NumUtil.inDomain(num, this.min, this.max, 'Inclusive');
-  };
+      NumUtil.inDomain(num, this.min, this.max, 'Inclusive')
+  }
 
   readonly mod = (int: number): T => {
-    assert(Number.isInteger(int), `${int} is not an integral value.`);
+    assert(Number.isInteger(int), `${int} is not an integral value.`)
 
     if (this.width < 53) {
-      return this.cast(NumUtil.wrap(int, this.min, this.max + 1));
+      return this.cast(NumUtil.wrap(int, this.min, this.max + 1))
     }
 
     // Assume 53-bit unsigned.
-    if (this.width == 53) return this.cast(NumUtil.modUint(int));
+    if (this.width == 53) return this.cast(NumUtil.modUint(int))
 
     // Assume 54-bit signed.
-    return this.cast(NumUtil.modInt(int));
-  };
+    return this.cast(NumUtil.modInt(int))
+  }
 
   readonly round = (num: number): T => {
-    return <T> NumUtil.clamp(NumUtil.round(num), this.min, this.max);
-  };
+    return <T> NumUtil.clamp(NumUtil.round(num), this.min, this.max)
+  }
 
   readonly trunc = (num: number): T => {
-    return <T> NumUtil.clamp(Math.trunc(num), this.min, this.max);
-  };
+    return <T> NumUtil.clamp(Math.trunc(num), this.min, this.max)
+  }
 }
 
 class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
-  override readonly min: T;
-  override readonly max: T;
+  override readonly min: T
+  override readonly max: T
 
   static new<T extends number>(
     name: AnyNumTypeName,
@@ -234,10 +234,10 @@ class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
     min: number,
     max: number,
   ): NumNamespace<T> {
-    const base = new NumberNumNamespaceImpl<T>(name, signedness, min, max);
-    const constructor = base.cast.bind(base);
-    Object.defineProperty(constructor, 'name', { value: name });
-    return Object.assign(constructor, base) as NumNamespace<T>;
+    const base = new NumberNumNamespaceImpl<T>(name, signedness, min, max)
+    const constructor = base.cast.bind(base)
+    Object.defineProperty(constructor, 'name', { value: name })
+    return Object.assign(constructor, base) as NumNamespace<T>
   }
 
   constructor(
@@ -246,73 +246,73 @@ class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
     min: number,
     max: number,
   ) {
-    super(name, signedness);
-    this.min = <T> min;
-    this.max = <T> max;
+    super(name, signedness)
+    this.min = <T> min
+    this.max = <T> max
   }
 
   readonly clamp = (num: number): T => {
-    return <T> NumUtil.clamp(num, this.min, this.max);
-  };
+    return <T> NumUtil.clamp(num, this.min, this.max)
+  }
 
   readonly is = (num: number): num is T => {
-    return NumUtil.inDomain(num, this.min, this.max, 'Inclusive');
-  };
+    return NumUtil.inDomain(num, this.min, this.max, 'Inclusive')
+  }
 }
 
-export const I4: IntNamespace<I4> = IntNumNamespaceImpl.new('I4', 4, 'Signed');
+export const I4: IntNamespace<I4> = IntNumNamespaceImpl.new('I4', 4, 'Signed')
 export const U4: IntNamespace<U4> = IntNumNamespaceImpl.new(
   'U4',
   4,
   'Unsigned',
-);
-export const I8: IntNamespace<I8> = IntNumNamespaceImpl.new('I8', 8, 'Signed');
+)
+export const I8: IntNamespace<I8> = IntNumNamespaceImpl.new('I8', 8, 'Signed')
 export const U8: IntNamespace<U8> = IntNumNamespaceImpl.new(
   'U8',
   8,
   'Unsigned',
-);
+)
 export const I16: IntNamespace<I16> = IntNumNamespaceImpl.new(
   'I16',
   16,
   'Signed',
-);
+)
 export const U16: IntNamespace<U16> = IntNumNamespaceImpl.new(
   'U16',
   16,
   'Unsigned',
-);
+)
 export const I32: IntNamespace<I32> = IntNumNamespaceImpl.new(
   'I32',
   32,
   'Signed',
-);
+)
 export const U32: IntNamespace<U32> = IntNumNamespaceImpl.new(
   'U32',
   32,
   'Unsigned',
-);
+)
 export const Int: IntNamespace<Int> = IntNumNamespaceImpl.new(
   'Int',
   54,
   'Signed',
-);
+)
 // Numbers are signed so omitting negative numbers loses a bit instead of
 // doubling the values available.
 export const Uint: IntNamespace<Uint> = IntNumNamespaceImpl.new(
   'Uint',
   53,
   'Unsigned',
-);
+)
 export const Num: NumNamespace<number> = NumberNumNamespaceImpl.new(
   'Num',
   'Signed',
   Number.NEGATIVE_INFINITY,
   Number.POSITIVE_INFINITY,
-);
+)
 export const Unum: NumNamespace<Unum> = NumberNumNamespaceImpl.new(
   'Unum',
   'Unsigned',
   0,
   Number.POSITIVE_INFINITY,
-);
+)

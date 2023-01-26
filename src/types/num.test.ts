@@ -11,8 +11,8 @@ import {
   U8,
   Uint,
   Unum,
-} from '@/oidlib';
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts';
+} from '@/oidlib'
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('Clamping.', async (test) => {
   for (
@@ -967,47 +967,47 @@ Deno.test('Clamping.', async (test) => {
   ) {
     await test.step(name, () => {
       if (numClampExpected == null) {
-        assertThrows(() => Num.clamp(value));
-        assertThrows(() => Unum.clamp(value));
-        assertThrows(() => Int.ceil(value));
-        assertThrows(() => Int.floor(value));
-        assertThrows(() => Int.round(value));
-        assertThrows(() => Int.trunc(value));
-        assertThrows(() => Uint.ceil(value));
-        assertThrows(() => Uint.floor(value));
-        assertThrows(() => Uint.round(value));
-        assertThrows(() => Uint.trunc(value));
-        assertThrows(() => I4.ceil(value));
-        assertThrows(() => I4.floor(value));
-        assertThrows(() => I4.round(value));
-        assertThrows(() => I4.trunc(value));
-        assertThrows(() => U4.ceil(value));
-        assertThrows(() => U4.floor(value));
-        assertThrows(() => U4.round(value));
-        assertThrows(() => U4.trunc(value));
+        assertThrows(() => Num.clamp(value))
+        assertThrows(() => Unum.clamp(value))
+        assertThrows(() => Int.ceil(value))
+        assertThrows(() => Int.floor(value))
+        assertThrows(() => Int.round(value))
+        assertThrows(() => Int.trunc(value))
+        assertThrows(() => Uint.ceil(value))
+        assertThrows(() => Uint.floor(value))
+        assertThrows(() => Uint.round(value))
+        assertThrows(() => Uint.trunc(value))
+        assertThrows(() => I4.ceil(value))
+        assertThrows(() => I4.floor(value))
+        assertThrows(() => I4.round(value))
+        assertThrows(() => I4.trunc(value))
+        assertThrows(() => U4.ceil(value))
+        assertThrows(() => U4.floor(value))
+        assertThrows(() => U4.round(value))
+        assertThrows(() => U4.trunc(value))
       } else {
-        assertEquals(Num.clamp(value), Num(numClampExpected));
-        assertEquals(Unum.clamp(value), Unum(unumClampExpected));
-        assertEquals(Int.ceil(value), Int(intCeilExpected));
-        assertEquals(Int.floor(value), Int(intFloorExpected));
-        assertEquals(Int.round(value), Int(intRoundExpected));
-        assertEquals(Int.trunc(value), Int(intTruncExpected));
-        assertEquals(Uint.ceil(value), Uint(uintCeilExpected));
-        assertEquals(Uint.floor(value), Uint(uintFloorExpected));
-        assertEquals(Uint.round(value), Uint(uintRoundExpected));
-        assertEquals(Uint.trunc(value), Uint(uintTruncExpected));
-        assertEquals(I4.ceil(value), I4(i4CeilExpected));
-        assertEquals(I4.floor(value), I4(i4FloorExpected));
-        assertEquals(I4.round(value), I4(i4RoundExpected));
-        assertEquals(I4.trunc(value), I4(i4TruncExpected));
-        assertEquals(U4.ceil(value), U4(u4CeilExpected));
-        assertEquals(U4.floor(value), U4(u4FloorExpected));
-        assertEquals(U4.round(value), U4(u4RoundExpected));
-        assertEquals(U4.trunc(value), U4(u4TruncExpected));
+        assertEquals(Num.clamp(value), Num(numClampExpected))
+        assertEquals(Unum.clamp(value), Unum(unumClampExpected))
+        assertEquals(Int.ceil(value), Int(intCeilExpected))
+        assertEquals(Int.floor(value), Int(intFloorExpected))
+        assertEquals(Int.round(value), Int(intRoundExpected))
+        assertEquals(Int.trunc(value), Int(intTruncExpected))
+        assertEquals(Uint.ceil(value), Uint(uintCeilExpected))
+        assertEquals(Uint.floor(value), Uint(uintFloorExpected))
+        assertEquals(Uint.round(value), Uint(uintRoundExpected))
+        assertEquals(Uint.trunc(value), Uint(uintTruncExpected))
+        assertEquals(I4.ceil(value), I4(i4CeilExpected))
+        assertEquals(I4.floor(value), I4(i4FloorExpected))
+        assertEquals(I4.round(value), I4(i4RoundExpected))
+        assertEquals(I4.trunc(value), I4(i4TruncExpected))
+        assertEquals(U4.ceil(value), U4(u4CeilExpected))
+        assertEquals(U4.floor(value), U4(u4FloorExpected))
+        assertEquals(U4.round(value), U4(u4RoundExpected))
+        assertEquals(U4.trunc(value), U4(u4TruncExpected))
       }
-    });
+    })
   }
-});
+})
 
 Deno.test('Constructor', async (test) => {
   for (
@@ -1019,18 +1019,17 @@ Deno.test('Constructor', async (test) => {
       ['max safe integer', Number.MAX_SAFE_INTEGER],
     ] as const
   ) {
-    await test.step(`Construct ${name}.`, () =>
-      assertEquals(Int(value), value));
+    await test.step(`Construct ${name}.`, () => assertEquals(Int(value), value))
   }
 
   for (
     const [name, value] of [['not a number', NaN]] as const
   ) {
     await test.step(`Forbid construction of: ${name}.`, () => {
-      assertThrows(() => Int(value));
-    });
+      assertThrows(() => Int(value))
+    })
   }
-});
+})
 
 Deno.test('is()', async (test) => {
   for (
@@ -1043,7 +1042,7 @@ Deno.test('is()', async (test) => {
     ] as const
   ) {
     await test.step(`Is an integer: ${name}.`, () =>
-      assertEquals(Int.is(value), true));
+      assertEquals(Int.is(value), true))
   }
 
   for (
@@ -1058,36 +1057,36 @@ Deno.test('is()', async (test) => {
     ] as const
   ) {
     await test.step(`Is not integer: ${name}.`, () =>
-      assertEquals(Int.is(value), false));
+      assertEquals(Int.is(value), false))
   }
-});
+})
 
 Deno.test('Maximum and minimum values.', () => {
-  assertEquals(Num.min, Number.NEGATIVE_INFINITY);
-  assertEquals(Num.max, Number.POSITIVE_INFINITY);
-  assertEquals(Unum.min, 0);
-  assertEquals(Unum.max, Number.POSITIVE_INFINITY);
-  assertEquals(Int.min, Number.MIN_SAFE_INTEGER - 1);
-  assertEquals(Int.max, Number.MAX_SAFE_INTEGER);
-  assertEquals(Uint.min, 0);
-  assertEquals(Uint.max, Number.MAX_SAFE_INTEGER);
-  assertEquals(I32.min, -2147483648);
-  assertEquals(I32.max, 2147483647);
-  assertEquals(U32.min, 0);
-  assertEquals(U32.max, 4294967295);
-  assertEquals(I16.min, -32768);
-  assertEquals(I16.max, 32767);
-  assertEquals(U16.min, 0);
-  assertEquals(U16.max, 65535);
-  assertEquals(I8.min, -128);
-  assertEquals(I8.max, 127);
-  assertEquals(U8.min, 0);
-  assertEquals(U8.max, 255);
-  assertEquals(I4.min, -8);
-  assertEquals(I4.max, 7);
-  assertEquals(U4.min, 0);
-  assertEquals(U4.max, 15);
-});
+  assertEquals(Num.min, Number.NEGATIVE_INFINITY)
+  assertEquals(Num.max, Number.POSITIVE_INFINITY)
+  assertEquals(Unum.min, 0)
+  assertEquals(Unum.max, Number.POSITIVE_INFINITY)
+  assertEquals(Int.min, Number.MIN_SAFE_INTEGER - 1)
+  assertEquals(Int.max, Number.MAX_SAFE_INTEGER)
+  assertEquals(Uint.min, 0)
+  assertEquals(Uint.max, Number.MAX_SAFE_INTEGER)
+  assertEquals(I32.min, -2147483648)
+  assertEquals(I32.max, 2147483647)
+  assertEquals(U32.min, 0)
+  assertEquals(U32.max, 4294967295)
+  assertEquals(I16.min, -32768)
+  assertEquals(I16.max, 32767)
+  assertEquals(U16.min, 0)
+  assertEquals(U16.max, 65535)
+  assertEquals(I8.min, -128)
+  assertEquals(I8.max, 127)
+  assertEquals(U8.min, 0)
+  assertEquals(U8.max, 255)
+  assertEquals(I4.min, -8)
+  assertEquals(I4.max, 7)
+  assertEquals(U4.min, 0)
+  assertEquals(U4.max, 15)
+})
 
 Deno.test('Bits.', async (test) => {
   for (
@@ -1177,25 +1176,25 @@ Deno.test('Bits.', async (test) => {
         Int.mod(val),
         intExpected as Int,
         `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
-      );
+      )
       assertEquals(
         Uint.mod(val),
         uintExpected as Uint,
         `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
-      );
+      )
       assertEquals(
         I4.mod(val),
         i4Expected as I4,
         `I4.mod(${val}); ${I4.mod(val)} != ${i4Expected}`,
-      );
+      )
       assertEquals(
         U4.mod(val),
         u4Expected as U4,
         `U4.mod(${val}); ${U4.mod(val)} != ${u4Expected}`,
-      );
-    });
+      )
+    })
   }
-});
+})
 
 Deno.test('Int bit limits.', async (test) => {
   for (
@@ -1231,33 +1230,33 @@ Deno.test('Int bit limits.', async (test) => {
         Int.mod(val),
         intExpected,
         `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
-      );
+      )
       assertEquals(
         Uint.mod(val),
         uintExpected,
         `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
-      );
-    });
+      )
+    })
   }
 
-  assertEquals(Int.mod(Number.MAX_SAFE_INTEGER), Number.MAX_SAFE_INTEGER);
-});
+  assertEquals(Int.mod(Number.MAX_SAFE_INTEGER), Number.MAX_SAFE_INTEGER)
+})
 
-let _: I32 = I32(0);
-_ = I32(_ + 0);
-_ = I4(0);
-_ = U4(0);
-_ = I8(0);
-_ = U8(0);
-_ = I16(0);
-_ = U16(0);
-_ = I32(0);
-
-// @ts-expect-error 2322
-_ = U32(0);
+let _: I32 = I32(0)
+_ = I32(_ + 0)
+_ = I4(0)
+_ = U4(0)
+_ = I8(0)
+_ = U8(0)
+_ = I16(0)
+_ = U16(0)
+_ = I32(0)
 
 // @ts-expect-error 2322
-_ = Int(1);
+_ = U32(0)
 
 // @ts-expect-error 2322
-_ = Uint(1);
+_ = Int(1)
+
+// @ts-expect-error 2322
+_ = Uint(1)

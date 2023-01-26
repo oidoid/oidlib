@@ -1,5 +1,5 @@
-import { assertEquals } from 'std/testing/asserts.ts';
-import { Inverse } from '@/oidlib';
+import { assertEquals } from 'std/testing/asserts.ts'
+import { Inverse } from '@/oidlib'
 
 for (
   const [name, record, expected] of [
@@ -14,5 +14,5 @@ for (
     ],
   ]
 ) {
-  Deno.test(`Inverse ${name}.`, () => assertEquals(Inverse(record), expected));
+  Deno.test(`Inverse ${name}.`, () => assertEquals(Inverse(record), expected))
 }

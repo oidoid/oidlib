@@ -1,10 +1,10 @@
 // import { mapEntries } from 'std/collections/map_entries.ts';
 
 export type Inverse<T extends Invertible> = {
-  [Key in keyof T as T[Key]]: Key;
-};
+  [Key in keyof T as T[Key]]: Key
+}
 
-export type Invertible = Record<PropertyKey, PropertyKey>;
+export type Invertible = Record<PropertyKey, PropertyKey>
 
 // to-do: use mapEntries
 export function Inverse<T extends Invertible>(obj: Readonly<T>): Inverse<T> {
@@ -12,5 +12,5 @@ export function Inverse<T extends Invertible>(obj: Readonly<T>): Inverse<T> {
   return Object.entries<T[keyof T]>(obj).reduce(
     (reversed, [key, val]) => ({ ...reversed, [val]: key }),
     <Inverse<T>> {},
-  );
+  )
 }

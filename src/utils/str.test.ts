@@ -1,5 +1,5 @@
-import { Str } from '@/oidlib';
-import { assertEquals } from 'std/testing/asserts.ts';
+import { Str } from '@/oidlib'
+import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Str', async (test) => {
   for (
@@ -16,10 +16,10 @@ Deno.test('Str', async (test) => {
     ] as const
   ) {
     await test.step(`uncapitialize(${str}) => ${uncapitalized}`, () =>
-      assertEquals(Str.uncapitalize(str), uncapitalized));
+      assertEquals(Str.uncapitalize(str), uncapitalized))
     await test.step(`capitialize(${str}) => ${capitalized}`, () =>
-      assertEquals(Str.capitalize(str), capitalized));
+      assertEquals(Str.capitalize(str), capitalized))
     await test.step(`isBlank(${str}) => ${blank}`, () =>
-      assertEquals(Str.isBlank(str), blank));
+      assertEquals(Str.isBlank(str), blank))
   }
-});
+})

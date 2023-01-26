@@ -6,12 +6,13 @@ export namespace ArrayUtil {
    */
   export function shuffle(self: unknown[], random: () => number): void {
     for (let i = self.length - 1; i >= 0; i--) {
-      swap(self, i, Math.trunc(random() * (i + 1)));
+      swap(self, i, Math.trunc(random() * (i + 1)))
     }
   }
 
   /** Swap left and right values in place. */
   export function swap(self: unknown[], left: number, right: number): void {
-    [self[left], self[right]] = [self[right], self[left]];
+    // deno-fmt-ignore
+    [self[left], self[right]] = [self[right], self[left]]
   }
 }
