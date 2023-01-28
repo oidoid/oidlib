@@ -299,7 +299,12 @@ Deno.test(`xy`, () => {
 })
 
 Deno.test(`toJSON()`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).toJSON(), { x: 1, y: 2, w: 3, h: 4 })
+  assertEquals(new IntBox(1, 2, 3, 4).toJSON(), {
+    x: Int(1),
+    y: Int(2),
+    w: Int(3),
+    h: Int(4),
+  })
 })
 
 Deno.test(`toNumBox()`, () => {

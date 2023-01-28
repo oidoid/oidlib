@@ -750,8 +750,8 @@ export class I8Box implements IntegralBox<I8> {
     return {
       ...(this.x == 0 ? undefined : { x: this.x }),
       ...(this.y == 0 ? undefined : { y: this.y }),
-      ...(this.w == 0 ? undefined : { x: this.w }),
-      ...(this.h == 0 ? undefined : { y: this.h }),
+      ...(this.w == 0 ? undefined : { w: this.w }),
+      ...(this.h == 0 ? undefined : { h: this.h }),
     }
   }
 

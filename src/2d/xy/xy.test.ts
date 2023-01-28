@@ -162,7 +162,7 @@ for (
 }
 
 Deno.test('toJSON()', () => {
-  assertEquals(new IntXY(1, 2).toJSON(), { x: 1, y: 2 })
+  assertEquals(new IntXY(1, 2).toJSON(), { x: Int(1), y: Int(2) })
 })
 
 Deno.test('toNumXY()', () => {
