@@ -1,4 +1,4 @@
-import { IntegralXY, NumXY, U8, XY } from '@/oidlib'
+import { IntegralXY, NumXY, U8, XY, XYJSON } from '@/oidlib'
 
 export class U8XY implements IntegralXY<U8> {
   static ceil(x: number, y: number): U8XY
@@ -35,6 +35,10 @@ export class U8XY implements IntegralXY<U8> {
       U8.trunc(typeof xXY == 'number' ? xXY : xXY.x),
       U8.trunc(typeof xXY == 'number' ? y! : xXY.y),
     )
+  }
+
+  static fromJSON(json: Readonly<XYJSON>): U8XY {
+    return new this(json.x ?? 0, json.y ?? 0)
   }
 
   #x: U8
@@ -374,8 +378,11 @@ export class U8XY implements IntegralXY<U8> {
     return this
   }
 
-  toJSON(): XY<U8> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<U8>> {
+    return {
+      ...(this.#x == 0 ? undefined : { x: this.#x }),
+      ...(this.#y == 0 ? undefined : { y: this.#y }),
+    }
   }
 
   toNumXY(): NumXY {

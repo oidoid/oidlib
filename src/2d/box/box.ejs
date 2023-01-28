@@ -1,4 +1,4 @@
-import { argsToBox, Box, <% if (type != 'Num') { %><%- type %>, <% } %><% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box,<% if (type != 'Num') { %> NumBox, NumXY,<% } %> <%- type %>XY, XY } from '@/oidlib'
+import { argsToBox, Box, BoxJSON, <% if (type != 'Num') { %><%- type %>, <% } %><% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box,<% if (type != 'Num') { %> NumBox, NumXY,<% } %> <%- type %>XY, XY } from '@/oidlib'
 
 export class <%- type %>Box implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box<<%- component %>> {
   <% coercions.forEach(coerce =>{ %>
@@ -15,6 +15,15 @@ export class <%- type %>Box implements <% if (type == 'Num' || type == 'Unum') {
     return new this(<%- type %>XY.<%- coerce.toLowerCase() %>(box.x, box.y), <%- type %>XY.<%- coerce.toLowerCase() %>(box.w, box.h))
   }
   <% }) %>
+
+  static fromJSON(json: Readonly<BoxJSON>): <%- type %>Box {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0
+    )
+  }
 
   #xy: <%- type %>XY
   #wh: <%- type %>XY
@@ -287,8 +296,13 @@ export class <%- type %>Box implements <% if (type == 'Num' || type == 'Unum') {
   }
   <% }) %>
 
-  toJSON(): Box<<%- component %>> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<<%- component %>>> {
+    return {
+      ...(this.x == 0 ? undefined : {x: this.x}),
+      ...(this.y == 0 ? undefined : {y: this.y}),
+      ...(this.w == 0 ? undefined : {x: this.w}),
+      ...(this.h == 0 ? undefined : {y: this.h})
+    }
   }
 
   toNumBox(): NumBox {

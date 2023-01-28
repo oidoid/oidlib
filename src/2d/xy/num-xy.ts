@@ -1,4 +1,4 @@
-import { FractionalXY, Num, XY } from '@/oidlib'
+import { FractionalXY, Num, XY, XYJSON } from '@/oidlib'
 
 export class NumXY implements FractionalXY<number> {
   static clamp(x: number, y: number): NumXY
@@ -8,6 +8,10 @@ export class NumXY implements FractionalXY<number> {
       Num.clamp(typeof xXY == 'number' ? xXY : xXY.x),
       Num.clamp(typeof xXY == 'number' ? y! : xXY.y),
     )
+  }
+
+  static fromJSON(json: Readonly<XYJSON>): NumXY {
+    return new this(json.x ?? 0, json.y ?? 0)
   }
 
   #x: number
@@ -142,9 +146,7 @@ export class NumXY implements FractionalXY<number> {
   maxClamp(x: number, y: number): this
   maxClamp(xy: Readonly<XY<number>>): this
   maxClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Num.clamp(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = Num.clamp(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Num.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -160,9 +162,7 @@ export class NumXY implements FractionalXY<number> {
   minClamp(x: number, y: number): this
   minClamp(xy: Readonly<XY<number>>): this
   minClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Num.clamp(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = Num.clamp(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Num.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -183,8 +183,11 @@ export class NumXY implements FractionalXY<number> {
     return this
   }
 
-  toJSON(): XY<number> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<number>> {
+    return {
+      ...(this.#x == 0 ? undefined : { x: this.#x }),
+      ...(this.#y == 0 ? undefined : { y: this.#y }),
+    }
   }
 
   toNumXY(): NumXY {

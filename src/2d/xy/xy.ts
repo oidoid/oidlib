@@ -27,7 +27,9 @@ export interface XY<T> {
  *
  * All argument type-checking is loose, ensuring only that `number`s or an
  * `XY<number>` is passed since out-of-range errors are extraordinarily easy to
- * induce for all types.
+ * induce regardless of whether the input types match. Eg,
+ * `new I4XY(I4(7), I4(7)).add(I4(1), I4(1))` is well typed but throws at
+ * runtime.
  */
 export interface NumericalXY<T> extends XY<T> {
   /** Set x and y to their absolute values. */
@@ -67,8 +69,8 @@ export interface NumericalXY<T> extends XY<T> {
   /** Subtract x and y by arguments. */
   sub(x: number, y: number): this
   sub(xy: Readonly<XY<number>>): this
-  /** Copy state as plain JSON. */
-  toJSON(): XY<T>
+  /** Copy state as plain JSON with zero values omitted. */
+  toJSON(): Partial<XY<T>>
   /** Copy state as a permissive double XY. */
   toNumXY(): NumXY
   /** Copy state as a string. */
@@ -183,4 +185,9 @@ export interface FractionalXY<T> extends NumericalXY<T> {
   setClamp(xy: Readonly<XY<number>>): this
   subClamp(x: number, y: number): this
   subClamp(xy: Readonly<XY<number>>): this
+}
+
+export interface XYJSON {
+  x?: number | undefined
+  y?: number | undefined
 }

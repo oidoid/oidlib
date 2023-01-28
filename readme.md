@@ -37,6 +37,7 @@ import map.
 | op        | operation                          |
 | prev      | previous                           |
 | prop      | property                           |
+| pt        | point                              |
 | rhs       | right-hand side                    |
 | size      | Map.size / Array.length            |
 | src       | source(s)                          |

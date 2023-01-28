@@ -1,6 +1,7 @@
 import {
   argsToBox,
   Box,
+  BoxJSON,
   Int,
   IntegralBox,
   IntXY,
@@ -60,6 +61,15 @@ export class IntBox implements IntegralBox<Int> {
   ): IntBox {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(IntXY.trunc(box.x, box.y), IntXY.trunc(box.w, box.h))
+  }
+
+  static fromJSON(json: Readonly<BoxJSON>): IntBox {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0,
+    )
   }
 
   #xy: IntXY
@@ -736,8 +746,13 @@ export class IntBox implements IntegralBox<Int> {
     return this
   }
 
-  toJSON(): Box<Int> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<Int>> {
+    return {
+      ...(this.x == 0 ? undefined : { x: this.x }),
+      ...(this.y == 0 ? undefined : { y: this.y }),
+      ...(this.w == 0 ? undefined : { x: this.w }),
+      ...(this.h == 0 ? undefined : { y: this.h }),
+    }
   }
 
   toNumBox(): NumBox {

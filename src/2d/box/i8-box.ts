@@ -1,6 +1,7 @@
 import {
   argsToBox,
   Box,
+  BoxJSON,
   I8,
   I8XY,
   IntegralBox,
@@ -60,6 +61,15 @@ export class I8Box implements IntegralBox<I8> {
   ): I8Box {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(I8XY.trunc(box.x, box.y), I8XY.trunc(box.w, box.h))
+  }
+
+  static fromJSON(json: Readonly<BoxJSON>): I8Box {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0,
+    )
   }
 
   #xy: I8XY
@@ -736,8 +746,13 @@ export class I8Box implements IntegralBox<I8> {
     return this
   }
 
-  toJSON(): Box<I8> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<I8>> {
+    return {
+      ...(this.x == 0 ? undefined : { x: this.x }),
+      ...(this.y == 0 ? undefined : { y: this.y }),
+      ...(this.w == 0 ? undefined : { x: this.w }),
+      ...(this.h == 0 ? undefined : { y: this.h }),
+    }
   }
 
   toNumBox(): NumBox {

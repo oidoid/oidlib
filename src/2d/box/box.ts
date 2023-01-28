@@ -1,4 +1,4 @@
-import { NumBox, NumXY, XY } from '@/oidlib'
+import { NumBox, NumXY, XY, XYJSON } from '@/oidlib'
 
 /**
  * Axis-aligned width (w) × height (h) rectangle in starting at (x, y).
@@ -109,8 +109,8 @@ export interface NumericalBox<T> extends Box<T> {
   xy: XY<T>
   /** The box dimensions. */
   wh: XY<T>
-  /** Copy state as plain JSON. */
-  toJSON(): Box<T>
+  /** Copy state as plain JSON with zero values omitted. */
+  toJSON(): Partial<Box<T>>
   /** Copy state as a permissive double Box. */
   toNumBox(): NumBox
   /** Copy state as a string. */
@@ -229,6 +229,15 @@ export interface FractionalBox<T> extends NumericalBox<T> {
   unionClamp(x: number, y: number, w: number, h: number): this
   unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   unionClamp(box: Readonly<Box<number>>): this
+}
+
+export interface BoxJSON {
+  x?: number | undefined
+  y?: number | undefined
+  w?: number | undefined
+  h?: number | undefined
+  xy?: XYJSON | undefined
+  wh?: XYJSON | undefined
 }
 
 export function argsToBox(

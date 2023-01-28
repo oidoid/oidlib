@@ -1,4 +1,4 @@
-import { FractionalXY, NumXY, Unum, XY } from '@/oidlib'
+import { FractionalXY, NumXY, Unum, XY, XYJSON } from '@/oidlib'
 
 export class UnumXY implements FractionalXY<Unum> {
   static clamp(x: number, y: number): UnumXY
@@ -8,6 +8,10 @@ export class UnumXY implements FractionalXY<Unum> {
       Unum.clamp(typeof xXY == 'number' ? xXY : xXY.x),
       Unum.clamp(typeof xXY == 'number' ? y! : xXY.y),
     )
+  }
+
+  static fromJSON(json: Readonly<XYJSON>): UnumXY {
+    return new this(json.x ?? 0, json.y ?? 0)
   }
 
   #x: Unum
@@ -145,9 +149,7 @@ export class UnumXY implements FractionalXY<Unum> {
     this.#x = Unum.clamp(
       Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Unum.clamp(
-      Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Unum.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -165,9 +167,7 @@ export class UnumXY implements FractionalXY<Unum> {
     this.#x = Unum.clamp(
       Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Unum.clamp(
-      Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Unum.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -187,8 +187,11 @@ export class UnumXY implements FractionalXY<Unum> {
     return this
   }
 
-  toJSON(): XY<Unum> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<Unum>> {
+    return {
+      ...(this.#x == 0 ? undefined : { x: this.#x }),
+      ...(this.#y == 0 ? undefined : { y: this.#y }),
+    }
   }
 
   toNumXY(): NumXY {

@@ -1,6 +1,7 @@
 import {
   argsToBox,
   Box,
+  BoxJSON,
   I32,
   I32XY,
   IntegralBox,
@@ -60,6 +61,15 @@ export class I32Box implements IntegralBox<I32> {
   ): I32Box {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(I32XY.trunc(box.x, box.y), I32XY.trunc(box.w, box.h))
+  }
+
+  static fromJSON(json: Readonly<BoxJSON>): I32Box {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0,
+    )
   }
 
   #xy: I32XY
@@ -736,8 +746,13 @@ export class I32Box implements IntegralBox<I32> {
     return this
   }
 
-  toJSON(): Box<I32> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<I32>> {
+    return {
+      ...(this.x == 0 ? undefined : { x: this.x }),
+      ...(this.y == 0 ? undefined : { y: this.y }),
+      ...(this.w == 0 ? undefined : { x: this.w }),
+      ...(this.h == 0 ? undefined : { y: this.h }),
+    }
   }
 
   toNumBox(): NumBox {

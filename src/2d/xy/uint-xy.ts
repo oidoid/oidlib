@@ -1,4 +1,4 @@
-import { IntegralXY, NumXY, Uint, XY } from '@/oidlib'
+import { IntegralXY, NumXY, Uint, XY, XYJSON } from '@/oidlib'
 
 export class UintXY implements IntegralXY<Uint> {
   static ceil(x: number, y: number): UintXY
@@ -35,6 +35,10 @@ export class UintXY implements IntegralXY<Uint> {
       Uint.trunc(typeof xXY == 'number' ? xXY : xXY.x),
       Uint.trunc(typeof xXY == 'number' ? y! : xXY.y),
     )
+  }
+
+  static fromJSON(json: Readonly<XYJSON>): UintXY {
+    return new this(json.x ?? 0, json.y ?? 0)
   }
 
   #x: Uint
@@ -265,9 +269,7 @@ export class UintXY implements IntegralXY<Uint> {
   maxCeil(x: number, y: number): this
   maxCeil(xy: Readonly<XY<number>>): this
   maxCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = Uint.ceil(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.ceil(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -278,9 +280,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.floor(
       Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.floor(
-      Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.floor(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -290,9 +290,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.round(
       Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.round(
-      Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.round(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -302,9 +300,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.trunc(
       Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.trunc(
-      Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.trunc(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -319,9 +315,7 @@ export class UintXY implements IntegralXY<Uint> {
   minCeil(x: number, y: number): this
   minCeil(xy: Readonly<XY<number>>): this
   minCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = Uint.ceil(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.ceil(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -332,9 +326,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.floor(
       Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.floor(
-      Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.floor(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -344,9 +336,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.round(
       Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.round(
-      Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.round(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -356,9 +346,7 @@ export class UintXY implements IntegralXY<Uint> {
     this.#x = Uint.trunc(
       Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.trunc(
-      Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y),
-    )
+    this.#y = Uint.trunc(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -402,8 +390,11 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
-  toJSON(): XY<Uint> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<Uint>> {
+    return {
+      ...(this.#x == 0 ? undefined : { x: this.#x }),
+      ...(this.#y == 0 ? undefined : { y: this.#y }),
+    }
   }
 
   toNumXY(): NumXY {

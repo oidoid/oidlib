@@ -1,4 +1,4 @@
-import { I32, IntegralXY, NumXY, XY } from '@/oidlib'
+import { I32, IntegralXY, NumXY, XY, XYJSON } from '@/oidlib'
 
 export class I32XY implements IntegralXY<I32> {
   static ceil(x: number, y: number): I32XY
@@ -35,6 +35,10 @@ export class I32XY implements IntegralXY<I32> {
       I32.trunc(typeof xXY == 'number' ? xXY : xXY.x),
       I32.trunc(typeof xXY == 'number' ? y! : xXY.y),
     )
+  }
+
+  static fromJSON(json: Readonly<XYJSON>): I32XY {
+    return new this(json.x ?? 0, json.y ?? 0)
   }
 
   #x: I32
@@ -273,9 +277,7 @@ export class I32XY implements IntegralXY<I32> {
   maxFloor(x: number, y: number): this
   maxFloor(xy: Readonly<XY<number>>): this
   maxFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.floor(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.floor(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.floor(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -283,9 +285,7 @@ export class I32XY implements IntegralXY<I32> {
   maxRound(x: number, y: number): this
   maxRound(xy: Readonly<XY<number>>): this
   maxRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.round(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.round(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.round(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -293,9 +293,7 @@ export class I32XY implements IntegralXY<I32> {
   maxTrunc(x: number, y: number): this
   maxTrunc(xy: Readonly<XY<number>>): this
   maxTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.trunc(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.trunc(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.trunc(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -319,9 +317,7 @@ export class I32XY implements IntegralXY<I32> {
   minFloor(x: number, y: number): this
   minFloor(xy: Readonly<XY<number>>): this
   minFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.floor(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.floor(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.floor(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -329,9 +325,7 @@ export class I32XY implements IntegralXY<I32> {
   minRound(x: number, y: number): this
   minRound(xy: Readonly<XY<number>>): this
   minRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.round(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.round(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.round(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -339,9 +333,7 @@ export class I32XY implements IntegralXY<I32> {
   minTrunc(x: number, y: number): this
   minTrunc(xy: Readonly<XY<number>>): this
   minTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I32.trunc(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
+    this.#x = I32.trunc(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I32.trunc(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
@@ -386,8 +378,11 @@ export class I32XY implements IntegralXY<I32> {
     return this
   }
 
-  toJSON(): XY<I32> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<I32>> {
+    return {
+      ...(this.#x == 0 ? undefined : { x: this.#x }),
+      ...(this.#y == 0 ? undefined : { y: this.#y }),
+    }
   }
 
   toNumXY(): NumXY {

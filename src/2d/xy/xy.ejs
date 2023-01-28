@@ -1,4 +1,4 @@
-import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY } from '@/oidlib'
+import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY, XYJSON } from '@/oidlib'
 
 export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY<<%- component %>> {
   <% coercions.forEach(coerce =>{ %>
@@ -11,6 +11,10 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
     )
   }
   <% }) %>
+
+  static fromJSON(json: Readonly<XYJSON>): <%- type %>XY {
+    return new this(json.x ?? 0, json.y ?? 0)
+  }
 
   #x: <%- component %>
   #y: <%- component %>
@@ -87,8 +91,11 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   }
   <% }) %>
 
-  toJSON(): XY<<%- component %>> {
-    return { x: this.#x, y: this.#y }
+  toJSON(): Partial<XY<<%- component %>>> {
+    return {
+      ...(this.#x == 0 ? undefined : {x: this.#x}),
+      ...(this.#y == 0 ? undefined : {y: this.#y})
+    }
   }
 
   toNumXY(): NumXY {

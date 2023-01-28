@@ -1,4 +1,4 @@
-import { argsToBox, Box, FractionalBox, NumXY, XY } from '@/oidlib'
+import { argsToBox, Box, BoxJSON, FractionalBox, NumXY, XY } from '@/oidlib'
 
 export class NumBox implements FractionalBox<number> {
   static clamp(x: number, y: number, w: number, h: number): NumBox
@@ -12,6 +12,15 @@ export class NumBox implements FractionalBox<number> {
   ): NumBox {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(NumXY.clamp(box.x, box.y), NumXY.clamp(box.w, box.h))
+  }
+
+  static fromJSON(json: Readonly<BoxJSON>): NumBox {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0,
+    )
   }
 
   #xy: NumXY
@@ -376,8 +385,13 @@ export class NumBox implements FractionalBox<number> {
     return this
   }
 
-  toJSON(): Box<number> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<number>> {
+    return {
+      ...(this.x == 0 ? undefined : { x: this.x }),
+      ...(this.y == 0 ? undefined : { y: this.y }),
+      ...(this.w == 0 ? undefined : { x: this.w }),
+      ...(this.h == 0 ? undefined : { y: this.h }),
+    }
   }
 
   toNumBox(): NumBox {

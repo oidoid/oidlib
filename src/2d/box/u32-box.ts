@@ -1,6 +1,7 @@
 import {
   argsToBox,
   Box,
+  BoxJSON,
   IntegralBox,
   NumBox,
   NumXY,
@@ -60,6 +61,15 @@ export class U32Box implements IntegralBox<U32> {
   ): U32Box {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(U32XY.trunc(box.x, box.y), U32XY.trunc(box.w, box.h))
+  }
+
+  static fromJSON(json: Readonly<BoxJSON>): U32Box {
+    return new this(
+      json.xy?.x ?? json.x ?? 0,
+      json.xy?.y ?? json.y ?? 0,
+      json.wh?.x ?? json.w ?? 0,
+      json.wh?.y ?? json.h ?? 0,
+    )
   }
 
   #xy: U32XY
@@ -736,8 +746,13 @@ export class U32Box implements IntegralBox<U32> {
     return this
   }
 
-  toJSON(): Box<U32> {
-    return { x: this.x, y: this.y, w: this.w, h: this.h }
+  toJSON(): Partial<Box<U32>> {
+    return {
+      ...(this.x == 0 ? undefined : { x: this.x }),
+      ...(this.y == 0 ? undefined : { y: this.y }),
+      ...(this.w == 0 ? undefined : { x: this.w }),
+      ...(this.h == 0 ? undefined : { y: this.h }),
+    }
   }
 
   toNumBox(): NumBox {
