@@ -10,44 +10,45 @@ import map.
 
 ## Shorthands
 
-| Shorthand | Description                        |
-| --------- | ---------------------------------- |
-| arg       | argument                           |
-| attrib    | attribute                          |
-| box       | rectangle                          |
-| cb        | callback / listener                |
-| cmd       | command                            |
-| config    | configuration                      |
-| ctrl      | control                            |
-| ctx       | context                            |
-| dir       | directory                          |
-| dist      | distributable(s)                   |
-| err       | error                              |
-| eq        | equal                              |
-| ev        | event                              |
-| ex        | example                            |
-| exec      | executable                         |
-| exec      | execute                            |
-| fn        | function                           |
-| int       | integer                            |
-| lhs       | left-hand side                     |
-| lut       | lookup table                       |
-| num       | number                             |
-| obj       | object                             |
-| op        | operation                          |
-| prev      | previous                           |
-| prop      | property                           |
-| pt        | point                              |
-| rhs       | right-hand side                    |
-| size      | Map.size / Array.length            |
-| src       | source(s)                          |
-| str       | string                             |
-| sym       | symbol                             |
-| this      | this when possible, self otherwise |
-| util      | utility                            |
-| val       | value                              |
-| wh        | width and height                   |
-| xy        | cartesian value pair               |
+| Shorthand | Description                                 |
+| --------- | ------------------------------------------- |
+| arg       | argument                                    |
+| attrib    | attribute                                   |
+| bin       | binary                                      |
+| box       | rectangle                                   |
+| cb        | callback / listener                         |
+| cmd       | command                                     |
+| config    | configuration                               |
+| ctrl      | control                                     |
+| ctx       | context                                     |
+| dir       | directory                                   |
+| dist      | distributable(s)                            |
+| err       | error                                       |
+| eq        | equal                                       |
+| ev        | event                                       |
+| ex        | example                                     |
+| exec      | executable                                  |
+| exec      | execute                                     |
+| fn        | function                                    |
+| int       | integer                                     |
+| lhs       | left-hand side                              |
+| lut       | lookup table                                |
+| num       | number                                      |
+| obj       | object                                      |
+| op        | operation                                   |
+| prev      | previous                                    |
+| prop      | property                                    |
+| pt        | point                                       |
+| rhs       | right-hand side                             |
+| size      | Map.size / Array.length                     |
+| src       | source(s)                                   |
+| str       | string, use shorthand except for toString() |
+| sym       | symbol                                      |
+| this      | this when possible, self otherwise          |
+| util      | utility                                     |
+| val       | value                                       |
+| wh        | width and height                            |
+| xy        | cartesian value pair                        |
 
 ## Environment variables
 
@@ -58,6 +59,9 @@ import map.
 ## Conventions
 
 - Prefer TitleCase for classes, enums, and string literals.
+- Favor objects to Maps. Object have wonderfully succinct syntax and native JSON
+  support. Only use Maps when special keys or size tracking is needed.
+- Favor `{}` objects to bare objects to keep the syntax sane.
 
 ## License
 

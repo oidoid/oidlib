@@ -1,2 +1,5 @@
 Finalize oidlib / oidkit / odk naming.
+Add rebuild to rules.make: clean build and force serial, maybe.
+Explore a script for updating imports.
+  find -name mods.json|xargs -rd\\n sed -ri 's%https://deno.land/x/oid@v[0-9]+.[0-9]+.[0-9]+/mod.ts%https://deno.land/x/oid@v0.0.6/mod.ts%'
 Explore how to eliminate race conditions for codegen in other modules.
