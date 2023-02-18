@@ -35,7 +35,7 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   <% }) %>
 
   <% [['add', '+'], ['div', '/'], ['mul', '*'], ['sub', '-']].forEach(([op, sym]) =>{ %>
-  <% ['', ...coercions].forEach(coerce =>{ %>
+  <% ['', ...coercions].forEach(coerce => { %>
   <%- op %><%- coerce %>(x: number, y: number): this
   <%- op %><%- coerce %>(xy: Readonly<XY<number>>): this
   <%- op %><%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -46,7 +46,7 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   <% }) %>
   <% }) %>
 
-  <% ['', 'Clamp', 'Num'].forEach(coerce =>{ %>
+  <% ['', 'Clamp', 'Num'].forEach(coerce => { %>
   get area<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
     return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(this.#x * this.#y)
   }
@@ -56,6 +56,14 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
     return new <%- type %>XY(this.#x, this.#y) as this
   }
 
+  <% ['', 'Clamp', 'Num'].forEach(coerce => { %>
+  dot<%- coerce %>(x: number, y: number): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %>;
+  dot<%- coerce %>(xy: Readonly<XY<number>>): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %>;
+  dot<%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
+    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(this.#x * (typeof xXY == 'number' ? xXY : xXY.x) + this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+  <% }) %>
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -63,14 +71,14 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  <% ['', 'Clamp', 'Num'].forEach(coerce =>{ %>
-  get magnitude<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
-    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  <% ['', ...coercions, 'Num'].forEach(coerce => { %>
+  get len<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
+    return <% if (coerce != 'Num') { %><%- type %><% if (coerce != '') { %>.<%- coerce.toLowerCase() %><% } %><% } %>(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
   <% }) %>
 
   <% ['max', 'min'].forEach(op =>{ %>
-  <% ['', ...coercions].forEach(coerce =>{ %>
+  <% ['', ...coercions].forEach(coerce => { %>
   <%- op %><%- coerce %>(x: number, y: number): this
   <%- op %><%- coerce %>(xy: Readonly<XY<number>>): this
   <%- op %><%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -81,7 +89,7 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   <% }) %>
   <% }) %>
 
-  <% ['', ...coercions].forEach(coerce =>{ %>
+  <% ['', ...coercions].forEach(coerce => { %>
   set<%- coerce %>(x: number, y: number): this
   set<%- coerce %>(xy: Readonly<XY<number>>): this
   set<%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {

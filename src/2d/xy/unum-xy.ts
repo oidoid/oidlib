@@ -116,6 +116,31 @@ export class UnumXY implements FractionalXY<Unum> {
     return new UnumXY(this.#x, this.#y) as this
   }
 
+  dot(x: number, y: number): Unum
+  dot(xy: Readonly<XY<number>>): Unum
+  dot(xXY: number | Readonly<XY<number>>, y?: number): Unum {
+    return Unum(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotClamp(x: number, y: number): Unum
+  dotClamp(xy: Readonly<XY<number>>): Unum
+  dotClamp(xXY: number | Readonly<XY<number>>, y?: number): Unum {
+    return Unum.clamp(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
+  dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
+    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -123,15 +148,15 @@ export class UnumXY implements FractionalXY<Unum> {
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  get magnitude(): Unum {
+  get len(): Unum {
     return Unum(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeClamp(): Unum {
+  get lenClamp(): Unum {
     return Unum.clamp(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeNum(): number {
+  get lenNum(): number {
     return (Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 

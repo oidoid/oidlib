@@ -239,6 +239,31 @@ export class I4XY implements IntegralXY<I4> {
     return new I4XY(this.#x, this.#y) as this
   }
 
+  dot(x: number, y: number): I4
+  dot(xy: Readonly<XY<number>>): I4
+  dot(xXY: number | Readonly<XY<number>>, y?: number): I4 {
+    return I4(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotClamp(x: number, y: number): I4
+  dotClamp(xy: Readonly<XY<number>>): I4
+  dotClamp(xXY: number | Readonly<XY<number>>, y?: number): I4 {
+    return I4.trunc(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
+  dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
+    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -246,15 +271,27 @@ export class I4XY implements IntegralXY<I4> {
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  get magnitude(): I4 {
+  get len(): I4 {
     return I4(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeClamp(): I4 {
+  get lenCeil(): I4 {
+    return I4.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenFloor(): I4 {
+    return I4.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenRound(): I4 {
+    return I4.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenTrunc(): I4 {
     return I4.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeNum(): number {
+  get lenNum(): number {
     return (Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 

@@ -239,6 +239,31 @@ export class I32XY implements IntegralXY<I32> {
     return new I32XY(this.#x, this.#y) as this
   }
 
+  dot(x: number, y: number): I32
+  dot(xy: Readonly<XY<number>>): I32
+  dot(xXY: number | Readonly<XY<number>>, y?: number): I32 {
+    return I32(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotClamp(x: number, y: number): I32
+  dotClamp(xy: Readonly<XY<number>>): I32
+  dotClamp(xXY: number | Readonly<XY<number>>, y?: number): I32 {
+    return I32.trunc(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
+  dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
+    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -246,15 +271,27 @@ export class I32XY implements IntegralXY<I32> {
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  get magnitude(): I32 {
+  get len(): I32 {
     return I32(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeClamp(): I32 {
+  get lenCeil(): I32 {
+    return I32.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenFloor(): I32 {
+    return I32.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenRound(): I32 {
+    return I32.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenTrunc(): I32 {
     return I32.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeNum(): number {
+  get lenNum(): number {
     return (Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 

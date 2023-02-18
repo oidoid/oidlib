@@ -239,6 +239,31 @@ export class IntXY implements IntegralXY<Int> {
     return new IntXY(this.#x, this.#y) as this
   }
 
+  dot(x: number, y: number): Int
+  dot(xy: Readonly<XY<number>>): Int
+  dot(xXY: number | Readonly<XY<number>>, y?: number): Int {
+    return Int(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotClamp(x: number, y: number): Int
+  dotClamp(xy: Readonly<XY<number>>): Int
+  dotClamp(xXY: number | Readonly<XY<number>>, y?: number): Int {
+    return Int.trunc(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
+  dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
+    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -246,15 +271,27 @@ export class IntXY implements IntegralXY<Int> {
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  get magnitude(): Int {
+  get len(): Int {
     return Int(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeClamp(): Int {
+  get lenCeil(): Int {
+    return Int.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenFloor(): Int {
+    return Int.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenRound(): Int {
+    return Int.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenTrunc(): Int {
     return Int.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeNum(): number {
+  get lenNum(): number {
     return (Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 

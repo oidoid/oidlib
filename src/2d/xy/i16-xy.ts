@@ -239,6 +239,31 @@ export class I16XY implements IntegralXY<I16> {
     return new I16XY(this.#x, this.#y) as this
   }
 
+  dot(x: number, y: number): I16
+  dot(xy: Readonly<XY<number>>): I16
+  dot(xXY: number | Readonly<XY<number>>, y?: number): I16 {
+    return I16(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotClamp(x: number, y: number): I16
+  dotClamp(xy: Readonly<XY<number>>): I16
+  dotClamp(xXY: number | Readonly<XY<number>>, y?: number): I16 {
+    return I16.trunc(
+      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
+  dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
+    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+  }
+
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
@@ -246,15 +271,27 @@ export class I16XY implements IntegralXY<I16> {
       this.#y == (typeof xXY == 'number' ? y! : xXY.y)
   }
 
-  get magnitude(): I16 {
+  get len(): I16 {
     return I16(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeClamp(): I16 {
+  get lenCeil(): I16 {
+    return I16.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenFloor(): I16 {
+    return I16.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenRound(): I16 {
+    return I16.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
+  get lenTrunc(): I16 {
     return I16.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
-  get magnitudeNum(): number {
+  get lenNum(): number {
     return (Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 

@@ -1,6 +1,11 @@
 import { NumXY } from '@/oidlib'
 
-/** A cartesian position or dimensions. x and y are independent values. */
+/**
+ * A cartesian position or dimensions. x and y are independent values.
+ *
+ * An XY may be a point (position), a vector, or a width and height, for
+ * example.
+ */
 export interface XY<T> {
   x: T
   y: T
@@ -40,20 +45,29 @@ export interface NumericalXY<T> extends XY<T> {
   add(xy: Readonly<XY<number>>): this
   /** The product of x and y. */
   area: T
-  areaNum: number
   areaClamp: T
+  areaNum: number
   /** Copy state as a new clone. */
   copy(): this
   /** Divide x and y by arguments. */
   div(x: number, y: number): this
   div(xy: Readonly<XY<number>>): this
+  /** Dot product of x and y and arguments. */
+  dot(x: number, y: number): T
+  dot(xy: Readonly<XY<number>>): T
+  dotClamp(x: number, y: number): T
+  dotClamp(xy: Readonly<XY<number>>): T
+  dotNum(x: number, y: number): number
+  dotNum(xy: Readonly<XY<number>>): number
   /** Compare x and y to arguments. */
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
-  /** Given a triangle with sides x and y, the length of the hypotenuse. */
-  magnitude: T
-  magnitudeNum: number
-  magnitudeClamp: T
+  /**
+   * Given a triangle with sides x and y, the length of the hypotenuse
+   * (magnitude).
+   */
+  len: T
+  lenNum: number
   /** Set x and y to the greater of themselves and arguments. */
   max(x: number, y: number): this
   max(xy: Readonly<XY<number>>): this
@@ -123,6 +137,11 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   divTrunc(x: number, y: number): this
   divTrunc(xy: Readonly<XY<number>>): this
 
+  lenCeil: T
+  lenFloor: T
+  lenRound: T
+  lenTrunc: T
+
   maxCeil(x: number, y: number): this
   maxCeil(xy: Readonly<XY<number>>): this
   maxFloor(x: number, y: number): this
@@ -175,6 +194,7 @@ export interface FractionalXY<T> extends NumericalXY<T> {
   addClamp(xy: Readonly<XY<number>>): this
   divClamp(x: number, y: number): this
   divClamp(xy: Readonly<XY<number>>): this
+  lenClamp: T
   maxClamp(x: number, y: number): this
   maxClamp(xy: Readonly<XY<number>>): this
   minClamp(x: number, y: number): this

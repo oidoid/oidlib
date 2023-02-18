@@ -104,6 +104,10 @@ Deno.test('divide', () => {
   assertEquals(new IntXY(4, 8).div(2, 2), new IntXY(2, 4))
 })
 
+Deno.test('dot', () => {
+  assertEquals(new IntXY(4, 8).dot(2, 2), 24)
+})
+
 Deno.test('equals', () => {
   assertEquals(new IntXY(4, 8).eq(2, 2), false)
   assertEquals(new IntXY(4, 8).eq(4, 8), true)
@@ -112,8 +116,7 @@ Deno.test('equals', () => {
 for (
   const [name, xy, expected] of [['integer', new IntXY(3, 4), 5]] as const
 ) {
-  Deno.test(`Magnitude: ${name}.`, () =>
-    assertEquals<number>(xy.magnitude, expected))
+  Deno.test(`Length: ${name}.`, () => assertEquals<number>(xy.len, expected))
 }
 
 for (
