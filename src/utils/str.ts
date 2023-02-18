@@ -25,4 +25,13 @@ export namespace Str {
   export function uppercase<T extends string>(str: T): Uppercase<T> {
     return str.toLocaleUpperCase() as Uppercase<T>
   }
+
+  /** Force English locale when comparing two strings. */
+  export function compareEn(
+    lhs: string,
+    rhs: string,
+    options?: Intl.CollatorOptions,
+  ): number {
+    return lhs.localeCompare(rhs, 'en', options)
+  }
 }
