@@ -1,4 +1,4 @@
-# 📚 ooz
+# 🧪 ooz
 
 The oidoid common library.
 
