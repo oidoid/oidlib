@@ -1,4 +1,4 @@
-include config.make
+include ../ooz/config.make
 
 dist_dir := dist
 src_dir := src
