@@ -65,5 +65,5 @@ $(codegen_out_xy_files)&: $(src_dir)/2d/xy/xy.ejs
 
 clean: clean-codegen
 
-.PHONE: clean-codegen
+.PHONY: clean-codegen
 clean-codegen:; $(rm) $(codegen_out_files)
