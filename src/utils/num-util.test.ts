@@ -1,4 +1,4 @@
-import { Int, NumUtil } from '@/oidlib'
+import { Int, NumUtil } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('wrap()', async (test) => {

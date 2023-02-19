@@ -8,7 +8,7 @@ import {
   Unum,
   UnumXY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class UnumBox implements FractionalBox<Unum> {
   static clamp(x: number, y: number, w: number, h: number): UnumBox

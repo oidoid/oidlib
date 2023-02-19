@@ -1,4 +1,4 @@
-import { assert, Immutable, Int } from '@/oidlib'
+import { assert, Immutable, Int } from '@/ooz'
 
 export namespace NumUtil {
   /**

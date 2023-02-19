@@ -34,7 +34,7 @@ endif
 # https://github.com/scop/bash-completion/issues/215.
 .SECONDARY:
 
-# to-do: move outside of oidlib.
+# to-do: move outside of ooz.
 aseprite := aseprite --batch
 
 # Preserve all and overwrite.

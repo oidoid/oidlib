@@ -1,5 +1,5 @@
 import { assertEquals } from 'std/testing/asserts.ts'
-import { Inverse } from '@/oidlib'
+import { Inverse } from '@/ooz'
 
 for (
   const [name, record, expected] of [

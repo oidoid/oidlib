@@ -8,7 +8,7 @@ import {
   U32,
   U32XY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class U32Box implements IntegralBox<U32> {
   static ceil(x: number, y: number, w: number, h: number): U32Box

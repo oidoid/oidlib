@@ -3,7 +3,7 @@
 // max is same as 1
 // modulo rollover
 
-import { I32, Random } from '@/oidlib'
+import { I32, Random } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 // https://www.firstpr.com.au/dsp/rand31/#History-implementation

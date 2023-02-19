@@ -8,7 +8,7 @@ import {
   NumBox,
   NumXY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class I4Box implements IntegralBox<I4> {
   static ceil(x: number, y: number, w: number, h: number): I4Box

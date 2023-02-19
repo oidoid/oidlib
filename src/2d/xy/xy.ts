@@ -1,4 +1,4 @@
-import { NumXY } from '@/oidlib'
+import { NumXY } from '@/ooz'
 
 /**
  * A cartesian position or dimensions. x and y are independent values.

@@ -1,4 +1,4 @@
-import { assert, NumUtil } from '@/oidlib'
+import { assert, NumUtil } from '@/ooz'
 
 export type I4 = number & { [i4]: never }
 declare const i4: unique symbol

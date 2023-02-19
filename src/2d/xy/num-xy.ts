@@ -1,4 +1,4 @@
-import { FractionalXY, Num, XY, XYJSON } from '@/oidlib'
+import { FractionalXY, Num, XY, XYJSON } from '@/ooz'
 
 export class NumXY implements FractionalXY<number> {
   static clamp(x: number, y: number): NumXY

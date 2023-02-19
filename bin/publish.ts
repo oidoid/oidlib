@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --check=typescript
-import { Obj, Str } from '@/oidlib'
+import { Obj, Str } from '@/ooz'
 import * as semver from 'std/semver/mod.ts'
 
 const releaseTypes: Set<semver.ReleaseType> = new Set([

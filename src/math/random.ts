@@ -1,4 +1,4 @@
-import { I32 } from '@/oidlib'
+import { I32 } from '@/ooz'
 
 // http://www.firstpr.com.au/dsp/rand31/
 export class Random {

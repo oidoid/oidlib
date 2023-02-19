@@ -1,4 +1,4 @@
-import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY, XYJSON } from '@/oidlib'
+import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY, XYJSON } from '@/ooz'
 
 export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY<<%- component %>> {
   <% coercions.forEach(coerce =>{ %>

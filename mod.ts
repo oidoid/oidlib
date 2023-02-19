@@ -1,4 +1,4 @@
-// ─── oidlib >°──
+// ─── ooz >°──
 
 // Import order is due to https://github.com/denoland/deno/issues/11286.
 // export * from './src/test/test-util.ts';

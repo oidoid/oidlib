@@ -8,7 +8,7 @@ import {
   U8,
   U8XY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class U8Box implements IntegralBox<U8> {
   static ceil(x: number, y: number, w: number, h: number): U8Box

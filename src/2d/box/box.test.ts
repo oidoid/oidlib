@@ -1,4 +1,4 @@
-import { I8Box, I8XY, Int, IntBox, IntXY, NumBox, NumXY } from '@/oidlib'
+import { I8Box, I8XY, Int, IntBox, IntXY, NumBox, NumXY } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 for (

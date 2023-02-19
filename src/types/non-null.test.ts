@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
-import { assertNonNull, NonNull } from '@/oidlib'
+import { assertNonNull, NonNull } from '@/ooz'
 
 for (
   const [input, throws] of [

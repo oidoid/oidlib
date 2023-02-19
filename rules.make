@@ -1,4 +1,4 @@
-include ../oidlib/config.make
+include config.make
 
 dist_dir := dist
 src_dir := src

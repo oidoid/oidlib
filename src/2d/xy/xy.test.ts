@@ -1,4 +1,4 @@
-import { Int, IntXY, NumXY } from '@/oidlib'
+import { Int, IntXY, NumXY } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 for (

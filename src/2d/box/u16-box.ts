@@ -8,7 +8,7 @@ import {
   U16,
   U16XY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class U16Box implements IntegralBox<U16> {
   static ceil(x: number, y: number, w: number, h: number): U16Box

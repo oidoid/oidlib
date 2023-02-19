@@ -1,4 +1,4 @@
-import { ArrayUtil, I32, Random } from '@/oidlib'
+import { ArrayUtil, I32, Random } from '@/ooz'
 import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Shuffle: permutations.', () => {

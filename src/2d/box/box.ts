@@ -1,4 +1,4 @@
-import { NumBox, NumXY, XY, XYJSON } from '@/oidlib'
+import { NumBox, NumXY, XY, XYJSON } from '@/ooz'
 
 /**
  * Axis-aligned width (w) × height (h) rectangle in starting at (x, y).

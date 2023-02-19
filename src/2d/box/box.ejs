@@ -1,4 +1,4 @@
-import { argsToBox, Box, BoxJSON, <% if (type != 'Num') { %><%- type %>, <% } %><% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box,<% if (type != 'Num') { %> NumBox, NumXY,<% } %> <%- type %>XY, XY } from '@/oidlib'
+import { argsToBox, Box, BoxJSON, <% if (type != 'Num') { %><%- type %>, <% } %><% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box,<% if (type != 'Num') { %> NumBox, NumXY,<% } %> <%- type %>XY, XY } from '@/ooz'
 
 export class <%- type %>Box implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>Box<<%- component %>> {
   <% coercions.forEach(coerce =>{ %>

@@ -1,5 +1,5 @@
 import { assertAlmostEquals } from 'std/testing/asserts.ts'
-import { Color, U32 } from '@/oidlib'
+import { Color, U32 } from '@/ooz'
 
 Deno.test(
   'colorIntToFloats',

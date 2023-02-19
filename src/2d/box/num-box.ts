@@ -1,4 +1,4 @@
-import { argsToBox, Box, BoxJSON, FractionalBox, NumXY, XY } from '@/oidlib'
+import { argsToBox, Box, BoxJSON, FractionalBox, NumXY, XY } from '@/ooz'
 
 export class NumBox implements FractionalBox<number> {
   static clamp(x: number, y: number, w: number, h: number): NumBox

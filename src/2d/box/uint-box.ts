@@ -8,7 +8,7 @@ import {
   Uint,
   UintXY,
   XY,
-} from '@/oidlib'
+} from '@/ooz'
 
 export class UintBox implements IntegralBox<Uint> {
   static ceil(x: number, y: number, w: number, h: number): UintBox

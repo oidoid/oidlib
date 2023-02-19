@@ -1,4 +1,4 @@
-import { assert } from '@/oidlib'
+import { assert } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('assert(false)', () => {

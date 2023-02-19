@@ -1,4 +1,4 @@
-import { Str } from '@/oidlib'
+import { Str } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Str', async (test) => {

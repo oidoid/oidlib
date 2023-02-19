@@ -1,4 +1,4 @@
-import { U32 } from '@/oidlib'
+import { U32 } from '@/ooz'
 
 export namespace Color {
   export function intToFloats(color: U32): [number, number, number, number] {

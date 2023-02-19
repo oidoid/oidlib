@@ -1,4 +1,4 @@
-import { I4, IntegralXY, NumXY, XY, XYJSON } from '@/oidlib'
+import { I4, IntegralXY, NumXY, XY, XYJSON } from '@/ooz'
 
 export class I4XY implements IntegralXY<I4> {
   static ceil(x: number, y: number): I4XY

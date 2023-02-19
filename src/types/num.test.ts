@@ -11,7 +11,7 @@ import {
   U8,
   Uint,
   Unum,
-} from '@/oidlib'
+} from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('Clamping.', async (test) => {

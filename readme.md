@@ -1,11 +1,11 @@
-# 📚 oidlib
+# 📚 ooz
 
 The oidoid common library.
 
 ## Installation
 
-oidlib is a Deno TypeScript project. Add `https://deno.land/x/oidlib/mod.ts` to
-your import modules and reference the `https://deno.land/x/oidlib/mods.json`
+ooz is a Deno TypeScript project. Add `https://deno.land/x/ooz/mod.ts` to
+your import modules and reference the `https://deno.land/x/ooz/mods.json`
 import map.
 
 ## Shorthands

@@ -1,4 +1,4 @@
-import { assert as assertTrue } from '@/oidlib'
+import { assert as assertTrue } from '@/ooz'
 
 /** Returns a nonnullish value or throws. */
 export function NonNull<T>(

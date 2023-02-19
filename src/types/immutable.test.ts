@@ -1,4 +1,4 @@
-import { Immutable } from '@/oidlib'
+import { Immutable } from '@/ooz'
 import { assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('A flat immutable cannot be mutated.', () => {
