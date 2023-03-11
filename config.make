@@ -43,6 +43,7 @@ cp := cp --archive --force
 # Only report warnings and errors.
 # https://github.com/denoland/deno/issues/10558
 # https://github.com/denoland/deno/issues/15828
+# https://github.com/denoland/deno/issues/8890
 deno := deno $(if $(value V),,--quiet)
 
 # https://github.com/denoland/deno/issues/16395.

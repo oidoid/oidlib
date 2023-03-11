@@ -1,5 +1,18 @@
+Move importMap to deno? Does this work with VSCode plugin.
+Switch to esbuild? esbuild_deno_loader is pretty crufty.
+  Migrate all projects to esbuild. replace deno pack with esbuild + typechecking
+    https://esbuild.github.io/api/#tsconfig
+    https://deno.land/x/esbuild@v0.17.10
+    https://github.com/denoland/deno/issues/14858
 Finalize oidkit / odk naming.
-Add rebuild to rules.make: clean build and force serial, maybe.
 Explore a script for updating imports.
   find -name mods.json|xargs -rd\\n sed -ri 's%https://deno.land/x/oid@v[0-9]+.[0-9]+.[0-9]+/mod.ts%https://deno.land/x/oid@v0.0.6/mod.ts%'
 Explore how to eliminate race conditions for codegen in other modules.
+Think about implications of splitting out libs for xy and int. +Easier to share code; -more maintenance, harder to find what's where.
+Reduce boilerplate
+  Can I reuse rules.mk in more places?
+  index.css, index.html, amd makefile are big boilerplates
+    Each could use mustach like templates or common rules
+    Makefiles are awesome but need to share some of that config like an Aseprite rule or something.
+ooz goals: as lightweight as possible, as simple as possible, as intuitive as possible, as friendly as possible, as human as possible, as small as possible.
+Review string literals for `${bigint}` opportunities.
