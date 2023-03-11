@@ -2,6 +2,7 @@
 import { Obj, Str } from '@/ooz'
 import * as semver from 'std/semver/mod.ts'
 
+const configFilename: string = 'deno.json'
 const releaseTypes: Set<semver.ReleaseType> = new Set([
   'pre',
   'major',
@@ -32,16 +33,16 @@ async function main(): Promise<number> {
     return 1
   }
 
-  const pkg = JSON.parse(await Deno.readTextFile('package.json'))
-  if (!isPackage(pkg)) {
-    console.error('package.json missing name or version properties.')
+  const config = JSON.parse(await Deno.readTextFile(configFilename))
+  if (!isConfig(config)) {
+    console.error(`${configFilename} missing name or version fields.`)
     return 1
   }
 
-  const nextVer = semver.increment(pkg.version, releaseType)
+  const nextVer = semver.increment(config.version, releaseType)
   if (nextVer == null) {
     console.error(
-      `Cannot compute next ${releaseType} semantic version from ${pkg.version}.`,
+      `Cannot compute next ${releaseType} semantic version from ${config.version}.`,
     )
     return 1
   }
@@ -91,24 +92,24 @@ async function main(): Promise<number> {
     return 1
   }
 
-  pkg.version = nextVer
-  await Deno.writeTextFile('package.json', JSON.stringify(pkg))
+  config.version = nextVer
+  await Deno.writeTextFile(configFilename, JSON.stringify(config))
 
-  result = await deno('fmt package.json')
+  result = await deno(`fmt ${configFilename}`)
   if (!result.ok) {
-    console.error('Cannot format package.json.')
+    console.error(`Cannot format ${configFilename}.`)
     return 1
   }
 
-  result = await git('add package.json')
+  result = await git(`add ${configFilename}`)
   if (!result.ok) {
-    console.error('Cannot stage package.json.')
+    console.error(`Cannot stage ${configFilename}.`)
     return 1
   }
 
   result = await git(`commit --message v${nextVer}`)
   if (!result.ok) {
-    console.error('Cannot commit package.json.')
+    console.error(`Cannot commit ${configFilename}.`)
     return 1
   }
 
@@ -161,12 +162,12 @@ function isReleaseType(str: string): str is semver.ReleaseType {
   return releaseTypes.has(str as semver.ReleaseType)
 }
 
-function isPackage(val: unknown): val is Package {
+function isConfig(val: unknown): val is Config {
   if (!Obj.is(val)) return false
   return typeof val.version == 'string' && typeof val.name == 'string'
 }
 
-interface Package {
+interface Config {
   name: string
   version: string
 }

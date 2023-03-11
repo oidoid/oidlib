@@ -1,5 +1,4 @@
 {
-  // https://deno.land/manual@main/typescript/configuration
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
@@ -20,5 +19,7 @@
     }
   },
   "lock": false,
-  "test": { "files": { "exclude": ["dist"] } }
+  "name": "ooz",
+  "test": { "files": { "exclude": ["dist"] } },
+  "version": "0.0.13"
 }

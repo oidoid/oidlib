@@ -15,7 +15,7 @@ watch: watch-bundle
 
 .PHONY: bundle
 bundle: | $(dist_dir)/
-  name="$$(deno eval -p 'JSON.parse(await Deno.readTextFile("package.json")).name')"
+  name="$$(deno eval -p 'JSON.parse(await Deno.readTextFile("deno.json")).name')"
   $(deno) bundle --config='$(deno_config)' mod.ts "$(dist_dir)/$$name.js" $(bundle_args)
 
 .PHONY: watch-bundle
