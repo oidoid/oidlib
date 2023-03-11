@@ -11,7 +11,13 @@
     "files": { "exclude": ["dist"] },
     "options": { "semiColons": false, "singleQuote": true }
   },
-  "importMap": "mods.json",
+  "imports": {
+    "@/ooz": "./mod.ts",
+    "dejs/": "https://deno.land/x/dejs@0.10.3/",
+    "esbuild": "https://deno.land/x/esbuild@v0.17.11/mod.js",
+    "esbuild_deno_loader": "https://deno.land/x/esbuild_deno_loader@0.6.0/mod.ts",
+    "std/": "https://deno.land/std@0.179.0/"
+  },
   "lint": {
     "files": { "exclude": ["dist"] },
     "rules": {
