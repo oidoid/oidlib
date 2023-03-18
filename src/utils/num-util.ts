@@ -38,8 +38,15 @@ export namespace NumUtil {
   }
 
   export function modUint(num: number): number {
-    return NumUtil.mod(num, Number.MAX_SAFE_INTEGER + 1)
+    return mod(num, Number.MAX_SAFE_INTEGER + 1)
   }
+
+  // to-do: dissect number into two 27b numbers, perform the bitwise operation
+  // wanted on each half, then shift the high 27b, and add together.
+  // Shift right 32b with zero-fill. Take the 21 LSBs and shift back left 32b.
+  // const h21 = (ushift(int, 32, this.width) & 0x1f_ff_ff) * 2 ** 32;
+  // const l32 = int >>> 0;
+  // return this.construct((h21 + l32) % (this.max + 1));
 
   export function clamp(num: number, min: number, max: number): number {
     assert(max >= min, `max=${max} < min=${min}.`)

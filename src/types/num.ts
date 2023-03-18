@@ -41,6 +41,7 @@ declare const u32: unique symbol
  * [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/BigInt#usage_recommendations
  * [3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
  * [4]: https://github.com/denoland/deno/pull/15692
+ * [5]: https://en.wikipedia.org/wiki/Double-precision_floating-point_format
  */
 export type Int = number & (I32 | Uint | { [int]: never })
 declare const int: unique symbol

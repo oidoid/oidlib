@@ -4,9 +4,8 @@ The oidoid common library.
 
 ## Installation
 
-ooz is a Deno TypeScript project. Add `https://deno.land/x/ooz/mod.ts` to
-your import modules and reference the `https://deno.land/x/ooz/mods.json`
-import map.
+ooz is a Deno TypeScript project. Add `https://deno.land/x/ooz/mod.ts` to your
+import modules and reference the `https://deno.land/x/ooz/mods.json` import map.
 
 ## Shorthands
 
@@ -16,6 +15,7 @@ import map.
 | attrib    | attribute                                   |
 | bin       | binary                                      |
 | box       | rectangle                                   |
+| bmp       | bitmap                                      |
 | cb        | callback / listener                         |
 | cmd       | command                                     |
 | config    | configuration                               |
