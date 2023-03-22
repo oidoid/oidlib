@@ -10,6 +10,15 @@ export class I8XY implements IntegralXY<I8> {
     )
   }
 
+  static clamp(x: number, y: number): I8XY
+  static clamp(xy: Readonly<XY<number>>): I8XY
+  static clamp(xXY: number | Readonly<XY<number>>, y?: number): I8XY {
+    return new this(
+      I8.clamp(typeof xXY == 'number' ? xXY : xXY.x),
+      I8.clamp(typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
   static floor(x: number, y: number): I8XY
   static floor(xy: Readonly<XY<number>>): I8XY
   static floor(xXY: number | Readonly<XY<number>>, y?: number): I8XY {
@@ -25,15 +34,6 @@ export class I8XY implements IntegralXY<I8> {
     return new this(
       I8.round(typeof xXY == 'number' ? xXY : xXY.x),
       I8.round(typeof xXY == 'number' ? y! : xXY.y),
-    )
-  }
-
-  static trunc(x: number, y: number): I8XY
-  static trunc(xy: Readonly<XY<number>>): I8XY
-  static trunc(xXY: number | Readonly<XY<number>>, y?: number): I8XY {
-    return new this(
-      I8.trunc(typeof xXY == 'number' ? xXY : xXY.x),
-      I8.trunc(typeof xXY == 'number' ? y! : xXY.y),
     )
   }
 
@@ -58,8 +58,8 @@ export class I8XY implements IntegralXY<I8> {
   }
 
   absClamp(): this {
-    this.#x = I8.trunc(Math.abs(this.#x))
-    this.#y = I8.trunc(Math.abs(this.#y))
+    this.#x = I8.clamp(Math.abs(this.#x))
+    this.#y = I8.clamp(Math.abs(this.#y))
     return this
   }
 
@@ -79,6 +79,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  addClamp(x: number, y: number): this
+  addClamp(xy: Readonly<XY<number>>): this
+  addClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   addFloor(x: number, y: number): this
   addFloor(xy: Readonly<XY<number>>): this
   addFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -92,14 +100,6 @@ export class I8XY implements IntegralXY<I8> {
   addRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I8.round(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  addTrunc(x: number, y: number): this
-  addTrunc(xy: Readonly<XY<number>>): this
-  addTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -119,6 +119,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  divClamp(x: number, y: number): this
+  divClamp(xy: Readonly<XY<number>>): this
+  divClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   divFloor(x: number, y: number): this
   divFloor(xy: Readonly<XY<number>>): this
   divFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -132,14 +140,6 @@ export class I8XY implements IntegralXY<I8> {
   divRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I8.round(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  divTrunc(x: number, y: number): this
-  divTrunc(xy: Readonly<XY<number>>): this
-  divTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -159,6 +159,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  mulClamp(x: number, y: number): this
+  mulClamp(xy: Readonly<XY<number>>): this
+  mulClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   mulFloor(x: number, y: number): this
   mulFloor(xy: Readonly<XY<number>>): this
   mulFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -172,14 +180,6 @@ export class I8XY implements IntegralXY<I8> {
   mulRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I8.round(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  mulTrunc(x: number, y: number): this
-  mulTrunc(xy: Readonly<XY<number>>): this
-  mulTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -199,6 +199,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  subClamp(x: number, y: number): this
+  subClamp(xy: Readonly<XY<number>>): this
+  subClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   subFloor(x: number, y: number): this
   subFloor(xy: Readonly<XY<number>>): this
   subFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -215,20 +223,12 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
-  subTrunc(x: number, y: number): this
-  subTrunc(xy: Readonly<XY<number>>): this
-  subTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
   get area(): I8 {
     return I8(this.#x * this.#y)
   }
 
   get areaClamp(): I8 {
-    return I8.trunc(this.#x * this.#y)
+    return I8.clamp(this.#x * this.#y)
   }
 
   get areaNum(): number {
@@ -251,7 +251,7 @@ export class I8XY implements IntegralXY<I8> {
   dotClamp(x: number, y: number): I8
   dotClamp(xy: Readonly<XY<number>>): I8
   dotClamp(xXY: number | Readonly<XY<number>>, y?: number): I8 {
-    return I8.trunc(
+    return I8.clamp(
       this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
         this.#y * (typeof xXY == 'number' ? y! : xXY.y),
     )
@@ -279,16 +279,16 @@ export class I8XY implements IntegralXY<I8> {
     return I8.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
+  get lenClamp(): I8 {
+    return I8.clamp(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
   get lenFloor(): I8 {
     return I8.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
   get lenRound(): I8 {
     return I8.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
-  }
-
-  get lenTrunc(): I8 {
-    return I8.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
   get lenNum(): number {
@@ -311,6 +311,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  maxClamp(x: number, y: number): this
+  maxClamp(xy: Readonly<XY<number>>): this
+  maxClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   maxFloor(x: number, y: number): this
   maxFloor(xy: Readonly<XY<number>>): this
   maxFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -324,14 +332,6 @@ export class I8XY implements IntegralXY<I8> {
   maxRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I8.round(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  maxTrunc(x: number, y: number): this
-  maxTrunc(xy: Readonly<XY<number>>): this
-  maxTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -351,6 +351,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  minClamp(x: number, y: number): this
+  minClamp(xy: Readonly<XY<number>>): this
+  minClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = I8.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   minFloor(x: number, y: number): this
   minFloor(xy: Readonly<XY<number>>): this
   minFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -364,14 +372,6 @@ export class I8XY implements IntegralXY<I8> {
   minRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = I8.round(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  minTrunc(x: number, y: number): this
-  minTrunc(xy: Readonly<XY<number>>): this
-  minTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = I8.trunc(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -391,6 +391,14 @@ export class I8XY implements IntegralXY<I8> {
     return this
   }
 
+  setClamp(x: number, y: number): this
+  setClamp(xy: Readonly<XY<number>>): this
+  setClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = I8.clamp(typeof xXY == 'number' ? xXY : xXY.x)
+    this.#y = I8.clamp(typeof xXY == 'number' ? y! : xXY.y)
+    return this
+  }
+
   setFloor(x: number, y: number): this
   setFloor(xy: Readonly<XY<number>>): this
   setFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -404,14 +412,6 @@ export class I8XY implements IntegralXY<I8> {
   setRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = I8.round(typeof xXY == 'number' ? xXY : xXY.x)
     this.#y = I8.round(typeof xXY == 'number' ? y! : xXY.y)
-    return this
-  }
-
-  setTrunc(x: number, y: number): this
-  setTrunc(xy: Readonly<XY<number>>): this
-  setTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = I8.trunc(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = I8.trunc(typeof xXY == 'number' ? y! : xXY.y)
     return this
   }
 

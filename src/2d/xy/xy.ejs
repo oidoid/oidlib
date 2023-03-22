@@ -1,6 +1,6 @@
-import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY, XYJSON } from '@/ooz'
+import { <%- type %>, <% if (type == 'Num' || type == 'Unum') { %>Numerical<% } else { %>Integral<% } %>XY,<% if (type != 'Num') { %> NumXY,<% } %> XY, XYJSON } from '@/ooz'
 
-export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { %>Fractional<% } else { %>Integral<% } %>XY<<%- component %>> {
+export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { %>Numerical<% } else { %>Integral<% } %>XY<<%- component %>> {
   <% coercions.forEach(coerce =>{ %>
   static <%- coerce.toLowerCase() %>(x: number, y: number): <%- type %>XY
   static <%- coerce.toLowerCase() %>(xy: Readonly<XY<number>>): <%- type %>XY
@@ -28,8 +28,8 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
 
   <% ['', 'Clamp'].forEach(coerce =>{ %>
   abs<%- coerce %>(): this {
-    this.#x = <%- type %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.abs(this.#x))
-    this.#y = <%- type %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(Math.abs(this.#y))
+    this.#x = <%- type %><% if (coerce == 'Clamp') { %>.clamp<% } %>(Math.abs(this.#x))
+    this.#y = <%- type %><% if (coerce == 'Clamp') { %>.clamp<% } %>(Math.abs(this.#y))
     return this
   }
   <% }) %>
@@ -48,7 +48,7 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
 
   <% ['', 'Clamp', 'Num'].forEach(coerce => { %>
   get area<%- coerce %>(): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
-    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(this.#x * this.#y)
+    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %>.clamp<% } %>(this.#x * this.#y)
   }
   <% }) %>
 
@@ -60,7 +60,7 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   dot<%- coerce %>(x: number, y: number): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %>;
   dot<%- coerce %>(xy: Readonly<XY<number>>): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %>;
   dot<%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): <% if (coerce == 'Num') { %>number<% } else { %><%- component %><% } %> {
-    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %><% if (type == 'Num' || type == 'Unum') { %>.clamp<% } else { %>.trunc<% } %><% } %>(this.#x * (typeof xXY == 'number' ? xXY : xXY.x) + this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    return <% if (coerce != 'Num') { %><%- type %><% } %><% if (coerce == 'Clamp') { %>.clamp<% } %>(this.#x * (typeof xXY == 'number' ? xXY : xXY.x) + this.#y * (typeof xXY == 'number' ? y! : xXY.y))
   }
   <% }) %>
 

@@ -24,6 +24,19 @@ export class U16Box implements IntegralBox<U16> {
     return new this(U16XY.ceil(box.x, box.y), U16XY.ceil(box.w, box.h))
   }
 
+  static clamp(x: number, y: number, w: number, h: number): U16Box
+  static clamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): U16Box
+  static clamp(box: Readonly<Box<number>>): U16Box
+  static clamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): U16Box {
+    const box = argsToBox(xXYBox, yWH, w, h)
+    return new this(U16XY.clamp(box.x, box.y), U16XY.clamp(box.w, box.h))
+  }
+
   static floor(x: number, y: number, w: number, h: number): U16Box
   static floor(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): U16Box
   static floor(box: Readonly<Box<number>>): U16Box
@@ -48,19 +61,6 @@ export class U16Box implements IntegralBox<U16> {
   ): U16Box {
     const box = argsToBox(xXYBox, yWH, w, h)
     return new this(U16XY.round(box.x, box.y), U16XY.round(box.w, box.h))
-  }
-
-  static trunc(x: number, y: number, w: number, h: number): U16Box
-  static trunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): U16Box
-  static trunc(box: Readonly<Box<number>>): U16Box
-  static trunc(
-    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
-    yWH?: number | Readonly<XY<number>>,
-    w?: number,
-    h?: number,
-  ): U16Box {
-    const box = argsToBox(xXYBox, yWH, w, h)
-    return new this(U16XY.trunc(box.x, box.y), U16XY.trunc(box.w, box.h))
   }
 
   static fromJSON(json: Readonly<BoxJSON>): U16Box {
@@ -109,16 +109,16 @@ export class U16Box implements IntegralBox<U16> {
     return U16XY.ceil(this.centerNum)
   }
 
+  get centerClamp(): U16XY {
+    return U16XY.clamp(this.centerNum)
+  }
+
   get centerFloor(): U16XY {
     return U16XY.floor(this.centerNum)
   }
 
   get centerRound(): U16XY {
     return U16XY.round(this.centerNum)
-  }
-
-  get centerTrunc(): U16XY {
-    return U16XY.trunc(this.centerNum)
   }
 
   get centerNum(): NumXY {
@@ -165,7 +165,7 @@ export class U16Box implements IntegralBox<U16> {
   }
 
   get endClamp(): U16XY {
-    return U16XY.trunc(this.endNum)
+    return U16XY.clamp(this.endNum)
   }
 
   get endNum(): NumXY {
@@ -224,6 +224,23 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  intersectionClamp(x: number, y: number, w: number, h: number): this
+  intersectionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  intersectionClamp(box: Readonly<Box<number>>): this
+  intersectionClamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    const box = new NumBox(argsToBox(xXYBox, yWH, w, h))
+    const xy = box.min.max(this.min)
+    const wh = box.max.min(this.max).sub(xy)
+    this.#xy.setClamp(xy)
+    this.#wh.setClamp(wh)
+    return this
+  }
+
   intersectionFloor(x: number, y: number, w: number, h: number): this
   intersectionFloor(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   intersectionFloor(box: Readonly<Box<number>>): this
@@ -258,23 +275,6 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
-  intersectionTrunc(x: number, y: number, w: number, h: number): this
-  intersectionTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  intersectionTrunc(box: Readonly<Box<number>>): this
-  intersectionTrunc(
-    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
-    yWH?: number | Readonly<XY<number>>,
-    w?: number,
-    h?: number,
-  ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h))
-    const xy = box.min.max(this.min)
-    const wh = box.max.min(this.max).sub(xy)
-    this.#xy.setTrunc(xy)
-    this.#wh.setTrunc(wh)
-    return this
-  }
-
   intersects(x: number, y: number): boolean
   intersects(xy: Readonly<XY<number>>): boolean
   intersects(x: number, y: number, w: number, h: number): boolean
@@ -296,7 +296,7 @@ export class U16Box implements IntegralBox<U16> {
   }
 
   get maxClamp(): U16XY {
-    return U16XY.trunc(this.maxNum)
+    return U16XY.clamp(this.maxNum)
   }
 
   get maxNum(): NumXY {
@@ -311,7 +311,7 @@ export class U16Box implements IntegralBox<U16> {
   }
 
   get minClamp(): U16XY {
-    return U16XY.trunc(this.minNum)
+    return U16XY.clamp(this.minNum)
   }
 
   get minNum(): NumXY {
@@ -341,6 +341,16 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  moveByClamp(x: number, y: number): this
+  moveByClamp(xy: Readonly<XY<number>>): this
+  moveByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#xy.setClamp(
+      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+    )
+    return this
+  }
+
   moveByFloor(x: number, y: number): this
   moveByFloor(xy: Readonly<XY<number>>): this
   moveByFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -355,16 +365,6 @@ export class U16Box implements IntegralBox<U16> {
   moveByRound(xy: Readonly<XY<number>>): this
   moveByRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setRound(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
-    )
-    return this
-  }
-
-  moveByTrunc(x: number, y: number): this
-  moveByTrunc(xy: Readonly<XY<number>>): this
-  moveByTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#xy.setTrunc(
       this.x + (typeof xXY == 'number' ? xXY : xXY.x),
       this.y + (typeof xXY == 'number' ? y! : xXY.y),
     )
@@ -393,6 +393,17 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  moveCenterToClamp(x: number, y: number): this
+  moveCenterToClamp(xy: Readonly<XY<number>>): this
+  moveCenterToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    const center = this.#wh.toNumXY().div(2, 2)
+    this.#xy.setClamp(
+      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+    )
+    return this
+  }
+
   moveCenterToFloor(x: number, y: number): this
   moveCenterToFloor(xy: Readonly<XY<number>>): this
   moveCenterToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -409,17 +420,6 @@ export class U16Box implements IntegralBox<U16> {
   moveCenterToRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setRound(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
-    )
-    return this
-  }
-
-  moveCenterToTrunc(x: number, y: number): this
-  moveCenterToTrunc(xy: Readonly<XY<number>>): this
-  moveCenterToTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    const center = this.#wh.toNumXY().div(2, 2)
-    this.#xy.setTrunc(
       (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
       (typeof xXY == 'number' ? y! : xXY.y) - center.y,
     )
@@ -446,6 +446,16 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  moveToClamp(x: number, y: number): this
+  moveToClamp(xy: Readonly<XY<number>>): this
+  moveToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#xy.setClamp(
+      typeof xXY == 'number' ? xXY : xXY.x,
+      typeof xXY == 'number' ? y! : xXY.y,
+    )
+    return this
+  }
+
   moveToFloor(x: number, y: number): this
   moveToFloor(xy: Readonly<XY<number>>): this
   moveToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -466,16 +476,6 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
-  moveToTrunc(x: number, y: number): this
-  moveToTrunc(xy: Readonly<XY<number>>): this
-  moveToTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#xy.setTrunc(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
-    )
-    return this
-  }
-
   order(): this {
     const min = this.min
     return this.set(min, this.max.sub(min))
@@ -483,7 +483,7 @@ export class U16Box implements IntegralBox<U16> {
 
   orderClamp(): this {
     const min = this.min
-    return this.setTrunc(min, this.max.sub(min))
+    return this.setClamp(min, this.max.sub(min))
   }
 
   set(x: number, y: number, w: number, h: number): this
@@ -513,6 +513,21 @@ export class U16Box implements IntegralBox<U16> {
     const box = argsToBox(xXYBox, yWH, w, h)
     this.#xy.setCeil(box.x, box.y)
     this.#wh.setCeil(box.w, box.h)
+    return this
+  }
+
+  setClamp(x: number, y: number, w: number, h: number): this
+  setClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  setClamp(box: Readonly<Box<number>>): this
+  setClamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    const box = argsToBox(xXYBox, yWH, w, h)
+    this.#xy.setClamp(box.x, box.y)
+    this.#wh.setClamp(box.w, box.h)
     return this
   }
 
@@ -546,21 +561,6 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
-  setTrunc(x: number, y: number, w: number, h: number): this
-  setTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  setTrunc(box: Readonly<Box<number>>): this
-  setTrunc(
-    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
-    yWH?: number | Readonly<XY<number>>,
-    w?: number,
-    h?: number,
-  ): this {
-    const box = argsToBox(xXYBox, yWH, w, h)
-    this.#xy.setTrunc(box.x, box.y)
-    this.#wh.setTrunc(box.w, box.h)
-    return this
-  }
-
   sizeBy(x: number, y: number): this
   sizeBy(xy: Readonly<XY<number>>): this
   sizeBy(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -575,6 +575,16 @@ export class U16Box implements IntegralBox<U16> {
   sizeByCeil(xy: Readonly<XY<number>>): this
   sizeByCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setCeil(
+      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+    )
+    return this
+  }
+
+  sizeByClamp(x: number, y: number): this
+  sizeByClamp(xy: Readonly<XY<number>>): this
+  sizeByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#wh.setClamp(
       this.w + (typeof xXY == 'number' ? xXY : xXY.x),
       this.h + (typeof xXY == 'number' ? y! : xXY.y),
     )
@@ -601,16 +611,6 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
-  sizeByTrunc(x: number, y: number): this
-  sizeByTrunc(xy: Readonly<XY<number>>): this
-  sizeByTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#wh.setTrunc(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
-    )
-    return this
-  }
-
   sizeTo(x: number, y: number): this
   sizeTo(xy: Readonly<XY<number>>): this
   sizeTo(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -631,6 +631,16 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  sizeToClamp(x: number, y: number): this
+  sizeToClamp(xy: Readonly<XY<number>>): this
+  sizeToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#wh.setClamp(
+      typeof xXY == 'number' ? xXY : xXY.x,
+      typeof xXY == 'number' ? y! : xXY.y,
+    )
+    return this
+  }
+
   sizeToFloor(x: number, y: number): this
   sizeToFloor(xy: Readonly<XY<number>>): this
   sizeToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -645,16 +655,6 @@ export class U16Box implements IntegralBox<U16> {
   sizeToRound(xy: Readonly<XY<number>>): this
   sizeToRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setRound(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
-    )
-    return this
-  }
-
-  sizeToTrunc(x: number, y: number): this
-  sizeToTrunc(xy: Readonly<XY<number>>): this
-  sizeToTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#wh.setTrunc(
       typeof xXY == 'number' ? xXY : xXY.x,
       typeof xXY == 'number' ? y! : xXY.y,
     )
@@ -695,6 +695,23 @@ export class U16Box implements IntegralBox<U16> {
     return this
   }
 
+  unionClamp(x: number, y: number, w: number, h: number): this
+  unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  unionClamp(box: Readonly<Box<number>>): this
+  unionClamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    const box = new NumBox(argsToBox(xXYBox, yWH, w, h))
+    const xy = box.min.min(this.min)
+    const wh = box.max.max(this.max).sub(xy)
+    this.#xy.setClamp(xy)
+    this.#wh.setClamp(wh)
+    return this
+  }
+
   unionFloor(x: number, y: number, w: number, h: number): this
   unionFloor(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   unionFloor(box: Readonly<Box<number>>): this
@@ -726,23 +743,6 @@ export class U16Box implements IntegralBox<U16> {
     const wh = box.max.max(this.max).sub(xy)
     this.#xy.setRound(xy)
     this.#wh.setRound(wh)
-    return this
-  }
-
-  unionTrunc(x: number, y: number, w: number, h: number): this
-  unionTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  unionTrunc(box: Readonly<Box<number>>): this
-  unionTrunc(
-    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
-    yWH?: number | Readonly<XY<number>>,
-    w?: number,
-    h?: number,
-  ): this {
-    const box = new NumBox(argsToBox(xXYBox, yWH, w, h))
-    const xy = box.min.min(this.min)
-    const wh = box.max.max(this.max).sub(xy)
-    this.#xy.setTrunc(xy)
-    this.#wh.setTrunc(wh)
     return this
   }
 

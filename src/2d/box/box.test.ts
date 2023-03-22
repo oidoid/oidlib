@@ -28,6 +28,22 @@ for (
     }],
   ] as const
 ) {
+  Deno.test(`Clamp: ${name}.`, () => {
+    assertEquals(IntBox.clamp(x, y, w, h).toJSON(), expected)
+  })
+}
+
+for (
+  const [name, x, y, w, h, expected] of [
+    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
+    ['fractions', 1.9, 2.9, 3.9, 9.9, {
+      x: Int(1),
+      y: Int(2),
+      w: Int(3),
+      h: Int(9),
+    }],
+  ] as const
+) {
   Deno.test(`Flooring: ${name}.`, () => {
     assertEquals(IntBox.floor(x, y, w, h).toJSON(), expected)
   })
@@ -46,22 +62,6 @@ for (
 ) {
   Deno.test(`Round: ${name}.`, () => {
     assertEquals(IntBox.round(x, y, w, h).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, {
-      x: Int(1),
-      y: Int(2),
-      w: Int(3),
-      h: Int(9),
-    }],
-  ] as const
-) {
-  Deno.test(`Truncate: ${name}.`, () => {
-    assertEquals(IntBox.trunc(x, y, w, h).toJSON(), expected)
   })
 }
 
@@ -95,20 +95,20 @@ for (
   Deno.test(`Area: ${name}.`, () => assertEquals(box.area, expected))
 }
 
-Deno.test('centerNum', () => {
-  assertEquals(new I8Box(1, 2, 3, 4).centerNum, new NumXY(2.5, 4))
-  assertEquals(new I8Box(5, 6, 7, 8).centerNum, new NumXY(8.5, 10))
-})
-
 for (
   const [name, box, expected] of [
     ['back-facing', new IntBox(4, 1, 2, -2), new IntXY(3, 2)],
     ['front-facing', new IntBox(1, 2, 3, 4), new IntXY(2, 4)],
   ] as const
 ) {
-  Deno.test(`Center truncated: ${name}.`, () =>
-    assertEquals(box.centerTrunc, expected))
+  Deno.test(`Center clamped: ${name}.`, () =>
+    assertEquals(box.centerClamp, expected))
 }
+
+Deno.test('centerNum', () => {
+  assertEquals(new I8Box(1, 2, 3, 4).centerNum, new NumXY(2.5, 4))
+  assertEquals(new I8Box(5, 6, 7, 8).centerNum, new NumXY(8.5, 10))
+})
 
 for (
   const [name, box, other, expected] of [
@@ -232,7 +232,7 @@ for (
     ],
     [
       'fractions',
-      IntBox.trunc(1.9, 2.9, 3.9, 4.9),
+      IntBox.clamp(1.9, 2.9, 3.9, 4.9),
       new IntXY(3, 3),
       new IntBox(3, 3, 3, 4),
     ],
@@ -288,7 +288,7 @@ for (
 for (
   const [name, box, expected] of [
     ['integers', new IntBox(1, 2, 3, 4), new IntXY(3, 4)],
-    ['fractions', IntBox.trunc(1.9, 2.9, 3.9, 4.9), new IntXY(3, 4)],
+    ['fractions', IntBox.clamp(1.9, 2.9, 3.9, 4.9), new IntXY(3, 4)],
   ] as const
 ) {
   Deno.test(`width-height: ${name}.`, () => assertEquals(box.wh, expected))

@@ -28,7 +28,8 @@ export interface XY<T> {
  *     xy.subClamp(.5, 2) // (.5, 0)
  *
  *   Clamping is available on all fractional methods and integral methods where
- *   a fractional value is not possible.
+ *   a fractions are either impossible or achievable with clamping and
+ *   truncation.
  *
  * All argument type-checking is loose, ensuring only that `number`s or an
  * `XY<number>` is passed since out-of-range errors are extraordinarily easy to
@@ -40,6 +41,8 @@ export interface NumericalXY<T> extends XY<T> {
   /** Set x and y to their absolute values. */
   abs(): this
   absClamp(): this
+  addClamp(x: number, y: number): this
+  addClamp(xy: Readonly<XY<number>>): this
   /** Add arguments to x and y. */
   add(x: number, y: number): this
   add(xy: Readonly<XY<number>>): this
@@ -52,6 +55,8 @@ export interface NumericalXY<T> extends XY<T> {
   /** Divide x and y by arguments. */
   div(x: number, y: number): this
   div(xy: Readonly<XY<number>>): this
+  divClamp(x: number, y: number): this
+  divClamp(xy: Readonly<XY<number>>): this
   /** Dot product of x and y and arguments. */
   dot(x: number, y: number): T
   dot(xy: Readonly<XY<number>>): T
@@ -67,22 +72,33 @@ export interface NumericalXY<T> extends XY<T> {
    * (magnitude).
    */
   len: T
+  lenClamp: T
   lenNum: number
   /** Set x and y to the greater of themselves and arguments. */
   max(x: number, y: number): this
   max(xy: Readonly<XY<number>>): this
+  maxClamp(x: number, y: number): this
+  maxClamp(xy: Readonly<XY<number>>): this
   /** Set x and y to the lesser of themselves and arguments. */
   min(x: number, y: number): this
   min(xy: Readonly<XY<number>>): this
+  minClamp(x: number, y: number): this
+  minClamp(xy: Readonly<XY<number>>): this
   /** Multiply x and y by arguments. */
   mul(x: number, y: number): this
   mul(xy: Readonly<XY<number>>): this
+  mulClamp(x: number, y: number): this
+  mulClamp(xy: Readonly<XY<number>>): this
   /** Set x and y to arguments. */
   set(x: number, y: number): this
   set(xy: Readonly<XY<number>>): this
+  setClamp(x: number, y: number): this
+  setClamp(xy: Readonly<XY<number>>): this
   /** Subtract x and y by arguments. */
   sub(x: number, y: number): this
   sub(xy: Readonly<XY<number>>): this
+  subClamp(x: number, y: number): this
+  subClamp(xy: Readonly<XY<number>>): this
   /** Copy state as plain JSON with zero values omitted. */
   toJSON(): Partial<XY<T>>
   /** Copy state as a permissive double XY. */
@@ -111,12 +127,6 @@ export interface NumericalXY<T> extends XY<T> {
  *
  *     const xy = new U4XY(0, 0)
  *     xy.addRound(1.5, 16.5) // (2, 15)
- *
- * - Trunc: clamp and truncate if the result of the operation is out-of-range.
- *   Eg:
- *
- *     const xy = new U4XY(0, 0)
- *     xy.addTrunc(1.5, 16.5) // (1, 15)
  */
 export interface IntegralXY<T> extends NumericalXY<T> {
   addCeil(x: number, y: number): this
@@ -125,8 +135,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   addFloor(xy: Readonly<XY<number>>): this
   addRound(x: number, y: number): this
   addRound(xy: Readonly<XY<number>>): this
-  addTrunc(x: number, y: number): this
-  addTrunc(xy: Readonly<XY<number>>): this
 
   divCeil(x: number, y: number): this
   divCeil(xy: Readonly<XY<number>>): this
@@ -134,13 +142,10 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   divFloor(xy: Readonly<XY<number>>): this
   divRound(x: number, y: number): this
   divRound(xy: Readonly<XY<number>>): this
-  divTrunc(x: number, y: number): this
-  divTrunc(xy: Readonly<XY<number>>): this
 
   lenCeil: T
   lenFloor: T
   lenRound: T
-  lenTrunc: T
 
   maxCeil(x: number, y: number): this
   maxCeil(xy: Readonly<XY<number>>): this
@@ -148,8 +153,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   maxFloor(xy: Readonly<XY<number>>): this
   maxRound(x: number, y: number): this
   maxRound(xy: Readonly<XY<number>>): this
-  maxTrunc(x: number, y: number): this
-  maxTrunc(xy: Readonly<XY<number>>): this
 
   minCeil(x: number, y: number): this
   minCeil(xy: Readonly<XY<number>>): this
@@ -157,8 +160,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   minFloor(xy: Readonly<XY<number>>): this
   minRound(x: number, y: number): this
   minRound(xy: Readonly<XY<number>>): this
-  minTrunc(x: number, y: number): this
-  minTrunc(xy: Readonly<XY<number>>): this
 
   mulCeil(x: number, y: number): this
   mulCeil(xy: Readonly<XY<number>>): this
@@ -166,8 +167,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   mulFloor(xy: Readonly<XY<number>>): this
   mulRound(x: number, y: number): this
   mulRound(xy: Readonly<XY<number>>): this
-  mulTrunc(x: number, y: number): this
-  mulTrunc(xy: Readonly<XY<number>>): this
 
   setCeil(x: number, y: number): this
   setCeil(xy: Readonly<XY<number>>): this
@@ -175,8 +174,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   setFloor(xy: Readonly<XY<number>>): this
   setRound(x: number, y: number): this
   setRound(xy: Readonly<XY<number>>): this
-  setTrunc(x: number, y: number): this
-  setTrunc(xy: Readonly<XY<number>>): this
 
   subCeil(x: number, y: number): this
   subCeil(xy: Readonly<XY<number>>): this
@@ -184,27 +181,6 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   subFloor(xy: Readonly<XY<number>>): this
   subRound(x: number, y: number): this
   subRound(xy: Readonly<XY<number>>): this
-  subTrunc(x: number, y: number): this
-  subTrunc(xy: Readonly<XY<number>>): this
-}
-
-/** XY fractional state with methods. */
-export interface FractionalXY<T> extends NumericalXY<T> {
-  addClamp(x: number, y: number): this
-  addClamp(xy: Readonly<XY<number>>): this
-  divClamp(x: number, y: number): this
-  divClamp(xy: Readonly<XY<number>>): this
-  lenClamp: T
-  maxClamp(x: number, y: number): this
-  maxClamp(xy: Readonly<XY<number>>): this
-  minClamp(x: number, y: number): this
-  minClamp(xy: Readonly<XY<number>>): this
-  mulClamp(x: number, y: number): this
-  mulClamp(xy: Readonly<XY<number>>): this
-  setClamp(x: number, y: number): this
-  setClamp(xy: Readonly<XY<number>>): this
-  subClamp(x: number, y: number): this
-  subClamp(xy: Readonly<XY<number>>): this
 }
 
 export interface XYJSON {

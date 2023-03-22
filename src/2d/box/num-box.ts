@@ -1,6 +1,6 @@
-import { argsToBox, Box, BoxJSON, FractionalBox, NumXY, XY } from '@/ooz'
+import { argsToBox, Box, BoxJSON, NumericalBox, NumXY, XY } from '@/ooz'
 
-export class NumBox implements FractionalBox<number> {
+export class NumBox implements NumericalBox<number> {
   static clamp(x: number, y: number, w: number, h: number): NumBox
   static clamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): NumBox
   static clamp(box: Readonly<Box<number>>): NumBox

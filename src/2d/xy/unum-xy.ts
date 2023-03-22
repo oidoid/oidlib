@@ -1,6 +1,6 @@
-import { FractionalXY, NumXY, Unum, XY, XYJSON } from '@/ooz'
+import { NumericalXY, NumXY, Unum, XY, XYJSON } from '@/ooz'
 
-export class UnumXY implements FractionalXY<Unum> {
+export class UnumXY implements NumericalXY<Unum> {
   static clamp(x: number, y: number): UnumXY
   static clamp(xy: Readonly<XY<number>>): UnumXY
   static clamp(xXY: number | Readonly<XY<number>>, y?: number): UnumXY {

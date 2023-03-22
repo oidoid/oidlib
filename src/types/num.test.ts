@@ -1,17 +1,4 @@
-import {
-  I16,
-  I32,
-  I4,
-  I8,
-  Int,
-  Num,
-  U16,
-  U32,
-  U4,
-  U8,
-  Uint,
-  Unum,
-} from '@/ooz'
+import { I16, I32, I4, I8, Int, Num, U16, U32, U4, U8, Uint, Unum } from '@/ooz'
 import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test('Clamping.', async (test) => {
@@ -24,19 +11,19 @@ Deno.test('Clamping.', async (test) => {
       intCeilExpected,
       intFloorExpected,
       intRoundExpected,
-      intTruncExpected,
+      intClampExpected,
       uintCeilExpected,
       uintFloorExpected,
       uintRoundExpected,
-      uintTruncExpected,
+      uintClampExpected,
       i4CeilExpected,
       i4FloorExpected,
       i4RoundExpected,
-      i4TruncExpected,
+      i4ClampExpected,
       u4CeilExpected,
       u4FloorExpected,
       u4RoundExpected,
-      u4TruncExpected,
+      u4ClampExpected,
     ] of [
       [
         'min safe integer',
@@ -48,20 +35,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
         Number.MIN_SAFE_INTEGER - 1, // Int.round
-        Number.MIN_SAFE_INTEGER - 1, // Int.trunc
+        Number.MIN_SAFE_INTEGER - 1, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'negative integer',
@@ -73,20 +60,20 @@ Deno.test('Clamping.', async (test) => {
         -1, // Int.ceil
         -1, // Int.floor
         -1, // Int.round
-        -1, // Int.trunc
+        -1, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -1, // I4.ceil
         -1, // I4.floor
         -1, // I4.round
-        -1, // I4.trunc
+        -1, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'zero',
@@ -98,20 +85,20 @@ Deno.test('Clamping.', async (test) => {
         0, // Int.ceil
         0, // Int.floor
         0, // Int.round
-        0, // Int.trunc
+        0, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         0, // I4.ceil
         0, // I4.floor
         0, // I4.round
-        0, // I4.trunc
+        0, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'positive integer',
@@ -123,20 +110,20 @@ Deno.test('Clamping.', async (test) => {
         1, // Int.ceil
         1, // Int.floor
         1, // Int.round
-        1, // Int.trunc
+        1, // Int.clamp
         1, // Uint.ceil
         1, // Uint.floor
         1, // Uint.round
-        1, // Uint.trunc
+        1, // Uint.clamp
 
         1, // I4.ceil
         1, // I4.floor
         1, // I4.round
-        1, // I4.trunc
+        1, // I4.clamp
         1, // U4.ceil
         1, // U4.floor
         1, // U4.round
-        1, // U4.trunc
+        1, // U4.clamp
       ],
       [
         'max safe integer',
@@ -148,20 +135,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
         Number.MAX_SAFE_INTEGER, // Int.round
-        Number.MAX_SAFE_INTEGER, // Int.trunc
+        Number.MAX_SAFE_INTEGER, // Int.clamp
         Number.MAX_SAFE_INTEGER, // Uint.ceil
         Number.MAX_SAFE_INTEGER, // Uint.floor
         Number.MAX_SAFE_INTEGER, // Uint.round
-        Number.MAX_SAFE_INTEGER, // Uint.trunc
+        Number.MAX_SAFE_INTEGER, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         15, // U4.ceil
         15, // U4.floor
         15, // U4.round
-        15, // U4.trunc
+        15, // U4.clamp
       ],
       [
         'negative infinity',
@@ -173,20 +160,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
         Number.MIN_SAFE_INTEGER - 1, // Int.round
-        Number.MIN_SAFE_INTEGER - 1, // Int.trunc
+        Number.MIN_SAFE_INTEGER - 1, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'min fraction',
@@ -198,20 +185,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MIN_SAFE_INTEGER - 1, // Int.ceil
         Number.MIN_SAFE_INTEGER - 1, // Int.floor
         Number.MIN_SAFE_INTEGER - 1, // Int.round
-        Number.MIN_SAFE_INTEGER - 1, // Int.trunc
+        Number.MIN_SAFE_INTEGER - 1, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'negative fraction',
@@ -223,20 +210,20 @@ Deno.test('Clamping.', async (test) => {
         -1, // Int.ceil
         -2, // Int.floor
         -2, // Int.round
-        -1, // Int.trunc
+        -1, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -1, // I4.ceil
         -2, // I4.floor
         -2, // I4.round
-        -1, // I4.trunc
+        -1, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'positive fraction',
@@ -248,20 +235,20 @@ Deno.test('Clamping.', async (test) => {
         2, // Int.ceil
         1, // Int.floor
         2, // Int.round
-        1, // Int.trunc
+        1, // Int.clamp
         2, // Uint.ceil
         1, // Uint.floor
         2, // Uint.round
-        1, // Uint.trunc
+        1, // Uint.clamp
 
         2, // I4.ceil
         1, // I4.floor
         2, // I4.round
-        1, // I4.trunc
+        1, // I4.clamp
         2, // U4.ceil
         1, // U4.floor
         2, // U4.round
-        1, // U4.trunc
+        1, // U4.clamp
       ],
       [
         'max fraction',
@@ -273,20 +260,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
         Number.MAX_SAFE_INTEGER, // Int.round
-        Number.MAX_SAFE_INTEGER, // Int.trunc
+        Number.MAX_SAFE_INTEGER, // Int.clamp
         Number.MAX_SAFE_INTEGER, // Uint.ceil
         Number.MAX_SAFE_INTEGER, // Uint.floor
         Number.MAX_SAFE_INTEGER, // Uint.round
-        Number.MAX_SAFE_INTEGER, // Uint.trunc
+        Number.MAX_SAFE_INTEGER, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         15, // U4.ceil
         15, // U4.floor
         15, // U4.round
-        15, // U4.trunc
+        15, // U4.clamp
       ],
       [
         'positive infinity',
@@ -298,20 +285,20 @@ Deno.test('Clamping.', async (test) => {
         Number.MAX_SAFE_INTEGER, // Int.ceil
         Number.MAX_SAFE_INTEGER, // Int.floor
         Number.MAX_SAFE_INTEGER, // Int.round
-        Number.MAX_SAFE_INTEGER, // Int.trunc
+        Number.MAX_SAFE_INTEGER, // Int.clamp
         Number.MAX_SAFE_INTEGER, // Uint.ceil
         Number.MAX_SAFE_INTEGER, // Uint.floor
         Number.MAX_SAFE_INTEGER, // Uint.round
-        Number.MAX_SAFE_INTEGER, // Uint.trunc
+        Number.MAX_SAFE_INTEGER, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         15, // U4.ceil
         15, // U4.floor
         15, // U4.round
-        15, // U4.trunc
+        15, // U4.clamp
       ],
       [
         'I4 range -9.75',
@@ -323,20 +310,20 @@ Deno.test('Clamping.', async (test) => {
         -9, // Int.ceil
         -10, // Int.floor
         -10, // Int.round
-        -9, // Int.trunc
+        -9, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -9.5',
@@ -348,20 +335,20 @@ Deno.test('Clamping.', async (test) => {
         -9, // Int.ceil
         -10, // Int.floor
         -10, // Int.round
-        -9, // Int.trunc
+        -9, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -9.25',
@@ -373,20 +360,20 @@ Deno.test('Clamping.', async (test) => {
         -9, // Int.ceil
         -10, // Int.floor
         -9, // Int.round
-        -9, // Int.trunc
+        -9, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -9',
@@ -398,20 +385,20 @@ Deno.test('Clamping.', async (test) => {
         -9, // Int.ceil
         -9, // Int.floor
         -9, // Int.round
-        -9, // Int.trunc
+        -9, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -8.75',
@@ -423,20 +410,20 @@ Deno.test('Clamping.', async (test) => {
         -8, // Int.ceil
         -9, // Int.floor
         -9, // Int.round
-        -8, // Int.trunc
+        -8, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -8.5',
@@ -448,20 +435,20 @@ Deno.test('Clamping.', async (test) => {
         -8, // Int.ceil
         -9, // Int.floor
         -9, // Int.round
-        -8, // Int.trunc
+        -8, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -8.25',
@@ -473,20 +460,20 @@ Deno.test('Clamping.', async (test) => {
         -8, // Int.ceil
         -9, // Int.floor
         -8, // Int.round
-        -8, // Int.trunc
+        -8, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -8',
@@ -498,20 +485,20 @@ Deno.test('Clamping.', async (test) => {
         -8, // Int.ceil
         -8, // Int.floor
         -8, // Int.round
-        -8, // Int.trunc
+        -8, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -8, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -8, // I4.trunc
+        -8, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -7.75',
@@ -523,20 +510,20 @@ Deno.test('Clamping.', async (test) => {
         -7, // Int.ceil
         -8, // Int.floor
         -8, // Int.round
-        -7, // Int.trunc
+        -7, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -7, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -7, // I4.trunc
+        -7, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -7.5',
@@ -548,20 +535,20 @@ Deno.test('Clamping.', async (test) => {
         -7, // Int.ceil
         -8, // Int.floor
         -8, // Int.round
-        -7, // Int.trunc
+        -7, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -7, // I4.ceil
         -8, // I4.floor
         -8, // I4.round
-        -7, // I4.trunc
+        -7, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -7.25',
@@ -573,20 +560,20 @@ Deno.test('Clamping.', async (test) => {
         -7, // Int.ceil
         -8, // Int.floor
         -7, // Int.round
-        -7, // Int.trunc
+        -7, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -7, // I4.ceil
         -8, // I4.floor
         -7, // I4.round
-        -7, // I4.trunc
+        -7, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -7',
@@ -598,20 +585,20 @@ Deno.test('Clamping.', async (test) => {
         -7, // Int.ceil
         -7, // Int.floor
         -7, // Int.round
-        -7, // Int.trunc
+        -7, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -7, // I4.ceil
         -7, // I4.floor
         -7, // I4.round
-        -7, // I4.trunc
+        -7, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
 
       [
@@ -624,20 +611,20 @@ Deno.test('Clamping.', async (test) => {
         -6, // Int.ceil
         -7, // Int.floor
         -7, // Int.round
-        -6, // Int.trunc
+        -6, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -6, // I4.ceil
         -7, // I4.floor
         -7, // I4.round
-        -6, // I4.trunc
+        -6, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -6.5',
@@ -649,20 +636,20 @@ Deno.test('Clamping.', async (test) => {
         -6, // Int.ceil
         -7, // Int.floor
         -7, // Int.round
-        -6, // Int.trunc
+        -6, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -6, // I4.ceil
         -7, // I4.floor
         -7, // I4.round
-        -6, // I4.trunc
+        -6, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -6.25',
@@ -674,20 +661,20 @@ Deno.test('Clamping.', async (test) => {
         -6, // Int.ceil
         -7, // Int.floor
         -6, // Int.round
-        -6, // Int.trunc
+        -6, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -6, // I4.ceil
         -7, // I4.floor
         -6, // I4.round
-        -6, // I4.trunc
+        -6, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range -6',
@@ -699,20 +686,20 @@ Deno.test('Clamping.', async (test) => {
         -6, // Int.ceil
         -6, // Int.floor
         -6, // Int.round
-        -6, // Int.trunc
+        -6, // Int.clamp
         0, // Uint.ceil
         0, // Uint.floor
         0, // Uint.round
-        0, // Uint.trunc
+        0, // Uint.clamp
 
         -6, // I4.ceil
         -6, // I4.floor
         -6, // I4.round
-        -6, // I4.trunc
+        -6, // I4.clamp
         0, // U4.ceil
         0, // U4.floor
         0, // U4.round
-        0, // U4.trunc
+        0, // U4.clamp
       ],
       [
         'I4 range 6',
@@ -724,20 +711,20 @@ Deno.test('Clamping.', async (test) => {
         6, // Int.ceil
         6, // Int.floor
         6, // Int.round
-        6, // Int.trunc
+        6, // Int.clamp
         6, // Uint.ceil
         6, // Uint.floor
         6, // Uint.round
-        6, // Uint.trunc
+        6, // Uint.clamp
 
         6, // I4.ceil
         6, // I4.floor
         6, // I4.round
-        6, // I4.trunc
+        6, // I4.clamp
         6, // U4.ceil
         6, // U4.floor
         6, // U4.round
-        6, // U4.trunc
+        6, // U4.clamp
       ],
       [
         'I4 range 6.25',
@@ -749,20 +736,20 @@ Deno.test('Clamping.', async (test) => {
         7, // Int.ceil
         6, // Int.floor
         6, // Int.round
-        6, // Int.trunc
+        6, // Int.clamp
         7, // Uint.ceil
         6, // Uint.floor
         6, // Uint.round
-        6, // Uint.trunc
+        6, // Uint.clamp
 
         7, // I4.ceil
         6, // I4.floor
         6, // I4.round
-        6, // I4.trunc
+        6, // I4.clamp
         7, // U4.ceil
         6, // U4.floor
         6, // U4.round
-        6, // U4.trunc
+        6, // U4.clamp
       ],
       [
         'I4 range 6.5',
@@ -774,20 +761,20 @@ Deno.test('Clamping.', async (test) => {
         7, // Int.ceil
         6, // Int.floor
         7, // Int.round
-        6, // Int.trunc
+        6, // Int.clamp
         7, // Uint.ceil
         6, // Uint.floor
         7, // Uint.round
-        6, // Uint.trunc
+        6, // Uint.clamp
 
         7, // I4.ceil
         6, // I4.floor
         7, // I4.round
-        6, // I4.trunc
+        6, // I4.clamp
         7, // U4.ceil
         6, // U4.floor
         7, // U4.round
-        6, // U4.trunc
+        6, // U4.clamp
       ],
       [
         'I4 range 6.75',
@@ -799,20 +786,20 @@ Deno.test('Clamping.', async (test) => {
         7, // Int.ceil
         6, // Int.floor
         7, // Int.round
-        6, // Int.trunc
+        6, // Int.clamp
         7, // Uint.ceil
         6, // Uint.floor
         7, // Uint.round
-        6, // Uint.trunc
+        6, // Uint.clamp
 
         7, // I4.ceil
         6, // I4.floor
         7, // I4.round
-        6, // I4.trunc
+        6, // I4.clamp
         7, // U4.ceil
         6, // U4.floor
         7, // U4.round
-        6, // U4.trunc
+        6, // U4.clamp
       ],
       [
         'I4 range 7',
@@ -824,20 +811,20 @@ Deno.test('Clamping.', async (test) => {
         7, // Int.ceil
         7, // Int.floor
         7, // Int.round
-        7, // Int.trunc
+        7, // Int.clamp
         7, // Uint.ceil
         7, // Uint.floor
         7, // Uint.round
-        7, // Uint.trunc
+        7, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         7, // U4.ceil
         7, // U4.floor
         7, // U4.round
-        7, // U4.trunc
+        7, // U4.clamp
       ],
       [
         'I4 range 7.25',
@@ -849,20 +836,20 @@ Deno.test('Clamping.', async (test) => {
         8, // Int.ceil
         7, // Int.floor
         7, // Int.round
-        7, // Int.trunc
+        7, // Int.clamp
         8, // Uint.ceil
         7, // Uint.floor
         7, // Uint.round
-        7, // Uint.trunc
+        7, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         8, // U4.ceil
         7, // U4.floor
         7, // U4.round
-        7, // U4.trunc
+        7, // U4.clamp
       ],
       [
         'I4 range 7.5',
@@ -874,20 +861,20 @@ Deno.test('Clamping.', async (test) => {
         8, // Int.ceil
         7, // Int.floor
         8, // Int.round
-        7, // Int.trunc
+        7, // Int.clamp
         8, // Uint.ceil
         7, // Uint.floor
         8, // Uint.round
-        7, // Uint.trunc
+        7, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         8, // U4.ceil
         7, // U4.floor
         8, // U4.round
-        7, // U4.trunc
+        7, // U4.clamp
       ],
       [
         'I4 range 7.75',
@@ -899,20 +886,20 @@ Deno.test('Clamping.', async (test) => {
         8, // Int.ceil
         7, // Int.floor
         8, // Int.round
-        7, // Int.trunc
+        7, // Int.clamp
         8, // Uint.ceil
         7, // Uint.floor
         8, // Uint.round
-        7, // Uint.trunc
+        7, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         8, // U4.ceil
         7, // U4.floor
         8, // U4.round
-        7, // U4.trunc
+        7, // U4.clamp
       ],
       [
         'I4 range 8',
@@ -924,20 +911,20 @@ Deno.test('Clamping.', async (test) => {
         8, // Int.ceil
         8, // Int.floor
         8, // Int.round
-        8, // Int.trunc
+        8, // Int.clamp
         8, // Uint.ceil
         8, // Uint.floor
         8, // Uint.round
-        8, // Uint.trunc
+        8, // Uint.clamp
 
         7, // I4.ceil
         7, // I4.floor
         7, // I4.round
-        7, // I4.trunc
+        7, // I4.clamp
         8, // U4.ceil
         8, // U4.floor
         8, // U4.round
-        8, // U4.trunc
+        8, // U4.clamp
       ],
 
       [
@@ -949,19 +936,19 @@ Deno.test('Clamping.', async (test) => {
         undefined, // Int.ceil
         undefined, // Int.floor
         undefined, // Int.round
-        undefined, // Int.trunc
+        undefined, // Int.clamp
         undefined, // Uint.ceil
         undefined, // Uint.floor
         undefined, // Uint.round
-        undefined, // Uint.trunc
+        undefined, // Uint.clamp
         undefined, // I4.ceil
         undefined, // I4.floor
         undefined, // I4.round
-        undefined, // I4.trunc
+        undefined, // I4.clamp
         undefined, // U4.ceil
         undefined, // U4.floor
         undefined, // U4.round
-        undefined, // U4.trunc
+        undefined, // U4.clamp
       ],
     ] as const
   ) {
@@ -972,38 +959,38 @@ Deno.test('Clamping.', async (test) => {
         assertThrows(() => Int.ceil(value))
         assertThrows(() => Int.floor(value))
         assertThrows(() => Int.round(value))
-        assertThrows(() => Int.trunc(value))
+        assertThrows(() => Int.clamp(value))
         assertThrows(() => Uint.ceil(value))
         assertThrows(() => Uint.floor(value))
         assertThrows(() => Uint.round(value))
-        assertThrows(() => Uint.trunc(value))
+        assertThrows(() => Uint.clamp(value))
         assertThrows(() => I4.ceil(value))
         assertThrows(() => I4.floor(value))
         assertThrows(() => I4.round(value))
-        assertThrows(() => I4.trunc(value))
+        assertThrows(() => I4.clamp(value))
         assertThrows(() => U4.ceil(value))
         assertThrows(() => U4.floor(value))
         assertThrows(() => U4.round(value))
-        assertThrows(() => U4.trunc(value))
+        assertThrows(() => U4.clamp(value))
       } else {
         assertEquals(Num.clamp(value), Num(numClampExpected))
         assertEquals(Unum.clamp(value), Unum(unumClampExpected))
         assertEquals(Int.ceil(value), Int(intCeilExpected))
         assertEquals(Int.floor(value), Int(intFloorExpected))
         assertEquals(Int.round(value), Int(intRoundExpected))
-        assertEquals(Int.trunc(value), Int(intTruncExpected))
+        assertEquals(Int.clamp(value), Int(intClampExpected))
         assertEquals(Uint.ceil(value), Uint(uintCeilExpected))
         assertEquals(Uint.floor(value), Uint(uintFloorExpected))
         assertEquals(Uint.round(value), Uint(uintRoundExpected))
-        assertEquals(Uint.trunc(value), Uint(uintTruncExpected))
+        assertEquals(Uint.clamp(value), Uint(uintClampExpected))
         assertEquals(I4.ceil(value), I4(i4CeilExpected))
         assertEquals(I4.floor(value), I4(i4FloorExpected))
         assertEquals(I4.round(value), I4(i4RoundExpected))
-        assertEquals(I4.trunc(value), I4(i4TruncExpected))
+        assertEquals(I4.clamp(value), I4(i4ClampExpected))
         assertEquals(U4.ceil(value), U4(u4CeilExpected))
         assertEquals(U4.floor(value), U4(u4FloorExpected))
         assertEquals(U4.round(value), U4(u4RoundExpected))
-        assertEquals(U4.trunc(value), U4(u4TruncExpected))
+        assertEquals(U4.clamp(value), U4(u4ClampExpected))
       }
     })
   }

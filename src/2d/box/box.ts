@@ -25,6 +25,7 @@ export interface NumericalBox<T> extends Box<T> {
   areaNum: number
   /** The center coordinate. */
   center: XY<T>
+  centerClamp: XY<T>
   centerNum: NumXY
   /**
    * True if passed box fits within this box possibly touching or overlapping.
@@ -58,6 +59,9 @@ export interface NumericalBox<T> extends Box<T> {
   intersection(x: number, y: number, w: number, h: number): this
   intersection(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   intersection(box: Readonly<Box<number>>): this
+  intersectionClamp(x: number, y: number, w: number, h: number): this
+  intersectionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  intersectionClamp(box: Readonly<Box<number>>): this
   /**
    * Return true if self and box are overlapping, false if only touching or
    * independent.
@@ -78,12 +82,18 @@ export interface NumericalBox<T> extends Box<T> {
   /** Reposition the box by arguments. */
   moveBy(x: number, y: number): this
   moveBy(xy: Readonly<XY<number>>): this
+  moveByClamp(x: number, y: number): this
+  moveByClamp(xy: Readonly<XY<number>>): this
   /** Center the box on arguments. */
   moveCenterTo(x: number, y: number): this
   moveCenterTo(xy: Readonly<XY<number>>): this
+  moveCenterToClamp(x: number, y: number): this
+  moveCenterToClamp(xy: Readonly<XY<number>>): this
   /** Reposition the box to arguments. */
   moveTo(x: number, y: number): this
   moveTo(xy: Readonly<XY<number>>): this
+  moveToClamp(x: number, y: number): this
+  moveToClamp(xy: Readonly<XY<number>>): this
   /**
    * Recomputes as a front-facing Box range with coordinates reordered such that
    * each component of start is less than or equal to end. The result is always
@@ -95,16 +105,26 @@ export interface NumericalBox<T> extends Box<T> {
   set(x: number, y: number, w: number, h: number): this
   set(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   set(box: Readonly<Box<number>>): this
+  setClamp(x: number, y: number, w: number, h: number): this
+  setClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  setClamp(box: Readonly<Box<number>>): this
   /** Resize the box by arguments. */
   sizeBy(x: number, y: number): this
   sizeBy(xy: Readonly<XY<number>>): this
+  sizeByClamp(x: number, y: number): this
+  sizeByClamp(xy: Readonly<XY<number>>): this
   /** Resize the box to arguments. */
   sizeTo(x: number, y: number): this
   sizeTo(xy: Readonly<XY<number>>): this
+  sizeToClamp(x: number, y: number): this
+  sizeToClamp(xy: Readonly<XY<number>>): this
   /** Sets the minimum rectangle occupied by both box and arguments. */
   union(x: number, y: number, w: number, h: number): this
   union(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   union(box: Readonly<Box<number>>): this
+  unionClamp(x: number, y: number, w: number, h: number): this
+  unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  unionClamp(box: Readonly<Box<number>>): this
   /** The box coordinates. */
   xy: XY<T>
   /** The box dimensions. */
@@ -121,7 +141,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   centerCeil: XY<T>
   centerFloor: XY<T>
   centerRound: XY<T>
-  centerTrunc: XY<T>
 
   intersectionCeil(x: number, y: number, w: number, h: number): this
   intersectionCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
@@ -132,9 +151,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   intersectionRound(x: number, y: number, w: number, h: number): this
   intersectionRound(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   intersectionRound(box: Readonly<Box<number>>): this
-  intersectionTrunc(x: number, y: number, w: number, h: number): this
-  intersectionTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  intersectionTrunc(box: Readonly<Box<number>>): this
 
   moveByCeil(x: number, y: number): this
   moveByCeil(xy: Readonly<XY<number>>): this
@@ -142,8 +158,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   moveByFloor(xy: Readonly<XY<number>>): this
   moveByRound(x: number, y: number): this
   moveByRound(xy: Readonly<XY<number>>): this
-  moveByTrunc(x: number, y: number): this
-  moveByTrunc(xy: Readonly<XY<number>>): this
 
   moveCenterToCeil(x: number, y: number): this
   moveCenterToCeil(xy: Readonly<XY<number>>): this
@@ -151,8 +165,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   moveCenterToFloor(xy: Readonly<XY<number>>): this
   moveCenterToRound(x: number, y: number): this
   moveCenterToRound(xy: Readonly<XY<number>>): this
-  moveCenterToTrunc(x: number, y: number): this
-  moveCenterToTrunc(xy: Readonly<XY<number>>): this
 
   moveToCeil(x: number, y: number): this
   moveToCeil(xy: Readonly<XY<number>>): this
@@ -160,8 +172,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   moveToFloor(xy: Readonly<XY<number>>): this
   moveToRound(x: number, y: number): this
   moveToRound(xy: Readonly<XY<number>>): this
-  moveToTrunc(x: number, y: number): this
-  moveToTrunc(xy: Readonly<XY<number>>): this
 
   setCeil(x: number, y: number, w: number, h: number): this
   setCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
@@ -172,9 +182,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   setRound(x: number, y: number, w: number, h: number): this
   setRound(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   setRound(box: Readonly<Box<number>>): this
-  setTrunc(x: number, y: number, w: number, h: number): this
-  setTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  setTrunc(box: Readonly<Box<number>>): this
 
   sizeByCeil(x: number, y: number): this
   sizeByCeil(xy: Readonly<XY<number>>): this
@@ -182,8 +189,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   sizeByFloor(xy: Readonly<XY<number>>): this
   sizeByRound(x: number, y: number): this
   sizeByRound(xy: Readonly<XY<number>>): this
-  sizeByTrunc(x: number, y: number): this
-  sizeByTrunc(xy: Readonly<XY<number>>): this
 
   sizeToCeil(x: number, y: number): this
   sizeToCeil(xy: Readonly<XY<number>>): this
@@ -191,8 +196,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   sizeToFloor(xy: Readonly<XY<number>>): this
   sizeToRound(x: number, y: number): this
   sizeToRound(xy: Readonly<XY<number>>): this
-  sizeToTrunc(x: number, y: number): this
-  sizeToTrunc(xy: Readonly<XY<number>>): this
 
   unionCeil(x: number, y: number, w: number, h: number): this
   unionCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
@@ -203,32 +206,6 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   unionRound(x: number, y: number, w: number, h: number): this
   unionRound(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   unionRound(box: Readonly<Box<number>>): this
-  unionTrunc(x: number, y: number, w: number, h: number): this
-  unionTrunc(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  unionTrunc(box: Readonly<Box<number>>): this
-}
-
-export interface FractionalBox<T> extends NumericalBox<T> {
-  centerClamp: XY<T>
-  intersectionClamp(x: number, y: number, w: number, h: number): this
-  intersectionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  intersectionClamp(box: Readonly<Box<number>>): this
-  moveByClamp(x: number, y: number): this
-  moveByClamp(xy: Readonly<XY<number>>): this
-  moveCenterToClamp(x: number, y: number): this
-  moveCenterToClamp(xy: Readonly<XY<number>>): this
-  moveToClamp(x: number, y: number): this
-  moveToClamp(xy: Readonly<XY<number>>): this
-  setClamp(x: number, y: number, w: number, h: number): this
-  setClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  setClamp(box: Readonly<Box<number>>): this
-  sizeByClamp(x: number, y: number): this
-  sizeByClamp(xy: Readonly<XY<number>>): this
-  sizeToClamp(x: number, y: number): this
-  sizeToClamp(xy: Readonly<XY<number>>): this
-  unionClamp(x: number, y: number, w: number, h: number): this
-  unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
-  unionClamp(box: Readonly<Box<number>>): this
 }
 
 export interface BoxJSON {

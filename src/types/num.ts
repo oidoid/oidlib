@@ -54,37 +54,31 @@ export type Signedness = 'Signed' | 'Unsigned'
 
 export type IntTypeName = `${'I' | 'U'}${4 | 8 | 16 | 32}` | 'Int' | 'Uint'
 export type NumTypeName = 'Num' | 'Unum'
-export type AnyNumTypeName = IntTypeName | NumTypeName
+export type NumericalTypeName = IntTypeName | NumTypeName
 
-export type IntCoercion = 'Ceil' | 'Floor' | 'Round' | 'Trunc'
+export type IntCoercion = 'Ceil' | 'Clamp' | 'Floor' | 'Round'
 export type NumCoercion = 'Clamp'
 
-export interface AnyNumNamespace<T extends number> {
-  readonly name: AnyNumTypeName
+export interface NumericalNamespace<T extends number> {
+  readonly name: NumericalTypeName
   readonly min: T
   readonly max: T
   readonly signedness: Signedness
-
   /**
    * Cast or assert val (no change). val is interpreted as a logical number,
    * not bits. For example, `I8(0xff)` will fail as 255 is out-of-range for a
    * signed eight-bit number.
    */
   (num: number): T
-
+  /**
+   * Values exceeding the range are limited to the corresponding logical minimum
+   * or maximum inclusive endpoint. Integers are saturated and truncated.
+   */
+  clamp(num: number): T
   is(num: number): num is T
 }
 
-export interface NumNamespace<T extends number> extends AnyNumNamespace<T> {
-  readonly name: NumTypeName
-  /**
-   * Values exceeding the range are limited to the corresponding logical minimum
-   * or maximum inclusive endpoint.
-   */
-  clamp(num: number): T
-}
-
-export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
+export interface IntNamespace<T extends Int> extends NumericalNamespace<T> {
   readonly name: IntTypeName
   readonly width: T
 
@@ -116,8 +110,6 @@ export interface IntNamespace<T extends Int> extends AnyNumNamespace<T> {
   floor(num: number): T
   /** Clamp the rounding of num. This is a saturating round(). */
   round(num: number): T
-  /** Clamp the truncation of num. This is a saturating trunc(). */
-  trunc(num: number): T
 }
 
 abstract class NumNamespaceImpl<T extends number> {
@@ -125,12 +117,12 @@ abstract class NumNamespaceImpl<T extends number> {
    * Private to avoid enumerable. The static constructors will define the name
    * on the function object.
    */
-  readonly #name: AnyNumTypeName
+  readonly #name: NumericalTypeName
   abstract readonly min: T
   abstract readonly max: T
   readonly signedness: Signedness
 
-  protected constructor(name: AnyNumTypeName, signedness: Signedness) {
+  protected constructor(name: NumericalTypeName, signedness: Signedness) {
     this.#name = name
     this.signedness = signedness
   }
@@ -156,7 +148,7 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
   readonly width: T
 
   static new<T extends Int>(
-    name: AnyNumTypeName,
+    name: NumericalTypeName,
     width: number,
     signedness: Signedness,
   ): IntNamespace<T> {
@@ -166,7 +158,7 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
     return Object.assign(constructor, base) as IntNamespace<T>
   }
 
-  constructor(name: AnyNumTypeName, width: number, signedness: Signedness) {
+  constructor(name: NumericalTypeName, width: number, signedness: Signedness) {
     super(name, signedness)
     assert(
       width > 0 && Number.isInteger(width),
@@ -191,6 +183,10 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
 
   readonly ceil = (num: number): T => {
     return <T> NumUtil.clamp(Math.ceil(num), this.min, this.max)
+  }
+
+  readonly clamp = (num: number): T => {
+    return <T> NumUtil.clamp(Math.trunc(num), this.min, this.max)
   }
 
   readonly floor = (num: number): T => {
@@ -219,10 +215,6 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
   readonly round = (num: number): T => {
     return <T> NumUtil.clamp(NumUtil.round(num), this.min, this.max)
   }
-
-  readonly trunc = (num: number): T => {
-    return <T> NumUtil.clamp(Math.trunc(num), this.min, this.max)
-  }
 }
 
 class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
@@ -230,19 +222,19 @@ class NumberNumNamespaceImpl<T extends number> extends NumNamespaceImpl<T> {
   override readonly max: T
 
   static new<T extends number>(
-    name: AnyNumTypeName,
+    name: NumericalTypeName,
     signedness: Signedness,
     min: number,
     max: number,
-  ): NumNamespace<T> {
+  ): NumericalNamespace<T> {
     const base = new NumberNumNamespaceImpl<T>(name, signedness, min, max)
     const constructor = base.cast.bind(base)
     Object.defineProperty(constructor, 'name', { value: name })
-    return Object.assign(constructor, base) as NumNamespace<T>
+    return Object.assign(constructor, base) as NumericalNamespace<T>
   }
 
   constructor(
-    name: AnyNumTypeName,
+    name: NumericalTypeName,
     signedness: Signedness,
     min: number,
     max: number,
@@ -305,13 +297,13 @@ export const Uint: IntNamespace<Uint> = IntNumNamespaceImpl.new(
   53,
   'Unsigned',
 )
-export const Num: NumNamespace<number> = NumberNumNamespaceImpl.new(
+export const Num: NumericalNamespace<number> = NumberNumNamespaceImpl.new(
   'Num',
   'Signed',
   Number.NEGATIVE_INFINITY,
   Number.POSITIVE_INFINITY,
 )
-export const Unum: NumNamespace<Unum> = NumberNumNamespaceImpl.new(
+export const Unum: NumericalNamespace<Unum> = NumberNumNamespaceImpl.new(
   'Unum',
   'Unsigned',
   0,

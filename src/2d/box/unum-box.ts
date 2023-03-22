@@ -2,15 +2,15 @@ import {
   argsToBox,
   Box,
   BoxJSON,
-  FractionalBox,
   NumBox,
+  NumericalBox,
   NumXY,
   Unum,
   UnumXY,
   XY,
 } from '@/ooz'
 
-export class UnumBox implements FractionalBox<Unum> {
+export class UnumBox implements NumericalBox<Unum> {
   static clamp(x: number, y: number, w: number, h: number): UnumBox
   static clamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): UnumBox
   static clamp(box: Readonly<Box<number>>): UnumBox

@@ -18,6 +18,17 @@ for (
     ['fractions', 1.9, 9.9, { x: Int(1), y: Int(9) }],
   ] as const
 ) {
+  Deno.test(`Clamp: ${name}.`, () => {
+    assertEquals(IntXY.clamp(x, y).toJSON(), expected)
+  })
+}
+
+for (
+  const [name, x, y, expected] of [
+    ['integers', 1, 2, { x: Int(1), y: Int(2) }],
+    ['fractions', 1.9, 9.9, { x: Int(1), y: Int(9) }],
+  ] as const
+) {
   Deno.test(`Flooring: ${name}.`, () => {
     assertEquals(IntXY.floor(x, y).toJSON(), expected)
   })
@@ -31,17 +42,6 @@ for (
 ) {
   Deno.test(`Round: ${name}.`, () => {
     assertEquals(IntXY.round(x, y).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, expected] of [
-    ['integers', 1, 2, { x: Int(1), y: Int(2) }],
-    ['fractions', 1.9, 9.9, { x: Int(1), y: Int(9) }],
-  ] as const
-) {
-  Deno.test(`Truncate: ${name}.`, () => {
-    assertEquals(IntXY.trunc(x, y).toJSON(), expected)
   })
 }
 
@@ -80,8 +80,8 @@ for (
     ],
   ] as const
 ) {
-  Deno.test(`addTrunc: ${name}.`, () =>
-    assertEquals(lhs.addTrunc(rhs), expected))
+  Deno.test(`addClamp: ${name}.`, () =>
+    assertEquals(lhs.addClamp(rhs), expected))
 }
 
 for (
@@ -160,8 +160,8 @@ for (
     ],
   ] as const
 ) {
-  Deno.test(`subTrunc: ${name}.`, () =>
-    assertEquals(lhs.subTrunc(rhs), expected))
+  Deno.test(`subClamp: ${name}.`, () =>
+    assertEquals(lhs.subClamp(rhs), expected))
 }
 
 Deno.test('toJSON()', () => {

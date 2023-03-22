@@ -10,6 +10,15 @@ export class UintXY implements IntegralXY<Uint> {
     )
   }
 
+  static clamp(x: number, y: number): UintXY
+  static clamp(xy: Readonly<XY<number>>): UintXY
+  static clamp(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
+    return new this(
+      Uint.clamp(typeof xXY == 'number' ? xXY : xXY.x),
+      Uint.clamp(typeof xXY == 'number' ? y! : xXY.y),
+    )
+  }
+
   static floor(x: number, y: number): UintXY
   static floor(xy: Readonly<XY<number>>): UintXY
   static floor(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
@@ -25,15 +34,6 @@ export class UintXY implements IntegralXY<Uint> {
     return new this(
       Uint.round(typeof xXY == 'number' ? xXY : xXY.x),
       Uint.round(typeof xXY == 'number' ? y! : xXY.y),
-    )
-  }
-
-  static trunc(x: number, y: number): UintXY
-  static trunc(xy: Readonly<XY<number>>): UintXY
-  static trunc(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
-    return new this(
-      Uint.trunc(typeof xXY == 'number' ? xXY : xXY.x),
-      Uint.trunc(typeof xXY == 'number' ? y! : xXY.y),
     )
   }
 
@@ -58,8 +58,8 @@ export class UintXY implements IntegralXY<Uint> {
   }
 
   absClamp(): this {
-    this.#x = Uint.trunc(Math.abs(this.#x))
-    this.#y = Uint.trunc(Math.abs(this.#y))
+    this.#x = Uint.clamp(Math.abs(this.#x))
+    this.#y = Uint.clamp(Math.abs(this.#y))
     return this
   }
 
@@ -79,6 +79,14 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
+  addClamp(x: number, y: number): this
+  addClamp(xy: Readonly<XY<number>>): this
+  addClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   addFloor(x: number, y: number): this
   addFloor(xy: Readonly<XY<number>>): this
   addFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -92,14 +100,6 @@ export class UintXY implements IntegralXY<Uint> {
   addRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.round(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  addTrunc(x: number, y: number): this
-  addTrunc(xy: Readonly<XY<number>>): this
-  addTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.trunc(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -119,6 +119,14 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
+  divClamp(x: number, y: number): this
+  divClamp(xy: Readonly<XY<number>>): this
+  divClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   divFloor(x: number, y: number): this
   divFloor(xy: Readonly<XY<number>>): this
   divFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -132,14 +140,6 @@ export class UintXY implements IntegralXY<Uint> {
   divRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.round(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  divTrunc(x: number, y: number): this
-  divTrunc(xy: Readonly<XY<number>>): this
-  divTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.trunc(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -159,6 +159,14 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
+  mulClamp(x: number, y: number): this
+  mulClamp(xy: Readonly<XY<number>>): this
+  mulClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   mulFloor(x: number, y: number): this
   mulFloor(xy: Readonly<XY<number>>): this
   mulFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -172,14 +180,6 @@ export class UintXY implements IntegralXY<Uint> {
   mulRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.round(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
-  mulTrunc(x: number, y: number): this
-  mulTrunc(xy: Readonly<XY<number>>): this
-  mulTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.trunc(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -199,6 +199,14 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
+  subClamp(x: number, y: number): this
+  subClamp(xy: Readonly<XY<number>>): this
+  subClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
   subFloor(x: number, y: number): this
   subFloor(xy: Readonly<XY<number>>): this
   subFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -215,20 +223,12 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
-  subTrunc(x: number, y: number): this
-  subTrunc(xy: Readonly<XY<number>>): this
-  subTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.trunc(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
   get area(): Uint {
     return Uint(this.#x * this.#y)
   }
 
   get areaClamp(): Uint {
-    return Uint.trunc(this.#x * this.#y)
+    return Uint.clamp(this.#x * this.#y)
   }
 
   get areaNum(): number {
@@ -251,7 +251,7 @@ export class UintXY implements IntegralXY<Uint> {
   dotClamp(x: number, y: number): Uint
   dotClamp(xy: Readonly<XY<number>>): Uint
   dotClamp(xXY: number | Readonly<XY<number>>, y?: number): Uint {
-    return Uint.trunc(
+    return Uint.clamp(
       this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
         this.#y * (typeof xXY == 'number' ? y! : xXY.y),
     )
@@ -279,16 +279,16 @@ export class UintXY implements IntegralXY<Uint> {
     return Uint.ceil(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
+  get lenClamp(): Uint {
+    return Uint.clamp(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
+  }
+
   get lenFloor(): Uint {
     return Uint.floor(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
   get lenRound(): Uint {
     return Uint.round(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
-  }
-
-  get lenTrunc(): Uint {
-    return Uint.trunc(Math.sqrt(this.#x * this.#x + this.#y * this.#y))
   }
 
   get lenNum(): number {
@@ -308,6 +308,16 @@ export class UintXY implements IntegralXY<Uint> {
   maxCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.ceil(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.ceil(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
+  maxClamp(x: number, y: number): this
+  maxClamp(xy: Readonly<XY<number>>): this
+  maxClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(
+      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+    )
+    this.#y = Uint.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -331,16 +341,6 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
-  maxTrunc(x: number, y: number): this
-  maxTrunc(xy: Readonly<XY<number>>): this
-  maxTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
-    this.#y = Uint.trunc(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
   min(x: number, y: number): this
   min(xy: Readonly<XY<number>>): this
   min(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -354,6 +354,16 @@ export class UintXY implements IntegralXY<Uint> {
   minCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.ceil(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
     this.#y = Uint.ceil(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    return this
+  }
+
+  minClamp(x: number, y: number): this
+  minClamp(xy: Readonly<XY<number>>): this
+  minClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(
+      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+    )
+    this.#y = Uint.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
     return this
   }
 
@@ -377,16 +387,6 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
-  minTrunc(x: number, y: number): this
-  minTrunc(xy: Readonly<XY<number>>): this
-  minTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
-    )
-    this.#y = Uint.trunc(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
-    return this
-  }
-
   set(x: number, y: number): this
   set(xy: Readonly<XY<number>>): this
   set(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -403,6 +403,14 @@ export class UintXY implements IntegralXY<Uint> {
     return this
   }
 
+  setClamp(x: number, y: number): this
+  setClamp(xy: Readonly<XY<number>>): this
+  setClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    this.#x = Uint.clamp(typeof xXY == 'number' ? xXY : xXY.x)
+    this.#y = Uint.clamp(typeof xXY == 'number' ? y! : xXY.y)
+    return this
+  }
+
   setFloor(x: number, y: number): this
   setFloor(xy: Readonly<XY<number>>): this
   setFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
@@ -416,14 +424,6 @@ export class UintXY implements IntegralXY<Uint> {
   setRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(typeof xXY == 'number' ? xXY : xXY.x)
     this.#y = Uint.round(typeof xXY == 'number' ? y! : xXY.y)
-    return this
-  }
-
-  setTrunc(x: number, y: number): this
-  setTrunc(xy: Readonly<XY<number>>): this
-  setTrunc(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.trunc(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint.trunc(typeof xXY == 'number' ? y! : xXY.y)
     return this
   }
 
