@@ -52,8 +52,13 @@ for (
   ] as const
 ) {
   Deno.test(`Construct: ${name}.`, () => {
-    if (expected == null) assertThrows(() => new IntXY(x, y))
-    else assertEquals(new IntXY(x, y).toJSON(), expected)
+    if (expected == null) {
+      assertThrows(() => new IntXY(x, y))
+      assertThrows(() => new IntXY(0, 0).construct(x, y))
+    } else {
+      assertEquals(new IntXY(x, y).toJSON(), expected)
+      assertEquals(new IntXY(0, 0).construct(x, y).toJSON(), expected)
+    }
   })
 }
 

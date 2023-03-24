@@ -72,19 +72,37 @@ for (
   ] as const
 ) {
   Deno.test(`Construct(x, y, w, h) ${name}.`, () => {
-    if (expected == undefined) assertThrows(() => new IntBox(x, y, w, h))
-    else assertEquals(new IntBox(x, y, w, h).toJSON(), expected)
+    if (expected == undefined) {
+      assertThrows(() => new IntBox(x, y, w, h))
+      assertThrows(() => new IntBox(0, 0, 0, 0).construct(x, y, w, h))
+    } else {
+      assertEquals(new IntBox(x, y, w, h).toJSON(), expected)
+      assertEquals(
+        new IntBox(0, 0, 0, 0).construct(x, y, w, h).toJSON(),
+        expected,
+      )
+    }
   })
 }
 
-Deno.test(`Construct(xy, xy).`, () =>
+Deno.test(`Construct(xy, xy).`, () => {
   assertEquals(
     new IntBox(new IntXY(1, 2), new IntXY(3, 4)),
     new IntBox(1, 2, 3, 4),
-  ))
+  )
+  assertEquals(
+    new IntBox(0, 0, 0, 0).construct(new IntXY(1, 2), new IntXY(3, 4)),
+    new IntBox(1, 2, 3, 4),
+  )
+})
 
-Deno.test(`Construct(box).`, () =>
-  assertEquals(new IntBox(new I8Box(1, 2, 3, 4)), new IntBox(1, 2, 3, 4)))
+Deno.test(`Construct(box).`, () => {
+  assertEquals(new IntBox(new I8Box(1, 2, 3, 4)), new IntBox(1, 2, 3, 4))
+  assertEquals(
+    new IntBox(0, 0, 0, 0).construct(new I8Box(1, 2, 3, 4)),
+    new IntBox(1, 2, 3, 4),
+  )
+})
 
 for (
   const [name, box, expected] of [

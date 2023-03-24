@@ -112,6 +112,18 @@ export class UnumXY implements NumericalXY<Unum> {
     return (this.#x * this.#y)
   }
 
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  construct(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return new UnumXY(xXY as number, y as number) as this
+  }
+
+  constructClamp(x: number, y: number): this
+  constructClamp(xy: Readonly<XY<number>>): this
+  constructClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return UnumXY.clamp(xXY as number, y as number) as this
+  }
+
   copy(): this {
     return new UnumXY(this.#x, this.#y) as this
   }

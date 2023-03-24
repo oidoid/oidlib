@@ -235,6 +235,36 @@ export class U8XY implements IntegralXY<U8> {
     return (this.#x * this.#y)
   }
 
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  construct(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return new U8XY(xXY as number, y as number) as this
+  }
+
+  constructCeil(x: number, y: number): this
+  constructCeil(xy: Readonly<XY<number>>): this
+  constructCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U8XY.ceil(xXY as number, y as number) as this
+  }
+
+  constructClamp(x: number, y: number): this
+  constructClamp(xy: Readonly<XY<number>>): this
+  constructClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U8XY.clamp(xXY as number, y as number) as this
+  }
+
+  constructFloor(x: number, y: number): this
+  constructFloor(xy: Readonly<XY<number>>): this
+  constructFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U8XY.floor(xXY as number, y as number) as this
+  }
+
+  constructRound(x: number, y: number): this
+  constructRound(xy: Readonly<XY<number>>): this
+  constructRound(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U8XY.round(xXY as number, y as number) as this
+  }
+
   copy(): this {
     return new U8XY(this.#x, this.#y) as this
   }

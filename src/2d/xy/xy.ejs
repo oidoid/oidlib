@@ -52,6 +52,20 @@ export class <%- type %>XY implements <% if (type == 'Num' || type == 'Unum') { 
   }
   <% }) %>
 
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  construct(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return new <%- type %>XY(xXY as number, y as number) as this
+  }
+
+  <% coercions.forEach(coerce =>{ %>
+  construct<%- coerce %>(x: number, y: number): this
+  construct<%- coerce %>(xy: Readonly<XY<number>>): this
+  construct<%- coerce %>(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return <%- type %>XY.<%- coerce.toLowerCase() %>(xXY as number, y as number) as this
+  }
+  <% }) %>
+
   copy(): this {
     return new <%- type %>XY(this.#x, this.#y) as this
   }

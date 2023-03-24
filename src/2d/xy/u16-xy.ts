@@ -235,6 +235,36 @@ export class U16XY implements IntegralXY<U16> {
     return (this.#x * this.#y)
   }
 
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  construct(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return new U16XY(xXY as number, y as number) as this
+  }
+
+  constructCeil(x: number, y: number): this
+  constructCeil(xy: Readonly<XY<number>>): this
+  constructCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U16XY.ceil(xXY as number, y as number) as this
+  }
+
+  constructClamp(x: number, y: number): this
+  constructClamp(xy: Readonly<XY<number>>): this
+  constructClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U16XY.clamp(xXY as number, y as number) as this
+  }
+
+  constructFloor(x: number, y: number): this
+  constructFloor(xy: Readonly<XY<number>>): this
+  constructFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U16XY.floor(xXY as number, y as number) as this
+  }
+
+  constructRound(x: number, y: number): this
+  constructRound(xy: Readonly<XY<number>>): this
+  constructRound(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return U16XY.round(xXY as number, y as number) as this
+  }
+
   copy(): this {
     return new U16XY(this.#x, this.#y) as this
   }

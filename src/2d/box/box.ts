@@ -1,4 +1,7 @@
-import { NumBox, NumXY, XY, XYJSON } from '@/ooz'
+import { XYJSON } from '@/ooz'
+import { NumXY } from '../xy/num-xy.ts' // https://github.com/denoland/deno/issues/11286
+import { XY } from '../xy/xy.ts' // https://github.com/denoland/deno/issues/11286
+import { NumBox } from './num-box.ts' // https://github.com/denoland/deno/issues/11286
 
 /**
  * Axis-aligned width (w) × height (h) rectangle in starting at (x, y).
@@ -27,6 +30,19 @@ export interface NumericalBox<T> extends Box<T> {
   center: XY<T>
   centerClamp: XY<T>
   centerNum: NumXY
+  /**
+   * Construct a new box of the same kind.
+   *
+   * This is useful to match an implementation without passing an additional
+   * reference or conditionals. You can use one reference as a factory instead
+   * of copying and setting.
+   */
+  construct(x: number, y: number, w: number, h: number): this
+  construct(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  construct(box: Readonly<Box<number>>): this
+  constructClamp(x: number, y: number, w: number, h: number): this
+  constructClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructClamp(box: Readonly<Box<number>>): this
   /**
    * True if passed box fits within this box possibly touching or overlapping.
    *
@@ -141,6 +157,16 @@ export interface IntegralBox<T> extends NumericalBox<T> {
   centerCeil: XY<T>
   centerFloor: XY<T>
   centerRound: XY<T>
+
+  constructCeil(x: number, y: number, w: number, h: number): this
+  constructCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructCeil(box: Readonly<Box<number>>): this
+  constructFloor(x: number, y: number, w: number, h: number): this
+  constructFloor(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructFloor(box: Readonly<Box<number>>): this
+  constructRound(x: number, y: number, w: number, h: number): this
+  constructRound(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructRound(box: Readonly<Box<number>>): this
 
   intersectionCeil(x: number, y: number, w: number, h: number): this
   intersectionCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this

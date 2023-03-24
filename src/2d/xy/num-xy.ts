@@ -112,6 +112,18 @@ export class NumXY implements NumericalXY<number> {
     return (this.#x * this.#y)
   }
 
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  construct(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return new NumXY(xXY as number, y as number) as this
+  }
+
+  constructClamp(x: number, y: number): this
+  constructClamp(xy: Readonly<XY<number>>): this
+  constructClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
+    return NumXY.clamp(xXY as number, y as number) as this
+  }
+
   copy(): this {
     return new NumXY(this.#x, this.#y) as this
   }

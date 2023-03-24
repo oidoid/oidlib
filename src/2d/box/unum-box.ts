@@ -74,6 +74,40 @@ export class UnumBox implements NumericalBox<Unum> {
     return this.#wh.toNumXY().div(2, 2).add(this.#xy)
   }
 
+  construct(x: number, y: number, w: number, h: number): this
+  construct(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  construct(box: Readonly<Box<number>>): this
+  construct(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return new UnumBox(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
+  constructClamp(x: number, y: number, w: number, h: number): this
+  constructClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructClamp(box: Readonly<Box<number>>): this
+  constructClamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return UnumBox.clamp(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
   contains(x: number, y: number): boolean
   contains(xy: Readonly<XY<number>>): boolean
   contains(x: number, y: number, w: number, h: number): boolean
@@ -92,17 +126,7 @@ export class UnumBox implements NumericalBox<Unum> {
   }
 
   copy(): this {
-    return new (this.constructor as new (
-      x: number,
-      y: number,
-      w: number,
-      h: number,
-    ) => this)(
-      this.x,
-      this.y,
-      this.w,
-      this.h,
-    )
+    return new UnumBox(this.x, this.y, this.w, this.h) as this
   }
 
   get empty(): boolean {

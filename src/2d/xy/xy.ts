@@ -1,4 +1,4 @@
-import { NumXY } from '@/ooz'
+import { NumXY } from './num-xy.ts' // https://github.com/denoland/deno/issues/11286
 
 /**
  * A cartesian position or dimensions. x and y are independent values.
@@ -50,6 +50,17 @@ export interface NumericalXY<T> extends XY<T> {
   area: T
   areaClamp: T
   areaNum: number
+  /**
+   * Construct a new xy of the same kind.
+   *
+   * This is useful to match an implementation without passing an additional
+   * reference or conditionals. You can use one reference as a factory instead
+   * of copying and setting.
+   */
+  construct(x: number, y: number): this
+  construct(xy: Readonly<XY<number>>): this
+  constructClamp(x: number, y: number): this
+  constructClamp(xy: Readonly<XY<number>>): this
   /** Copy state as a new clone. */
   copy(): this
   /** Divide x and y by arguments. */
@@ -135,6 +146,13 @@ export interface IntegralXY<T> extends NumericalXY<T> {
   addFloor(xy: Readonly<XY<number>>): this
   addRound(x: number, y: number): this
   addRound(xy: Readonly<XY<number>>): this
+
+  constructCeil(x: number, y: number): this
+  constructCeil(xy: Readonly<XY<number>>): this
+  constructFloor(x: number, y: number): this
+  constructFloor(xy: Readonly<XY<number>>): this
+  constructRound(x: number, y: number): this
+  constructRound(xy: Readonly<XY<number>>): this
 
   divCeil(x: number, y: number): this
   divCeil(xy: Readonly<XY<number>>): this

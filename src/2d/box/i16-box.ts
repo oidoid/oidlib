@@ -125,6 +125,91 @@ export class I16Box implements IntegralBox<I16> {
     return this.#wh.toNumXY().div(2, 2).add(this.#xy)
   }
 
+  construct(x: number, y: number, w: number, h: number): this
+  construct(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  construct(box: Readonly<Box<number>>): this
+  construct(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return new I16Box(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
+  constructCeil(x: number, y: number, w: number, h: number): this
+  constructCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructCeil(box: Readonly<Box<number>>): this
+  constructCeil(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return I16Box.ceil(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
+  constructClamp(x: number, y: number, w: number, h: number): this
+  constructClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructClamp(box: Readonly<Box<number>>): this
+  constructClamp(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return I16Box.clamp(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
+  constructFloor(x: number, y: number, w: number, h: number): this
+  constructFloor(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructFloor(box: Readonly<Box<number>>): this
+  constructFloor(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return I16Box.floor(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
+  constructRound(x: number, y: number, w: number, h: number): this
+  constructRound(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
+  constructRound(box: Readonly<Box<number>>): this
+  constructRound(
+    xXYBox: number | Readonly<XY<number>> | Readonly<Box<number>>,
+    yWH?: number | Readonly<XY<number>>,
+    w?: number,
+    h?: number,
+  ): this {
+    return I16Box.round(
+      xXYBox as number,
+      yWH as number,
+      w as number,
+      h as number,
+    ) as this
+  }
+
   contains(x: number, y: number): boolean
   contains(xy: Readonly<XY<number>>): boolean
   contains(x: number, y: number, w: number, h: number): boolean
@@ -143,17 +228,7 @@ export class I16Box implements IntegralBox<I16> {
   }
 
   copy(): this {
-    return new (this.constructor as new (
-      x: number,
-      y: number,
-      w: number,
-      h: number,
-    ) => this)(
-      this.x,
-      this.y,
-      this.w,
-      this.h,
-    )
+    return new I16Box(this.x, this.y, this.w, this.h) as this
   }
 
   get empty(): boolean {
