@@ -1162,22 +1162,22 @@ Deno.test('Bits.', async (test) => {
       assertEquals(
         Int.mod(val),
         intExpected as Int,
-        `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
+        `Int.mod(${val}); ${Int.mod(val)} !== ${intExpected}`,
       )
       assertEquals(
         Uint.mod(val),
         uintExpected as Uint,
-        `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
+        `Uint.mod(${val}); ${Uint.mod(val)} !== ${uintExpected}`,
       )
       assertEquals(
         I4.mod(val),
         i4Expected as I4,
-        `I4.mod(${val}); ${I4.mod(val)} != ${i4Expected}`,
+        `I4.mod(${val}); ${I4.mod(val)} !== ${i4Expected}`,
       )
       assertEquals(
         U4.mod(val),
         u4Expected as U4,
-        `U4.mod(${val}); ${U4.mod(val)} != ${u4Expected}`,
+        `U4.mod(${val}); ${U4.mod(val)} !== ${u4Expected}`,
       )
     })
   }
@@ -1216,12 +1216,12 @@ Deno.test('Int bit limits.', async (test) => {
       assertEquals(
         Int.mod(val),
         intExpected,
-        `Int.mod(${val}); ${Int.mod(val)} != ${intExpected}`,
+        `Int.mod(${val}); ${Int.mod(val)} !== ${intExpected}`,
       )
       assertEquals(
         Uint.mod(val),
         uintExpected,
-        `Uint.mod(${val}); ${Uint.mod(val)} != ${uintExpected}`,
+        `Uint.mod(${val}); ${Uint.mod(val)} !== ${uintExpected}`,
       )
     })
   }

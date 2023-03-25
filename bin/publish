@@ -65,7 +65,7 @@ async function main(): Promise<number> {
 
   result = await git('rev-parse --abbrev-ref @')
   const branch = result.text.trim()
-  if (!result.ok || branch == '') {
+  if (!result.ok || branch === '') {
     console.error('The active branch cannot be identified.')
     return 1
   }
@@ -87,7 +87,7 @@ async function main(): Promise<number> {
   }
 
   const gitVers = result.text.trim().split(/\s+/)
-  if (gitVers.some((ver) => `v${nextVer}` == ver)) {
+  if (gitVers.some((ver) => `v${nextVer}` === ver)) {
     console.error(`Git tag v${nextVer} is unavailable.`)
     return 1
   }
@@ -164,7 +164,7 @@ function isReleaseType(str: string): str is semver.ReleaseType {
 
 function isConfig(val: unknown): val is Config {
   if (!Obj.is(val)) return false
-  return typeof val.version == 'string' && typeof val.name == 'string'
+  return typeof val.version === 'string' && typeof val.name === 'string'
 }
 
 interface Config {

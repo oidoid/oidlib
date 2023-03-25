@@ -5,8 +5,8 @@ export class UnumXY implements NumericalXY<Unum> {
   static clamp(xy: Readonly<XY<number>>): UnumXY
   static clamp(xXY: number | Readonly<XY<number>>, y?: number): UnumXY {
     return new this(
-      Unum.clamp(typeof xXY == 'number' ? xXY : xXY.x),
-      Unum.clamp(typeof xXY == 'number' ? y! : xXY.y),
+      Unum.clamp(typeof xXY === 'number' ? xXY : xXY.x),
+      Unum.clamp(typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -20,8 +20,8 @@ export class UnumXY implements NumericalXY<Unum> {
   constructor(x: number, y: number)
   constructor(xy: Readonly<XY<number>>)
   constructor(xXY: number | Readonly<XY<number>>, y?: number) {
-    this.#x = Unum(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Unum(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Unum(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Unum(typeof xXY === 'number' ? y! : xXY.y)
   }
 
   abs(): this {
@@ -39,64 +39,64 @@ export class UnumXY implements NumericalXY<Unum> {
   add(x: number, y: number): this
   add(xy: Readonly<XY<number>>): this
   add(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   addClamp(x: number, y: number): this
   addClamp(xy: Readonly<XY<number>>): this
   addClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum.clamp(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum.clamp(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum.clamp(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum.clamp(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   div(x: number, y: number): this
   div(xy: Readonly<XY<number>>): this
   div(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   divClamp(x: number, y: number): this
   divClamp(xy: Readonly<XY<number>>): this
   divClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum.clamp(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum.clamp(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum.clamp(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum.clamp(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mul(x: number, y: number): this
   mul(xy: Readonly<XY<number>>): this
   mul(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mulClamp(x: number, y: number): this
   mulClamp(xy: Readonly<XY<number>>): this
   mulClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum.clamp(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum.clamp(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum.clamp(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum.clamp(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   sub(x: number, y: number): this
   sub(xy: Readonly<XY<number>>): this
   sub(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   subClamp(x: number, y: number): this
   subClamp(xy: Readonly<XY<number>>): this
   subClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum.clamp(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum.clamp(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum.clamp(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum.clamp(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -132,8 +132,8 @@ export class UnumXY implements NumericalXY<Unum> {
   dot(xy: Readonly<XY<number>>): Unum
   dot(xXY: number | Readonly<XY<number>>, y?: number): Unum {
     return Unum(
-      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+      this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -141,23 +141,23 @@ export class UnumXY implements NumericalXY<Unum> {
   dotClamp(xy: Readonly<XY<number>>): Unum
   dotClamp(xXY: number | Readonly<XY<number>>, y?: number): Unum {
     return Unum.clamp(
-      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+      this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
   dotNum(x: number, y: number): number
   dotNum(xy: Readonly<XY<number>>): number
   dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
-    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    return (this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY === 'number' ? y! : xXY.y))
   }
 
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
-    return this.#x == (typeof xXY == 'number' ? xXY : xXY.x) &&
-      this.#y == (typeof xXY == 'number' ? y! : xXY.y)
+    return this.#x === (typeof xXY === 'number' ? xXY : xXY.x) &&
+      this.#y === (typeof xXY === 'number' ? y! : xXY.y)
   }
 
   get len(): Unum {
@@ -175,8 +175,8 @@ export class UnumXY implements NumericalXY<Unum> {
   max(x: number, y: number): this
   max(xy: Readonly<XY<number>>): this
   max(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -184,17 +184,19 @@ export class UnumXY implements NumericalXY<Unum> {
   maxClamp(xy: Readonly<XY<number>>): this
   maxClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Unum.clamp(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Unum.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Unum.clamp(
+      Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
   min(x: number, y: number): this
   min(xy: Readonly<XY<number>>): this
   min(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Unum(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Unum(Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Unum(Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -202,32 +204,34 @@ export class UnumXY implements NumericalXY<Unum> {
   minClamp(xy: Readonly<XY<number>>): this
   minClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Unum.clamp(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Unum.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Unum.clamp(
+      Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
   set(x: number, y: number): this
   set(xy: Readonly<XY<number>>): this
   set(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Unum(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Unum(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Unum(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   setClamp(x: number, y: number): this
   setClamp(xy: Readonly<XY<number>>): this
   setClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Unum.clamp(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Unum.clamp(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Unum.clamp(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Unum.clamp(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   toJSON(): Partial<XY<Unum>> {
     return {
-      ...(this.#x == 0 ? undefined : { x: this.#x }),
-      ...(this.#y == 0 ? undefined : { y: this.#y }),
+      ...(this.#x === 0 ? undefined : { x: this.#x }),
+      ...(this.#y === 0 ? undefined : { y: this.#y }),
     }
   }
 

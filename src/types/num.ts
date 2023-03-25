@@ -166,13 +166,13 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
     )
     assert(
       width <= 32 ||
-        signedness == 'Unsigned' && width == 53 ||
-        signedness == 'Signed' && width == 54,
+        signedness === 'Unsigned' && width === 53 ||
+        signedness === 'Signed' && width === 54,
       'Width must be < 53b or unsigned 53b or signed 54b.',
     )
 
     this.width = <T> width
-    if (this.signedness == 'Signed') {
+    if (this.signedness === 'Signed') {
       this.min = <T> -(2 ** (width - 1))
       this.max = <T> (2 ** (width - 1) - 1)
     } else {
@@ -206,7 +206,7 @@ class IntNumNamespaceImpl<T extends Int> extends NumNamespaceImpl<T> {
     }
 
     // Assume 53-bit unsigned.
-    if (this.width == 53) return this.cast(NumUtil.modUint(int))
+    if (this.width === 53) return this.cast(NumUtil.modUint(int))
 
     // Assume 54-bit signed.
     return this.cast(NumUtil.modInt(int))

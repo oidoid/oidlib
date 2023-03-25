@@ -1,5 +1,5 @@
 /**
- * @return Negative when lhs < rhs, zero when lhs == rhs, and positive when
+ * @return Negative when lhs < rhs, zero when lhs === rhs, and positive when
  *         lhs > rhs.
  */
 export interface Comparator<T> {

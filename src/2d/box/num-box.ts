@@ -120,7 +120,7 @@ export class NumBox implements NumericalBox<number> {
   }
 
   get empty(): boolean {
-    return this.areaNum == 0
+    return this.areaNum === 0
   }
 
   get end(): NumXY {
@@ -145,8 +145,8 @@ export class NumBox implements NumericalBox<number> {
     h?: number,
   ): boolean {
     const box = argsToBox(xXYBox, yWH, w, h)
-    return this.x == box.x && this.y == box.y &&
-      this.w == box.w && this.h == box.h
+    return this.x === box.x && this.y === box.y &&
+      this.w === box.w && this.h === box.h
   }
 
   get flipped(): boolean {
@@ -237,8 +237,8 @@ export class NumBox implements NumericalBox<number> {
   moveBy(xy: Readonly<XY<number>>): this
   moveBy(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.set(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -247,8 +247,8 @@ export class NumBox implements NumericalBox<number> {
   moveByClamp(xy: Readonly<XY<number>>): this
   moveByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setClamp(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -258,8 +258,8 @@ export class NumBox implements NumericalBox<number> {
   moveCenterTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.set(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -269,8 +269,8 @@ export class NumBox implements NumericalBox<number> {
   moveCenterToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setClamp(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -279,8 +279,8 @@ export class NumBox implements NumericalBox<number> {
   moveTo(xy: Readonly<XY<number>>): this
   moveTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.set(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -289,8 +289,8 @@ export class NumBox implements NumericalBox<number> {
   moveToClamp(xy: Readonly<XY<number>>): this
   moveToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setClamp(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -339,8 +339,8 @@ export class NumBox implements NumericalBox<number> {
   sizeBy(xy: Readonly<XY<number>>): this
   sizeBy(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.set(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -349,8 +349,8 @@ export class NumBox implements NumericalBox<number> {
   sizeByClamp(xy: Readonly<XY<number>>): this
   sizeByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setClamp(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -359,8 +359,8 @@ export class NumBox implements NumericalBox<number> {
   sizeTo(xy: Readonly<XY<number>>): this
   sizeTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.set(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -369,8 +369,8 @@ export class NumBox implements NumericalBox<number> {
   sizeToClamp(xy: Readonly<XY<number>>): this
   sizeToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setClamp(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -411,10 +411,10 @@ export class NumBox implements NumericalBox<number> {
 
   toJSON(): Partial<Box<number>> {
     return {
-      ...(this.x == 0 ? undefined : { x: this.x }),
-      ...(this.y == 0 ? undefined : { y: this.y }),
-      ...(this.w == 0 ? undefined : { w: this.w }),
-      ...(this.h == 0 ? undefined : { h: this.h }),
+      ...(this.x === 0 ? undefined : { x: this.x }),
+      ...(this.y === 0 ? undefined : { y: this.y }),
+      ...(this.w === 0 ? undefined : { w: this.w }),
+      ...(this.h === 0 ? undefined : { h: this.h }),
     }
   }
 

@@ -232,7 +232,7 @@ export class I32Box implements IntegralBox<I32> {
   }
 
   get empty(): boolean {
-    return this.areaNum == 0
+    return this.areaNum === 0
   }
 
   get end(): I32XY {
@@ -257,8 +257,8 @@ export class I32Box implements IntegralBox<I32> {
     h?: number,
   ): boolean {
     const box = argsToBox(xXYBox, yWH, w, h)
-    return this.x == box.x && this.y == box.y &&
-      this.w == box.w && this.h == box.h
+    return this.x === box.x && this.y === box.y &&
+      this.w === box.w && this.h === box.h
   }
 
   get flipped(): boolean {
@@ -400,8 +400,8 @@ export class I32Box implements IntegralBox<I32> {
   moveBy(xy: Readonly<XY<number>>): this
   moveBy(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.set(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -410,8 +410,8 @@ export class I32Box implements IntegralBox<I32> {
   moveByCeil(xy: Readonly<XY<number>>): this
   moveByCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setCeil(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -420,8 +420,8 @@ export class I32Box implements IntegralBox<I32> {
   moveByClamp(xy: Readonly<XY<number>>): this
   moveByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setClamp(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -430,8 +430,8 @@ export class I32Box implements IntegralBox<I32> {
   moveByFloor(xy: Readonly<XY<number>>): this
   moveByFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setFloor(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -440,8 +440,8 @@ export class I32Box implements IntegralBox<I32> {
   moveByRound(xy: Readonly<XY<number>>): this
   moveByRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setRound(
-      this.x + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.y + (typeof xXY == 'number' ? y! : xXY.y),
+      this.x + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.y + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -451,8 +451,8 @@ export class I32Box implements IntegralBox<I32> {
   moveCenterTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.set(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -462,8 +462,8 @@ export class I32Box implements IntegralBox<I32> {
   moveCenterToCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setCeil(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -473,8 +473,8 @@ export class I32Box implements IntegralBox<I32> {
   moveCenterToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setClamp(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -484,8 +484,8 @@ export class I32Box implements IntegralBox<I32> {
   moveCenterToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setFloor(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -495,8 +495,8 @@ export class I32Box implements IntegralBox<I32> {
   moveCenterToRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     const center = this.#wh.toNumXY().div(2, 2)
     this.#xy.setRound(
-      (typeof xXY == 'number' ? xXY : xXY.x) - center.x,
-      (typeof xXY == 'number' ? y! : xXY.y) - center.y,
+      (typeof xXY === 'number' ? xXY : xXY.x) - center.x,
+      (typeof xXY === 'number' ? y! : xXY.y) - center.y,
     )
     return this
   }
@@ -505,8 +505,8 @@ export class I32Box implements IntegralBox<I32> {
   moveTo(xy: Readonly<XY<number>>): this
   moveTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.set(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -515,8 +515,8 @@ export class I32Box implements IntegralBox<I32> {
   moveToCeil(xy: Readonly<XY<number>>): this
   moveToCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setCeil(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -525,8 +525,8 @@ export class I32Box implements IntegralBox<I32> {
   moveToClamp(xy: Readonly<XY<number>>): this
   moveToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setClamp(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -535,8 +535,8 @@ export class I32Box implements IntegralBox<I32> {
   moveToFloor(xy: Readonly<XY<number>>): this
   moveToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setFloor(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -545,8 +545,8 @@ export class I32Box implements IntegralBox<I32> {
   moveToRound(xy: Readonly<XY<number>>): this
   moveToRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#xy.setRound(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -640,8 +640,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeBy(xy: Readonly<XY<number>>): this
   sizeBy(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.set(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -650,8 +650,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeByCeil(xy: Readonly<XY<number>>): this
   sizeByCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setCeil(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -660,8 +660,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeByClamp(xy: Readonly<XY<number>>): this
   sizeByClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setClamp(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -670,8 +670,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeByFloor(xy: Readonly<XY<number>>): this
   sizeByFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setFloor(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -680,8 +680,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeByRound(xy: Readonly<XY<number>>): this
   sizeByRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setRound(
-      this.w + (typeof xXY == 'number' ? xXY : xXY.x),
-      this.h + (typeof xXY == 'number' ? y! : xXY.y),
+      this.w + (typeof xXY === 'number' ? xXY : xXY.x),
+      this.h + (typeof xXY === 'number' ? y! : xXY.y),
     )
     return this
   }
@@ -690,8 +690,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeTo(xy: Readonly<XY<number>>): this
   sizeTo(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.set(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -700,8 +700,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeToCeil(xy: Readonly<XY<number>>): this
   sizeToCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setCeil(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -710,8 +710,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeToClamp(xy: Readonly<XY<number>>): this
   sizeToClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setClamp(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -720,8 +720,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeToFloor(xy: Readonly<XY<number>>): this
   sizeToFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setFloor(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -730,8 +730,8 @@ export class I32Box implements IntegralBox<I32> {
   sizeToRound(xy: Readonly<XY<number>>): this
   sizeToRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#wh.setRound(
-      typeof xXY == 'number' ? xXY : xXY.x,
-      typeof xXY == 'number' ? y! : xXY.y,
+      typeof xXY === 'number' ? xXY : xXY.x,
+      typeof xXY === 'number' ? y! : xXY.y,
     )
     return this
   }
@@ -823,10 +823,10 @@ export class I32Box implements IntegralBox<I32> {
 
   toJSON(): Partial<Box<I32>> {
     return {
-      ...(this.x == 0 ? undefined : { x: this.x }),
-      ...(this.y == 0 ? undefined : { y: this.y }),
-      ...(this.w == 0 ? undefined : { w: this.w }),
-      ...(this.h == 0 ? undefined : { h: this.h }),
+      ...(this.x === 0 ? undefined : { x: this.x }),
+      ...(this.y === 0 ? undefined : { y: this.y }),
+      ...(this.w === 0 ? undefined : { w: this.w }),
+      ...(this.h === 0 ? undefined : { h: this.h }),
     }
   }
 

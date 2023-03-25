@@ -12,7 +12,7 @@ export namespace ArrayUtil {
     while (min < max) {
       const mid = min + Math.trunc((max - min) / 2)
       const comparison = compare(vals[mid]!, val)
-      if (comparison == 0) return mid
+      if (comparison === 0) return mid
 
       // If item is less than middle, item can only be in the left. Search the
       // left. mid has been checked and so is correct for exclusive max.

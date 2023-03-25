@@ -31,7 +31,7 @@ Deno.test('Shuffle: no randomization.', () => {
 
 /** [Heap's_algorithm](https://en.wikipedia.org/wiki/Heap%27s_algorithm). */
 function permute<T>(array: T[], n: number = array.length): T[][] {
-  if (n == 1) return [[...array]]
+  if (n === 1) return [[...array]]
 
   const permutations = []
   permutations.push(...permute(array, n - 1))

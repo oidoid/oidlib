@@ -7,7 +7,7 @@ export namespace NumUtil {
    * @return A value wrapped to the domain [min, max).
    */
   export function wrap(num: number, min: number, max: number): number {
-    if (min == max) return min
+    if (min === max) return min
     assert(max > min, `max=${max} < min=${min}.`)
     const range = max - min // range ∈ [0, +∞).
     const x = (num - min) % range // Subtract min and wrap to x ∈ (-range, range).
@@ -30,7 +30,7 @@ export namespace NumUtil {
   export function modInt(num: number): number {
     // Only [Number.MIN_SAFE_INTEGER - 1, Number.MAX_SAFE_INTEGER + 1] are
     // supported inputs.
-    if (num == Number.MAX_SAFE_INTEGER + 1) return Number.MIN_SAFE_INTEGER - 1
+    if (num === Number.MAX_SAFE_INTEGER + 1) return Number.MIN_SAFE_INTEGER - 1
 
     const b27 = 2 ** 27
     const hi = (Math.floor(num / b27) % b27) * b27
@@ -56,7 +56,7 @@ export namespace NumUtil {
 
   export function ceilMultiple(multiple: number, val: number): number {
     // n / 0 * 0 = NaN
-    return multiple == 0 ? 0 : Math.ceil(val / multiple) * multiple
+    return multiple === 0 ? 0 : Math.ceil(val / multiple) * multiple
   }
 
   export function lerp(from: number, to: number, ratio: number): number {
@@ -69,7 +69,7 @@ export namespace NumUtil {
   export function lerpInt(from: number, to: number, ratio: number): Int {
     // Lerp, truncate and drop negative / positive zero.
     const interpolation = Int.round(lerp(from, to, ratio))
-    if (interpolation == from && ratio != 0) {
+    if (interpolation === from && ratio !== 0) {
       return Int(interpolation + Math.sign(to - interpolation))
     }
     return interpolation

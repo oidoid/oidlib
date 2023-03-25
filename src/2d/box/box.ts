@@ -249,7 +249,7 @@ export function argsToBox(
   w?: number,
   h?: number,
 ): Readonly<Box<number>> {
-  if (typeof xXYBox == 'number') {
+  if (typeof xXYBox === 'number') {
     return { x: xXYBox, y: yWH as number, w: w ?? 0, h: h ?? 0 }
   }
   if (yWH == null) {

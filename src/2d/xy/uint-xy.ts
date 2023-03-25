@@ -5,8 +5,8 @@ export class UintXY implements IntegralXY<Uint> {
   static ceil(xy: Readonly<XY<number>>): UintXY
   static ceil(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
     return new this(
-      Uint.ceil(typeof xXY == 'number' ? xXY : xXY.x),
-      Uint.ceil(typeof xXY == 'number' ? y! : xXY.y),
+      Uint.ceil(typeof xXY === 'number' ? xXY : xXY.x),
+      Uint.ceil(typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -14,8 +14,8 @@ export class UintXY implements IntegralXY<Uint> {
   static clamp(xy: Readonly<XY<number>>): UintXY
   static clamp(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
     return new this(
-      Uint.clamp(typeof xXY == 'number' ? xXY : xXY.x),
-      Uint.clamp(typeof xXY == 'number' ? y! : xXY.y),
+      Uint.clamp(typeof xXY === 'number' ? xXY : xXY.x),
+      Uint.clamp(typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -23,8 +23,8 @@ export class UintXY implements IntegralXY<Uint> {
   static floor(xy: Readonly<XY<number>>): UintXY
   static floor(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
     return new this(
-      Uint.floor(typeof xXY == 'number' ? xXY : xXY.x),
-      Uint.floor(typeof xXY == 'number' ? y! : xXY.y),
+      Uint.floor(typeof xXY === 'number' ? xXY : xXY.x),
+      Uint.floor(typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -32,8 +32,8 @@ export class UintXY implements IntegralXY<Uint> {
   static round(xy: Readonly<XY<number>>): UintXY
   static round(xXY: number | Readonly<XY<number>>, y?: number): UintXY {
     return new this(
-      Uint.round(typeof xXY == 'number' ? xXY : xXY.x),
-      Uint.round(typeof xXY == 'number' ? y! : xXY.y),
+      Uint.round(typeof xXY === 'number' ? xXY : xXY.x),
+      Uint.round(typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -47,8 +47,8 @@ export class UintXY implements IntegralXY<Uint> {
   constructor(x: number, y: number)
   constructor(xy: Readonly<XY<number>>)
   constructor(xXY: number | Readonly<XY<number>>, y?: number) {
-    this.#x = Uint(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint(typeof xXY === 'number' ? y! : xXY.y)
   }
 
   abs(): this {
@@ -66,160 +66,160 @@ export class UintXY implements IntegralXY<Uint> {
   add(x: number, y: number): this
   add(xy: Readonly<XY<number>>): this
   add(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   addCeil(x: number, y: number): this
   addCeil(xy: Readonly<XY<number>>): this
   addCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.ceil(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   addClamp(x: number, y: number): this
   addClamp(xy: Readonly<XY<number>>): this
   addClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.clamp(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.clamp(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.clamp(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   addFloor(x: number, y: number): this
   addFloor(xy: Readonly<XY<number>>): this
   addFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.floor(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.floor(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.floor(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.floor(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   addRound(x: number, y: number): this
   addRound(xy: Readonly<XY<number>>): this
   addRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.round(this.#x + (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.round(this.#y + (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.round(this.#x + (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.round(this.#y + (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   div(x: number, y: number): this
   div(xy: Readonly<XY<number>>): this
   div(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   divCeil(x: number, y: number): this
   divCeil(xy: Readonly<XY<number>>): this
   divCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.ceil(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   divClamp(x: number, y: number): this
   divClamp(xy: Readonly<XY<number>>): this
   divClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.clamp(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.clamp(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.clamp(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   divFloor(x: number, y: number): this
   divFloor(xy: Readonly<XY<number>>): this
   divFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.floor(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.floor(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.floor(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.floor(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   divRound(x: number, y: number): this
   divRound(xy: Readonly<XY<number>>): this
   divRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.round(this.#x / (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.round(this.#y / (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.round(this.#x / (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.round(this.#y / (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mul(x: number, y: number): this
   mul(xy: Readonly<XY<number>>): this
   mul(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mulCeil(x: number, y: number): this
   mulCeil(xy: Readonly<XY<number>>): this
   mulCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.ceil(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mulClamp(x: number, y: number): this
   mulClamp(xy: Readonly<XY<number>>): this
   mulClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.clamp(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.clamp(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.clamp(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mulFloor(x: number, y: number): this
   mulFloor(xy: Readonly<XY<number>>): this
   mulFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.floor(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.floor(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.floor(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.floor(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   mulRound(x: number, y: number): this
   mulRound(xy: Readonly<XY<number>>): this
   mulRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.round(this.#x * (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.round(this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.round(this.#x * (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.round(this.#y * (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   sub(x: number, y: number): this
   sub(xy: Readonly<XY<number>>): this
   sub(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   subCeil(x: number, y: number): this
   subCeil(xy: Readonly<XY<number>>): this
   subCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.ceil(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   subClamp(x: number, y: number): this
   subClamp(xy: Readonly<XY<number>>): this
   subClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.clamp(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.clamp(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.clamp(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.clamp(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   subFloor(x: number, y: number): this
   subFloor(xy: Readonly<XY<number>>): this
   subFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.floor(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.floor(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.floor(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.floor(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   subRound(x: number, y: number): this
   subRound(xy: Readonly<XY<number>>): this
   subRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.round(this.#x - (typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.round(this.#y - (typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.round(this.#x - (typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint.round(this.#y - (typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -273,8 +273,8 @@ export class UintXY implements IntegralXY<Uint> {
   dot(xy: Readonly<XY<number>>): Uint
   dot(xXY: number | Readonly<XY<number>>, y?: number): Uint {
     return Uint(
-      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+      this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
@@ -282,23 +282,23 @@ export class UintXY implements IntegralXY<Uint> {
   dotClamp(xy: Readonly<XY<number>>): Uint
   dotClamp(xXY: number | Readonly<XY<number>>, y?: number): Uint {
     return Uint.clamp(
-      this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-        this.#y * (typeof xXY == 'number' ? y! : xXY.y),
+      this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+        this.#y * (typeof xXY === 'number' ? y! : xXY.y),
     )
   }
 
   dotNum(x: number, y: number): number
   dotNum(xy: Readonly<XY<number>>): number
   dotNum(xXY: number | Readonly<XY<number>>, y?: number): number {
-    return (this.#x * (typeof xXY == 'number' ? xXY : xXY.x) +
-      this.#y * (typeof xXY == 'number' ? y! : xXY.y))
+    return (this.#x * (typeof xXY === 'number' ? xXY : xXY.x) +
+      this.#y * (typeof xXY === 'number' ? y! : xXY.y))
   }
 
   eq(x: number, y: number): boolean
   eq(xy: Readonly<XY<number>>): boolean
   eq(xXY: number | Readonly<XY<number>>, y?: number): boolean {
-    return this.#x == (typeof xXY == 'number' ? xXY : xXY.x) &&
-      this.#y == (typeof xXY == 'number' ? y! : xXY.y)
+    return this.#x === (typeof xXY === 'number' ? xXY : xXY.x) &&
+      this.#y === (typeof xXY === 'number' ? y! : xXY.y)
   }
 
   get len(): Uint {
@@ -328,16 +328,18 @@ export class UintXY implements IntegralXY<Uint> {
   max(x: number, y: number): this
   max(xy: Readonly<XY<number>>): this
   max(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   maxCeil(x: number, y: number): this
   maxCeil(xy: Readonly<XY<number>>): this
   maxCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(
+      Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
+    )
+    this.#y = Uint.ceil(Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -345,9 +347,11 @@ export class UintXY implements IntegralXY<Uint> {
   maxClamp(xy: Readonly<XY<number>>): this
   maxClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.clamp(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.clamp(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.clamp(
+      Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
@@ -355,9 +359,11 @@ export class UintXY implements IntegralXY<Uint> {
   maxFloor(xy: Readonly<XY<number>>): this
   maxFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.floor(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.floor(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.floor(
+      Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
@@ -365,25 +371,29 @@ export class UintXY implements IntegralXY<Uint> {
   maxRound(xy: Readonly<XY<number>>): this
   maxRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(
-      Math.max(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.max(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.round(Math.max(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.round(
+      Math.max(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
   min(x: number, y: number): this
   min(xy: Readonly<XY<number>>): this
   min(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint(Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x))
+    this.#y = Uint(Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
   minCeil(x: number, y: number): this
   minCeil(xy: Readonly<XY<number>>): this
   minCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x))
-    this.#y = Uint.ceil(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#x = Uint.ceil(
+      Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
+    )
+    this.#y = Uint.ceil(Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y))
     return this
   }
 
@@ -391,9 +401,11 @@ export class UintXY implements IntegralXY<Uint> {
   minClamp(xy: Readonly<XY<number>>): this
   minClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.clamp(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.clamp(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.clamp(
+      Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
@@ -401,9 +413,11 @@ export class UintXY implements IntegralXY<Uint> {
   minFloor(xy: Readonly<XY<number>>): this
   minFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.floor(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.floor(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.floor(
+      Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
@@ -411,56 +425,58 @@ export class UintXY implements IntegralXY<Uint> {
   minRound(xy: Readonly<XY<number>>): this
   minRound(xXY: number | Readonly<XY<number>>, y?: number): this {
     this.#x = Uint.round(
-      Math.min(this.#x, typeof xXY == 'number' ? xXY : xXY.x),
+      Math.min(this.#x, typeof xXY === 'number' ? xXY : xXY.x),
     )
-    this.#y = Uint.round(Math.min(this.#y, typeof xXY == 'number' ? y! : xXY.y))
+    this.#y = Uint.round(
+      Math.min(this.#y, typeof xXY === 'number' ? y! : xXY.y),
+    )
     return this
   }
 
   set(x: number, y: number): this
   set(xy: Readonly<XY<number>>): this
   set(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   setCeil(x: number, y: number): this
   setCeil(xy: Readonly<XY<number>>): this
   setCeil(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.ceil(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint.ceil(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint.ceil(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint.ceil(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   setClamp(x: number, y: number): this
   setClamp(xy: Readonly<XY<number>>): this
   setClamp(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.clamp(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint.clamp(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint.clamp(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint.clamp(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   setFloor(x: number, y: number): this
   setFloor(xy: Readonly<XY<number>>): this
   setFloor(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.floor(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint.floor(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint.floor(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint.floor(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   setRound(x: number, y: number): this
   setRound(xy: Readonly<XY<number>>): this
   setRound(xXY: number | Readonly<XY<number>>, y?: number): this {
-    this.#x = Uint.round(typeof xXY == 'number' ? xXY : xXY.x)
-    this.#y = Uint.round(typeof xXY == 'number' ? y! : xXY.y)
+    this.#x = Uint.round(typeof xXY === 'number' ? xXY : xXY.x)
+    this.#y = Uint.round(typeof xXY === 'number' ? y! : xXY.y)
     return this
   }
 
   toJSON(): Partial<XY<Uint>> {
     return {
-      ...(this.#x == 0 ? undefined : { x: this.#x }),
-      ...(this.#y == 0 ? undefined : { y: this.#y }),
+      ...(this.#x === 0 ? undefined : { x: this.#x }),
+      ...(this.#y === 0 ? undefined : { y: this.#y }),
     }
   }
 

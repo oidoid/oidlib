@@ -72,7 +72,7 @@ for (
   ] as const
 ) {
   Deno.test(`Construct(x, y, w, h) ${name}.`, () => {
-    if (expected == undefined) {
+    if (expected === undefined) {
       assertThrows(() => new IntBox(x, y, w, h))
       assertThrows(() => new IntBox(0, 0, 0, 0).construct(x, y, w, h))
     } else {
@@ -1153,12 +1153,12 @@ for (
   Deno.test(`Contains(lhs, rhs): ${diagram}`, () =>
     assertEquals(
       new IntBox(...lhs).contains(new IntBox(...rhs)),
-      contains == 'true-false' ? true : contains,
+      contains === 'true-false' ? true : contains,
     ))
   Deno.test(`Contains(rhs, lhs): ${diagram}`, () =>
     assertEquals(
       new IntBox(...rhs).contains(new IntBox(...lhs)),
-      contains == 'true-false' ? false : contains,
+      contains === 'true-false' ? false : contains,
     ))
 
   Deno.test(`Intersection(lhs, rhs): ${diagram}`, () =>
