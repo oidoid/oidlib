@@ -39,6 +39,7 @@ import modules and reference the `https://deno.land/x/ooz/mods.json` import map.
 | prev      | previous                                    |
 | prop      | property                                    |
 | pt        | point                                       |
+| pub       | publisher                                   |
 | rhs       | right-hand side                             |
 | size      | Map.size / Array.length                     |
 | src       | source(s)                                   |

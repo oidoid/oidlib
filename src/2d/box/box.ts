@@ -1,7 +1,4 @@
-import { XYJSON } from '@/ooz'
-import { NumXY } from '../xy/num-xy.ts' // https://github.com/denoland/deno/issues/11286
-import { XY } from '../xy/xy.ts' // https://github.com/denoland/deno/issues/11286
-import { NumBox } from './num-box.ts' // https://github.com/denoland/deno/issues/11286
+import { NumBox, NumXY, XY, XYJSON } from '@/ooz'
 
 /**
  * Axis-aligned width (w) × height (h) rectangle in starting at (x, y).

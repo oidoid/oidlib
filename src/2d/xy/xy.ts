@@ -1,4 +1,4 @@
-import { NumXY } from './num-xy.ts' // https://github.com/denoland/deno/issues/11286
+import { NumXY } from '@/ooz'
 
 /**
  * A cartesian position or dimensions. x and y are independent values.
