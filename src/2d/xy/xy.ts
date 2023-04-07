@@ -37,7 +37,7 @@ export interface XY<T> {
  * `new I4XY(I4(7), I4(7)).add(I4(1), I4(1))` is well typed but throws at
  * runtime.
  */
-export interface NumericalXY<T> extends XY<T> {
+export interface NumericalXY<out T> extends XY<T> {
   /** Set x and y to their absolute values. */
   abs(): this
   absClamp(): this
@@ -139,7 +139,7 @@ export interface NumericalXY<T> extends XY<T> {
  *     const xy = new U4XY(0, 0)
  *     xy.addRound(1.5, 16.5) // (2, 15)
  */
-export interface IntegralXY<T> extends NumericalXY<T> {
+export interface IntegralXY<out T> extends NumericalXY<T> {
   addCeil(x: number, y: number): this
   addCeil(xy: Readonly<XY<number>>): this
   addFloor(x: number, y: number): this

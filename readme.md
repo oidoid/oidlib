@@ -22,6 +22,7 @@ import modules and reference the `https://deno.land/x/ooz/mods.json` import map.
 | ctrl      | control                                     |
 | ctx       | context                                     |
 | dir       | directory                                   |
+| div       | divide                                      |
 | dist      | distributable(s)                            |
 | err       | error                                       |
 | eq        | equal                                       |
@@ -29,10 +30,12 @@ import modules and reference the `https://deno.land/x/ooz/mods.json` import map.
 | ex        | example                                     |
 | exec      | executable                                  |
 | exec      | execute                                     |
+| fmt       | format                                      |
 | fn        | function                                    |
 | int       | integer                                     |
 | lhs       | left-hand side                              |
 | lut       | lookup table                                |
+| mul       | multiply, multiplier                        |
 | num       | number                                      |
 | obj       | object                                      |
 | op        | operation                                   |
@@ -44,6 +47,7 @@ import modules and reference the `https://deno.land/x/ooz/mods.json` import map.
 | size      | Map.size / Array.length                     |
 | src       | source(s)                                   |
 | str       | string, use shorthand except for toString() |
+| sub       | subtract                                    |
 | sym       | symbol                                      |
 | this      | this when possible, self otherwise          |
 | util      | utility                                     |

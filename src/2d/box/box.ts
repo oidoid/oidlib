@@ -1,4 +1,4 @@
-import { NumBox, NumXY, XY, XYJSON } from '@/ooz'
+import { NumBox, NumericalXY, NumXY, XY, XYJSON } from '@/ooz'
 
 /**
  * Axis-aligned width (w) × height (h) rectangle in starting at (x, y).
@@ -18,14 +18,14 @@ export interface Box<T> extends XY<T> {
   h: T
 }
 
-export interface NumericalBox<T> extends Box<T> {
+export interface NumericalBox<out T> extends Box<T> {
   /** Width (w) × height (h) (may be negative if flipped). */
   area: T
   areaClamp: T
   areaNum: number
   /** The center coordinate. */
-  center: XY<T>
-  centerClamp: XY<T>
+  center: NumericalXY<T>
+  centerClamp: NumericalXY<T>
   centerNum: NumXY
   /**
    * Construct a new box of the same kind.
@@ -57,8 +57,8 @@ export interface NumericalBox<T> extends Box<T> {
   /** True if either side is zero. */
   empty: boolean
   /** The starting coordinate plus dimensions. */
-  end: XY<T>
-  endClamp: XY<T>
+  end: NumericalXY<T>
+  endClamp: NumericalXY<T>
   endNum: NumXY
   /** Compare xy and wh to arguments. */
   eq(x: number, y: number, w: number, h: number): boolean
@@ -85,12 +85,12 @@ export interface NumericalBox<T> extends Box<T> {
   intersects(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): boolean
   intersects(box: Readonly<Box<number>>): boolean
   /** The greatest coordinate of this box. */
-  max: XY<T>
-  maxClamp: XY<T>
+  max: NumericalXY<T>
+  maxClamp: NumericalXY<T>
   maxNum: NumXY
   /** The least coordinate of this box. */
-  min: XY<T>
-  minClamp: XY<T>
+  min: NumericalXY<T>
+  minClamp: NumericalXY<T>
   minNum: NumXY
   /** Reposition the box by arguments. */
   moveBy(x: number, y: number): this
@@ -139,9 +139,9 @@ export interface NumericalBox<T> extends Box<T> {
   unionClamp(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
   unionClamp(box: Readonly<Box<number>>): this
   /** The box coordinates. */
-  xy: XY<T>
+  xy: NumericalXY<T>
   /** The box dimensions. */
-  wh: XY<T>
+  wh: NumericalXY<T>
   /** Copy state as plain JSON with zero values omitted. */
   toJSON(): Partial<Box<T>>
   /** Copy state as a permissive double Box. */
@@ -150,10 +150,10 @@ export interface NumericalBox<T> extends Box<T> {
   toString(): string
 }
 
-export interface IntegralBox<T> extends NumericalBox<T> {
-  centerCeil: XY<T>
-  centerFloor: XY<T>
-  centerRound: XY<T>
+export interface IntegralBox<out T> extends NumericalBox<T> {
+  centerCeil: NumericalXY<T>
+  centerFloor: NumericalXY<T>
+  centerRound: NumericalXY<T>
 
   constructCeil(x: number, y: number, w: number, h: number): this
   constructCeil(xy: Readonly<XY<number>>, wh: Readonly<XY<number>>): this
