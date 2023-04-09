@@ -1,7 +1,5 @@
-import { U32 } from '@/ooz'
-
 export namespace Color {
-  export function intToFloats(color: U32): [number, number, number, number] {
+  export function intToFloats(color: number): [number, number, number, number] {
     return [
       ((color >> 24) & 0xff) / 0xff,
       ((color >> 16) & 0xff) / 0xff,

@@ -1,4 +1,4 @@
-import { ArrayUtil, I32, Random } from '@/ooz'
+import { ArrayUtil, Random } from '@/ooz'
 import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Shuffle: permutations.', () => {
@@ -7,7 +7,7 @@ Deno.test('Shuffle: permutations.', () => {
   const permutations = permute(array).map((permutation) => permutation.join(''))
 
   const distribution: Record<string, number> = {}
-  const random = new Random(I32(0))
+  const random = new Random(0)
   for (let i = 0; i < iterations; i++) {
     ArrayUtil.shuffle(array, () => random.fraction())
     const permutation = array.join('')

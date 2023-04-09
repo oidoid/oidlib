@@ -3,7 +3,7 @@
 // max is same as 1
 // modulo rollover
 
-import { I32, Random } from '@/ooz'
+import { Random } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 // https://www.firstpr.com.au/dsp/rand31/#History-implementation
@@ -31,10 +31,10 @@ Deno.test('Random.integer()', async (test) => {
     ] as const
   ) {
     await test.step(name, () => {
-      const random = new Random(I32(seed))
+      const random = new Random(seed)
       // Test seed instead of integer since we have a hack to give better
       // initial values not in the paper.
-      assertEquals(random.seed, I32(expected))
+      assertEquals(random.seed, expected)
     })
   }
 })

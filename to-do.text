@@ -7,8 +7,6 @@ Switch to esbuild? esbuild_deno_loader is pretty crufty.
 Finalize oidkit / odk naming.
 Explore a script for updating imports.
   find -name deno.json|xargs -rd\\n sed -ri 's%https://deno.land/x/oid@v[0-9]+.[0-9]+.[0-9]+/mod.ts%https://deno.land/x/oid@v0.0.6/mod.ts%'
-Explore how to eliminate race conditions for codegen in other modules.
-Think about implications of splitting out libs for xy and int. +Easier to share code; -more maintenance, harder to find what's where.
 Reduce boilerplate
   Can I reuse rules.mk in more places?
   index.css, index.html, amd makefile are big boilerplates

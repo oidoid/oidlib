@@ -1,113 +1,27 @@
-import { I8Box, I8XY, Int, IntBox, IntXY, NumBox, NumXY } from '@/ooz'
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
+import { Box, XY } from '@/ooz'
+import { assertEquals } from 'std/testing/asserts.ts'
 
 for (
   const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, {
-      x: Int(2),
-      y: Int(3),
-      w: Int(4),
-      h: Int(10),
-    }],
+    ['integers', 1, 2, 3, 4, { x: 1, y: 2, w: 3, h: 4 }],
+    ['fractions', 1.9, 2.9, 3.9, 9.9, { x: 1.9, y: 2.9, w: 3.9, h: 9.9 }],
   ] as const
 ) {
-  Deno.test(`Ceiling: ${name}.`, () => {
-    assertEquals(IntBox.ceil(x, y, w, h).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, {
-      x: Int(1),
-      y: Int(2),
-      w: Int(3),
-      h: Int(9),
-    }],
-  ] as const
-) {
-  Deno.test(`Clamp: ${name}.`, () => {
-    assertEquals(IntBox.clamp(x, y, w, h).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, {
-      x: Int(1),
-      y: Int(2),
-      w: Int(3),
-      h: Int(9),
-    }],
-  ] as const
-) {
-  Deno.test(`Flooring: ${name}.`, () => {
-    assertEquals(IntBox.floor(x, y, w, h).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, {
-      x: Int(2),
-      y: Int(3),
-      w: Int(4),
-      h: Int(10),
-    }],
-  ] as const
-) {
-  Deno.test(`Round: ${name}.`, () => {
-    assertEquals(IntBox.round(x, y, w, h).toJSON(), expected)
-  })
-}
-
-for (
-  const [name, x, y, w, h, expected] of [
-    ['integers', 1, 2, 3, 4, { x: Int(1), y: Int(2), w: Int(3), h: Int(4) }],
-    ['fractions', 1.9, 2.9, 3.9, 9.9, undefined],
-  ] as const
-) {
-  Deno.test(`Construct(x, y, w, h) ${name}.`, () => {
-    if (expected === undefined) {
-      assertThrows(() => new IntBox(x, y, w, h))
-      assertThrows(() => new IntBox(0, 0, 0, 0).construct(x, y, w, h))
-    } else {
-      assertEquals(new IntBox(x, y, w, h).toJSON(), expected)
-      assertEquals(
-        new IntBox(0, 0, 0, 0).construct(x, y, w, h).toJSON(),
-        expected,
-      )
-    }
-  })
+  Deno.test(`Construct(x, y, w, h) ${name}.`, () =>
+    assertEquals(new Box(x, y, w, h).toJSON(), expected))
 }
 
 Deno.test(`Construct(xy, xy).`, () => {
   assertEquals(
-    new IntBox(new IntXY(1, 2), new IntXY(3, 4)),
-    new IntBox(1, 2, 3, 4),
-  )
-  assertEquals(
-    new IntBox(0, 0, 0, 0).construct(new IntXY(1, 2), new IntXY(3, 4)),
-    new IntBox(1, 2, 3, 4),
-  )
-})
-
-Deno.test(`Construct(box).`, () => {
-  assertEquals(new IntBox(new I8Box(1, 2, 3, 4)), new IntBox(1, 2, 3, 4))
-  assertEquals(
-    new IntBox(0, 0, 0, 0).construct(new I8Box(1, 2, 3, 4)),
-    new IntBox(1, 2, 3, 4),
+    new Box(new XY(1, 2), new XY(3, 4)),
+    new Box(1, 2, 3, 4),
   )
 })
 
 for (
   const [name, box, expected] of [
-    ['integers', new IntBox(1, 2, 3, 4), 12],
-    ['fractions', new NumBox(1.1, 2.2, 3.3, 4.4), 14.52],
+    ['integers', new Box(1, 2, 3, 4), 12],
+    ['fractions', new Box(1.1, 2.2, 3.3, 4.4), 14.52],
   ] as const
 ) {
   Deno.test(`Area: ${name}.`, () => assertEquals(box.area, expected))
@@ -115,23 +29,23 @@ for (
 
 for (
   const [name, box, expected] of [
-    ['back-facing', new IntBox(4, 1, 2, -2), new IntXY(3, 2)],
-    ['front-facing', new IntBox(1, 2, 3, 4), new IntXY(2, 4)],
+    ['back-facing', new Box(4, 1, 2, -2), new XY(5, 0)],
+    ['front-facing', new Box(1, 2, 3, 4), new XY(2, 4)],
   ] as const
 ) {
-  Deno.test(`Center clamped: ${name}.`, () =>
-    assertEquals(box.centerClamp, expected))
+  Deno.test(`Center trunc: ${name}.`, () =>
+    assertEquals(box.center.trunc(), expected))
 }
 
-Deno.test('centerNum', () => {
-  assertEquals(new I8Box(1, 2, 3, 4).centerNum, new NumXY(2.5, 4))
-  assertEquals(new I8Box(5, 6, 7, 8).centerNum, new NumXY(8.5, 10))
+Deno.test('center', () => {
+  assertEquals(new Box(1, 2, 3, 4).center, new XY(2.5, 4))
+  assertEquals(new Box(5, 6, 7, 8).center, new XY(8.5, 10))
 })
 
 for (
   const [name, box, other, expected] of [
-    ['internal', new IntBox(1, 1, 3, 3), new IntXY(2, 2), true],
-    ['external', new IntBox(1, 1, 3, 3), new IntXY(5, 5), false],
+    ['internal', new Box(1, 1, 3, 3), new XY(2, 2), true],
+    ['external', new Box(1, 1, 3, 3), new XY(5, 5), false],
   ] as const
 ) {
   Deno.test(`Contains: ${name}.`, () =>
@@ -139,32 +53,36 @@ for (
 }
 
 Deno.test('copy', () => {
-  const box = new I8Box(1, 2, 3, 4)
-  const copy = box.copy().moveBy(1, 1).sizeBy(1, 1)
-  assertEquals(box, new I8Box(1, 2, 3, 4))
-  assertEquals(copy, new I8Box(2, 3, 4, 5))
+  const box = new Box(1, 2, 3, 4)
+  const copy = box.copy()
+  copy.x = 5
+  copy.y = 6
+  copy.w = 7
+  copy.h = 8
+  assertEquals(box, new Box(1, 2, 3, 4))
+  assertEquals(copy, new Box(5, 6, 7, 8))
 })
 
 for (
   const [name, box, expected] of [
-    ['empty', new IntBox(1, 2, 0, 0), true],
-    ['nonempty', new IntBox(1, 2, 3, 4), false],
+    ['empty', new Box(1, 2, 0, 0), true],
+    ['nonempty', new Box(1, 2, 3, 4), false],
   ] as const
 ) {
   Deno.test(`Empty: ${name}.`, () => assertEquals(box.empty, expected))
 }
 
 Deno.test('end', () => {
-  const box = new I8Box(1, 2, 3, 4)
-  assertEquals(box.end, new I8XY(4, 6))
+  const box = new Box(1, 2, 3, 4)
+  assertEquals(box.end, new XY(4, 6))
 })
 
 for (
   const [index, [lhs, rhs, expected]] of ([
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 3, 4), true],
-    [new IntBox(1, 2, 3, 4), new NumBox(1, 2, 3, 4), true],
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 4, 4), false],
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 3, 5), false],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 3, 4), true],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 3, 4), true],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 4, 4), false],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 3, 5), false],
   ] as const).entries()
 ) {
   Deno.test(`Equal: ${index}.`, () => assertEquals(lhs.eq(rhs), expected))
@@ -172,8 +90,8 @@ for (
 
 for (
   const [name, box, expected] of [
-    ['back-facing', new IntBox(new IntXY(3, 4), new IntXY(-2, -2)), true],
-    ['front-facing', new IntBox(1, 2, 3, 4), false],
+    ['back-facing', new Box(new XY(3, 4), new XY(-2, -2)), true],
+    ['front-facing', new Box(1, 2, 3, 4), false],
   ] as const
 ) {
   Deno.test(`Flipped: ${name}.`, () => assertEquals(box.flipped, expected))
@@ -181,13 +99,13 @@ for (
 
 for (
   const [index, [lhs, rhs, expected]] of ([
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 0, 0), new IntBox(1, 2, 0, 0)],
-    [new IntBox(1, 2, 3, 4), new NumBox(1, 2, 1, 1), new IntBox(1, 2, 1, 1)],
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 10, 10), new IntBox(1, 2, 3, 4)],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 0, 0), new Box(1, 2, 0, 0)],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 1, 1), new Box(1, 2, 1, 1)],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 10, 10), new Box(1, 2, 3, 4)],
     [
-      new IntBox(1, 2, 3, 4),
-      new IntBox(10, 10, 3, 5),
-      new IntBox(10, 10, -6, -4),
+      new Box(1, 2, 3, 4),
+      new Box(10, 10, 3, 5),
+      new Box(10, 10, -6, -4),
     ],
   ] as const).entries()
 ) {
@@ -195,24 +113,24 @@ for (
     assertEquals(lhs.intersection(rhs), expected))
 }
 
-Deno.test(`intersects(x, y)`, () => {
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(5, 5), true)
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(11, 11), false)
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(10, 10), false)
+Deno.test(`intersects(XY)`, () => {
+  assertEquals(new Box(2, 2, 8, 8).intersects(new XY(5, 5)), true)
+  assertEquals(new Box(2, 2, 8, 8).intersects(new XY(11, 11)), false)
+  assertEquals(new Box(2, 2, 8, 8).intersects(new XY(10, 10)), false)
 })
 
-Deno.test(`intersects(x, y, w, h)`, () => {
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(5, 5, 1, 1), true)
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(11, 11, 1, 1), false)
-  assertEquals(new IntBox(2, 2, 8, 8).intersects(10, 10, 1, 1), false)
+Deno.test(`intersects(Box)`, () => {
+  assertEquals(new Box(2, 2, 8, 8).intersects(new Box(5, 5, 1, 1)), true)
+  assertEquals(new Box(2, 2, 8, 8).intersects(new Box(11, 11, 1, 1)), false)
+  assertEquals(new Box(2, 2, 8, 8).intersects(new Box(10, 10, 1, 1)), false)
 })
 
 for (
   const [name, box, expected] of [
-    ['back-facing', new IntBox(4, 1, 2, -2), new IntXY(4, 3)],
-    ['front-facing', new IntBox(1, 2, 3, 4), new IntXY(4, 6)],
-    ['back-facing x', new IntBox(1, 2, -3, 4), new IntXY(1, 6)],
-    ['back-facing y', new IntBox(1, 2, 3, -4), new IntXY(4, 2)],
+    ['back-facing', new Box(4, 1, 2, -2), new XY(6, 1)],
+    ['front-facing', new Box(1, 2, 3, 4), new XY(4, 6)],
+    ['back-facing x', new Box(1, 2, -3, 4), new XY(1, 6)],
+    ['back-facing y', new Box(1, 2, 3, -4), new XY(4, 2)],
   ] as const
 ) {
   Deno.test(`Max: ${name}.`, () => assertEquals(box.max, expected))
@@ -220,84 +138,21 @@ for (
 
 for (
   const [name, box, expected] of [
-    ['back-facing', new IntBox(4, 1, 2, -2), new IntXY(2, 1)],
-    ['front-facing', new IntBox(1, 2, 3, 4), new IntXY(1, 2)],
-    ['back-facing x', new IntBox(1, 2, -3, 4), new IntXY(-2, 2)],
-    ['back-facing y', new IntBox(1, 2, 3, -4), new IntXY(1, -2)],
+    ['back-facing', new Box(4, 1, 2, -2), new XY(4, -1)],
+    ['front-facing', new Box(1, 2, 3, 4), new XY(1, 2)],
+    ['back-facing x', new Box(1, 2, -3, 4), new XY(-2, 2)],
+    ['back-facing y', new Box(1, 2, 3, -4), new XY(1, -2)],
   ] as const
 ) {
   Deno.test(`Min: ${name}.`, () => assertEquals(box.min, expected))
 }
 
-Deno.test(`moveBy(x, y)`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).moveBy(10, 10), new IntBox(11, 12, 3, 4))
-})
-
-Deno.test(`moveCenterTo(x, y)`, () => {
-  assertEquals(
-    new IntBox(1, 2, 4, 6).moveCenterTo(10, 10),
-    new IntBox(7, 5, 4, 6),
-  )
-})
-
-for (
-  const [name, box, to, expected] of [
-    [
-      'integers',
-      new IntBox(1, 2, 3, 4),
-      new IntXY(3, 3),
-      new IntBox(3, 3, 3, 4),
-    ],
-    [
-      'fractions',
-      IntBox.clamp(1.9, 2.9, 3.9, 4.9),
-      new IntXY(3, 3),
-      new IntBox(3, 3, 3, 4),
-    ],
-  ] as const
-) {
-  Deno.test(`Move to: ${name}.`, () => assertEquals(box.moveTo(to), expected))
-}
-
-for (
-  const [name, box, expected] of [
-    [
-      'back-facing',
-      new IntBox(new IntXY(4, 1), new IntXY(2, -2)),
-      new IntBox(2, 1, 2, 2),
-    ],
-    ['front-facing', new IntBox(1, 2, 3, 4), new IntBox(1, 2, 3, 4)],
-  ] as const
-) {
-  Deno.test(`Order: ${name}.`, () => assertEquals(box.order(), expected))
-}
-
-Deno.test(`set(x, y)`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).set(5, 6, 7, 8), new IntBox(5, 6, 7, 8))
-})
-
-Deno.test(`sizeBy(x, y)`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).sizeBy(10, 10), new IntBox(1, 2, 13, 14))
-})
-
-Deno.test(`sizeTo(x, y)`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).sizeTo(10, 11), new IntBox(1, 2, 10, 11))
-})
-
 for (
   const [index, [lhs, rhs, expected]] of ([
-    [new IntBox(1, 2, 3, 4), new IntBox(1, 2, 0, 0), new IntBox(1, 2, 0, 0)],
-    [new IntBox(1, 2, 3, 4), new NumBox(1, 2, 1, 1), new IntBox(1, 2, 3, 4)],
-    [
-      new IntBox(1, 2, 3, 4),
-      new IntBox(1, 2, 10, 10),
-      new IntBox(1, 2, 10, 10),
-    ],
-    [
-      new IntBox(1, 2, 3, 4),
-      new IntBox(10, 10, 3, 5),
-      new IntBox(1, 2, 13, 15),
-    ],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 0, 0), new Box(1, 2, 3, 4)],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 1, 1), new Box(1, 2, 3, 4)],
+    [new Box(1, 2, 3, 4), new Box(1, 2, 10, 10), new Box(1, 2, 10, 10)],
+    [new Box(1, 2, 3, 4), new Box(10, 10, 3, 5), new Box(1, 2, 12, 13)],
   ] as const).entries()
 ) {
   Deno.test(`Union: ${index}.`, () => assertEquals(lhs.union(rhs), expected))
@@ -305,32 +160,23 @@ for (
 
 for (
   const [name, box, expected] of [
-    ['integers', new IntBox(1, 2, 3, 4), new IntXY(3, 4)],
-    ['fractions', IntBox.clamp(1.9, 2.9, 3.9, 4.9), new IntXY(3, 4)],
+    ['integers', new Box(1, 2, 3, 4), new XY(3, 4)],
+    ['fractions', new Box(1.9, 2.9, 3.9, 4.9), new XY(3.9, 4.9)],
   ] as const
 ) {
   Deno.test(`width-height: ${name}.`, () => assertEquals(box.wh, expected))
 }
 
 Deno.test(`xy`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).xy, new IntXY(1, 2))
+  assertEquals(new Box(1, 2, 3, 4).xy, new XY(1, 2))
 })
 
 Deno.test(`toJSON()`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).toJSON(), {
-    x: Int(1),
-    y: Int(2),
-    w: Int(3),
-    h: Int(4),
-  })
-})
-
-Deno.test(`toNumBox()`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).toNumBox(), new NumBox(1, 2, 3, 4))
+  assertEquals(new Box(1, 2, 3, 4).toJSON(), { x: 1, y: 2, w: 3, h: 4 })
 })
 
 Deno.test(`toString()`, () => {
-  assertEquals(new IntBox(1, 2, 3, 4).toString(), '[(1, 2), 3×4]')
+  assertEquals(new Box(1, 2, 3, 4).toString(), '[(1, 2), 3×4]')
 })
 
 type TestCase = readonly [
@@ -1141,45 +987,45 @@ for (
 ) {
   Deno.test(`Intersects(lhs, rhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...lhs).intersects(new IntBox(...rhs)),
+      new Box(...lhs).intersects(new Box(...rhs)),
       intersects,
     ))
   Deno.test(`Intersects(rhs, lhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...rhs).intersects(new IntBox(...lhs)),
+      new Box(...rhs).intersects(new Box(...lhs)),
       intersects,
     ))
 
   Deno.test(`Contains(lhs, rhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...lhs).contains(new IntBox(...rhs)),
+      new Box(...lhs).contains(new Box(...rhs)),
       contains === 'true-false' ? true : contains,
     ))
   Deno.test(`Contains(rhs, lhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...rhs).contains(new IntBox(...lhs)),
+      new Box(...rhs).contains(new Box(...lhs)),
       contains === 'true-false' ? false : contains,
     ))
 
   Deno.test(`Intersection(lhs, rhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...lhs).intersection(new IntBox(...rhs)),
-      new IntBox(...intersection),
+      new Box(...lhs).intersection(new Box(...rhs)),
+      new Box(...intersection),
     ))
   Deno.test(`Intersection(rhs, lhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...rhs).intersection(new IntBox(...lhs)),
-      new IntBox(...intersection),
+      new Box(...rhs).intersection(new Box(...lhs)),
+      new Box(...intersection),
     ))
 
   Deno.test(`Union(lhs, rhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...lhs).union(new IntBox(...rhs)),
-      new IntBox(...union),
+      new Box(...lhs).union(new Box(...rhs)),
+      new Box(...union),
     ))
   Deno.test(`Union(rhs, lhs): ${diagram}`, () =>
     assertEquals(
-      new IntBox(...rhs).union(new IntBox(...lhs)),
-      new IntBox(...union),
+      new Box(...rhs).union(new Box(...lhs)),
+      new Box(...union),
     ))
 }
