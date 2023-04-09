@@ -12,4 +12,4 @@ Reduce boilerplate
   index.css, index.html, amd makefile are big boilerplates
     Each could use mustach like templates or common rules
     Makefiles are awesome but need to share some of that config like an Aseprite rule or something.
-ooz goals: as lightweight as possible, as simple as possible, as intuitive as possible, as friendly as possible, as human as possible, as small as possible.
+doc ooz goals: as lightweight as possible, as simple as possible, as intuitive as possible, as friendly as possible, as human as possible, as small as possible.

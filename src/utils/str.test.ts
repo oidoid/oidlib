@@ -1,4 +1,4 @@
-import { Str } from '@/ooz'
+import { strCapitalize, strIsBlank, strUncapitalize } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Str', async (test) => {
@@ -15,11 +15,11 @@ Deno.test('Str', async (test) => {
       ['ABC', 'aBC', 'ABC', false],
     ] as const
   ) {
-    await test.step(`uncapitialize(${str}) => ${uncapitalized}`, () =>
-      assertEquals(Str.uncapitalize(str), uncapitalized))
-    await test.step(`capitialize(${str}) => ${capitalized}`, () =>
-      assertEquals(Str.capitalize(str), capitalized))
-    await test.step(`isBlank(${str}) => ${blank}`, () =>
-      assertEquals(Str.isBlank(str), blank))
+    await test.step(`strUncapitalize(${str}) => ${uncapitalized}`, () =>
+      assertEquals(strUncapitalize(str), uncapitalized))
+    await test.step(`strCapitalize(${str}) => ${capitalized}`, () =>
+      assertEquals(strCapitalize(str), capitalized))
+    await test.step(`strIsBlank(${str}) => ${blank}`, () =>
+      assertEquals(strIsBlank(str), blank))
   }
 })

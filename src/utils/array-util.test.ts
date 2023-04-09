@@ -1,4 +1,4 @@
-import { ArrayUtil } from '@/ooz'
+import { arrayBinFind, arrayShuffle, arraySwap } from '@/ooz'
 import { assertAlmostEquals, assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('Shuffle: permutations.', () => {
@@ -8,7 +8,7 @@ Deno.test('Shuffle: permutations.', () => {
 
   const distribution: Record<string, number> = {}
   for (let i = 0; i < iterations; i++) {
-    ArrayUtil.shuffle(array, Math.random)
+    arrayShuffle(array, Math.random)
     const permutation = array.join('')
     distribution[permutation] ??= 0
     distribution[permutation]++
@@ -24,7 +24,7 @@ Deno.test('Shuffle: permutations.', () => {
 Deno.test('Shuffle: no randomization.', () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz'
   const letters = [...alphabet]
-  ArrayUtil.shuffle(letters, () => 1 - Number.EPSILON)
+  arrayShuffle(letters, () => 1 - Number.EPSILON)
   assertEquals(letters.join(''), alphabet)
 })
 
@@ -36,8 +36,8 @@ function permute<T>(array: T[], n: number = array.length): T[][] {
   permutations.push(...permute(array, n - 1))
 
   for (let i = 0; i < n - 1; i++) {
-    if (n % 2) ArrayUtil.swap(array, 0, n - 1)
-    else ArrayUtil.swap(array, i, n - 1)
+    if (n % 2) arraySwap(array, 0, n - 1)
+    else arraySwap(array, i, n - 1)
     permutations.push(...permute(array, n - 1))
   }
 
@@ -60,9 +60,9 @@ for (
     ['five not found', [1, 2, 3, 4, 5], 6, undefined],
   ] as const
 ) {
-  Deno.test(`binFind: ${name}.`, () =>
+  Deno.test(`arrayBinFind: ${name}.`, () =>
     assertEquals(
-      ArrayUtil.binFind(nums, num, (lhs, rhs) => lhs - rhs),
+      arrayBinFind(nums, num, (lhs, rhs) => lhs - rhs),
       expected,
     ))
 }
