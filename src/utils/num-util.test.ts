@@ -1,4 +1,4 @@
-import { intLerp, numRound, numWrap } from '@/ooz'
+import { lerpInt, round, wrapNum } from '@/ooz'
 import { assertEquals } from 'std/testing/asserts.ts'
 
 Deno.test('numWrap()', async (test) => {
@@ -303,7 +303,7 @@ Deno.test('numWrap()', async (test) => {
     ] as const
   ) {
     await test.step(`Wrap ${x} to [${min}, ${max}].`, () =>
-      assertEquals(numWrap(x, min, max), expected))
+      assertEquals(wrapNum(x, min, max), expected))
   }
 })
 
@@ -376,7 +376,7 @@ Deno.test('intLerp()', async (test) => {
     ] as const
   ) {
     await test.step(`intLerp(${from}, ${to}, ${ratio}) => ${expected}`, () =>
-      assertEquals(intLerp(from, to, ratio), expected))
+      assertEquals(lerpInt(from, to, ratio), expected))
   }
 })
 
@@ -447,6 +447,6 @@ Deno.test('numRound()', async (test) => {
     ] as const
   ) {
     await test.step(`numRound(${num}) => ${expected}`, () =>
-      assertEquals(numRound(num), expected))
+      assertEquals(round(num), expected))
   }
 })

@@ -1,7 +1,7 @@
 import { Comparator } from '../types/comparator.ts'
 
 /** For sorted arrays. */
-export function arrayBinFind<T>(
+export function binFind<T>(
   vals: readonly T[],
   val: T,
   compare: Comparator<T>,
@@ -28,14 +28,18 @@ export function arrayBinFind<T>(
  * https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
  * https://blog.codinghorror.com/the-danger-of-naivete/
  */
-export function arrayShuffle(self: unknown[], random: () => number): void {
+export function shuffle(self: unknown[], random: () => number): void {
   for (let i = self.length - 1; i >= 0; i--) {
-    arraySwap(self, i, Math.trunc(random() * (i + 1)))
+    swapIndices(self, i, Math.trunc(random() * (i + 1)))
   }
 }
 
 /** Swap left and right values in place. */
-export function arraySwap(self: unknown[], left: number, right: number): void {
+export function swapIndices(
+  self: unknown[],
+  left: number,
+  right: number,
+): void {
   // deno-fmt-ignore
   [self[left], self[right]] = [self[right], self[left]]
 }

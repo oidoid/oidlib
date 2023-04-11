@@ -1,11 +1,12 @@
 import { assert } from '@/ooz'
 
 /**
+ * Modulo a number across domain.
  * @arg min An integer < max
  * @arg max An integer > min
  * @return A value wrapped to the domain [min, max).
  */
-export function numWrap(num: number, min: number, max: number): number {
+export function wrapNum(num: number, min: number, max: number): number {
   if (min === max) return min
   assert(max > min, `max=${max} < min=${min}.`)
   const range = max - min // range ∈ [0, +∞).
@@ -15,16 +16,16 @@ export function numWrap(num: number, min: number, max: number): number {
   return z + min // Add min to return ∈ [min, max).
 }
 
-export function numLerp(from: number, to: number, ratio: number): number {
+export function lerp(from: number, to: number, ratio: number): number {
   return from * (1 - ratio) + to * ratio
 }
 
 /**
  * @return Monotonically increasing or decreasing integer towards to or to.
  */
-export function intLerp(from: number, to: number, ratio: number): number {
+export function lerpInt(from: number, to: number, ratio: number): number {
   // Lerp, truncate and drop negative / positive zero.
-  const interpolation = numRound(numLerp(from, to, ratio))
+  const interpolation = round(lerp(from, to, ratio))
   if (interpolation === from && ratio !== 0) {
     return interpolation + Math.sign(to - interpolation)
   }
@@ -32,6 +33,6 @@ export function intLerp(from: number, to: number, ratio: number): number {
 }
 
 /** Return value may be infinite. */
-export function numRound(num: number): number {
+export function round(num: number): number {
   return num < 0 ? -Math.round(-num) : Math.round(num)
 }
