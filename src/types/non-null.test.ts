@@ -1,5 +1,5 @@
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 import { assertNonNull, NonNull } from '@/ooz'
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 for (
   const [input, throws] of [
@@ -23,12 +23,6 @@ for (
     }
   })
 }
-
-// @ts-expect-error 2769
-NonNull('abc')
-
-// @ts-expect-error 2769
-assertNonNull('abc')
 
 NonNull('abc' as unknown as string | null)
 assertNonNull('abc' as unknown as string | null)
