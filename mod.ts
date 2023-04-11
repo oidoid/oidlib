@@ -2,7 +2,7 @@
 
 export * from './src/2d/box.ts'
 export * from './src/2d/xy.ts'
-export * from './src/test/test-util.ts'
+// export * from './src/test/test-util.ts'; https://github.com/denoland/deno/issues/11286
 export * from './src/types/comparator.ts'
 export * from './src/types/exact.ts'
 export * from './src/types/inverse.ts'
