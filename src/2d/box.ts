@@ -8,7 +8,7 @@ import { XY } from '@/ooz'
  * distinguishing certain states such as the intersection of disjoint boxes.
  */
 export class Box {
-  static fromJSON(json: Readonly<BoxJSON>): Box {
+  static fromJSON(json: Readonly<PartialBox>): Box {
     return new this(json.x ?? 0, json.y ?? 0, json.w ?? 0, json.h ?? 0)
   }
 
@@ -175,7 +175,7 @@ export class Box {
   }
 }
 
-export interface BoxJSON {
+export interface PartialBox {
   x?: number | undefined
   y?: number | undefined
   w?: number | undefined

@@ -4,7 +4,7 @@
  * An XY may be a position, a vector, or a width and height, for example.
  */
 export class XY {
-  static fromJSON(json: Readonly<XYJSON>): XY {
+  static fromJSON(json: Readonly<PartialXY>): XY {
     return new this(json.x ?? 0, json.y ?? 0)
   }
 
@@ -139,7 +139,7 @@ export class XY {
   }
 }
 
-export interface XYJSON {
+export interface PartialXY {
   x?: number | undefined
   y?: number | undefined
 }
