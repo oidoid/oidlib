@@ -1,3 +1,5 @@
+import { round } from '@/ooz'
+
 /**
  * A cartesian position or dimensions. x and y are independent values.
  *
@@ -96,8 +98,8 @@ export class XY {
   }
 
   round(): this {
-    this.x = Math.round(this.x)
-    this.y = Math.round(this.y)
+    this.x = round(this.x)
+    this.y = round(this.y)
     return this
   }
 

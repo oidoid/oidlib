@@ -91,9 +91,7 @@ export class Box {
     this.wh.y = h
   }
 
-  /**
-   * The mutual region occupied by this and box. Flipped if disjoint.
-   */
+  /** The mutual region occupied by this and box. Flipped if disjoint. */
   intersection(box: Readonly<Box>): this {
     const xy = box.min.max(this.min)
     const wh = box.max.min(this.max).sub(xy)
@@ -140,7 +138,10 @@ export class Box {
     return `[${this.xy}, ${this.w}×${this.h}]`
   }
 
-  /** Sets the minimum rectangle occupied by both box and arguments. */
+  /**
+   * Sets the minimum rectangle occupied by both box and arguments. Reorders
+   * this rectangle to be unflipped.
+   */
   union(box: Readonly<Box>): this {
     const xy = box.min.min(this.min)
     const wh = box.max.max(this.max).sub(xy)
