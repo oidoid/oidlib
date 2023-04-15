@@ -18,13 +18,8 @@ export class Box {
   wh: XY
 
   constructor(x: number, y: number, w: number, h: number)
-  constructor(xy: Readonly<XY>, wh: Readonly<XY>)
-  constructor(
-    xXY: number | Readonly<XY>,
-    yWH?: number | Readonly<XY>,
-    w?: number,
-    h?: number,
-  ) {
+  constructor(xy: XY, wh: XY)
+  constructor(xXY: number | XY, yWH?: number | XY, w?: number, h?: number) {
     this.xy = typeof xXY === 'number' ? new XY(xXY, yWH as number) : xXY
     this.wh = typeof yWH === 'number' ? new XY(w!, h!) : yWH!
   }
