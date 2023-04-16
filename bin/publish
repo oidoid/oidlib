@@ -1,8 +1,8 @@
 #!/usr/bin/env -S deno --quiet run --allow-read --allow-run --allow-write --ext ts
-import { Obj, Str } from '@/ooz'
+import { isBlank, isObj } from '@/ooz'
 import * as semver from 'std/semver/mod.ts'
 
-const configFilename: string = 'deno.json'
+const configFilename = 'deno.json'
 const releaseTypes: Set<semver.ReleaseType> = new Set([
   'pre',
   'major',
@@ -49,7 +49,7 @@ async function main(): Promise<number> {
 
   let result
   result = await git('status -z')
-  if (!result.ok || !Str.isBlank(result.text)) {
+  if (!result.ok || !isBlank(result.text)) {
     prompt(
       'Uncommitted changes detected. <enter> to continue, <ctrl-c> to cancel:',
     )
@@ -71,7 +71,7 @@ async function main(): Promise<number> {
   }
 
   result = await git(`rev-list -n1 @..origin/${branch}`)
-  if (!result.ok || !Str.isBlank(result.text)) {
+  if (!result.ok || !isBlank(result.text)) {
     console.error(
       `The active branch is behind origin/${branch}. Pull and try again.`,
     )
@@ -163,7 +163,7 @@ function isReleaseType(str: string): str is semver.ReleaseType {
 }
 
 function isConfig(val: unknown): val is Config {
-  if (!Obj.is(val)) return false
+  if (!isObj(val)) return false
   return typeof val.version === 'string' && typeof val.name === 'string'
 }
 
