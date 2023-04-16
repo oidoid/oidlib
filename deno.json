@@ -11,10 +11,7 @@
     "files": { "exclude": ["dist"] },
     "options": { "semiColons": false, "singleQuote": true }
   },
-  "imports": {
-    "@/ooz": "./mod.ts",
-    "std/": "https://deno.land/std@0.179.0/"
-  },
+  "imports": { "@/ooz": "./mod.ts", "std/": "https://deno.land/std@0.179.0/" },
   "lint": {
     "files": { "exclude": ["dist"] },
     "rules": { "exclude": ["no-empty-interface", "no-misused-new"] }
@@ -22,5 +19,5 @@
   "lock": false,
   "name": "ooz",
   "test": { "files": { "exclude": ["dist"] } },
-  "version": "0.0.16"
+  "version": "0.0.17"
 }
